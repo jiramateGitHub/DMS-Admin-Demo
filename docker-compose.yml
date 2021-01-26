@@ -1,7 +1,13 @@
-version: '3.7'
-
+version: '3'
 services:
-
-
-networks:
-  envoymesh: {}
+  vue-ui:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: vue-ui
+    volumes:
+       - .:/usr/src/app/
+       - dependencies:/usr/src/app/node_modules
+    network_mode: "dms-api_default"
+volumes:
+  dependencies:

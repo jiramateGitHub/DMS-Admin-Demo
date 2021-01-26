@@ -8,12 +8,14 @@
               <div class="card-icon">
                 <i class="material-icons">equalizer</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลทั้งหมด</p>
+              <p class="card-category">{{firstName}}</p>
               <h3 class="card-title">
                 <span class="text-success">100</span> / 100
               </h3>
             </div>
             <div class="card-footer text-right">
+              <button @click="getUser()">get User from API</button> <br />
+      {{ user }}
               <p class="card-category"></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
@@ -135,14 +137,27 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
-  name: "dashboard",
-  props: {
-    msg: String,
+  name: "App",
+  components: {},
+   data () {
+    return {
+      firstName: process.env.API_URL + "/dms_base_categories",
+    }
+  },
+  methods: {
+    ...mapActions({
+      getUser: "dms_base_categories/getUser",
+    }),
+  },
+  computed: {
+    ...mapState({
+      user: (state) => state.user,
+    }),
   },
 };
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
