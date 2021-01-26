@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 class HttpRequest {
-    constructor(url = '') {
+    constructor(url = process.env.VUE_APP_API_ROOT) {
         // this.axios = axios
         this.axiosInstance = axios.create({
             baseURL: url,
@@ -33,11 +33,13 @@ class HttpRequest {
     }
 
     get(methodName, data) {
+        let JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTE1NTg2ODMwNzksImV4cCI6MTYxMTU1ODY4MzEzOX0.c-_ROyG-LiLxdHhU2Dd2XQ54rOnRzE-E60PPS9DagoE"
+        let headers = {
+            Authorization: "Bearer " + JWTToken
+        };
         return this.axiosInstance.get(methodName, {
             params: data,
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTE1NTg2ODMwNzksImV4cCI6MTYxMTU1ODY4MzEzOX0.c-_ROyG-LiLxdHhU2Dd2XQ54rOnRzE-E60PPS9DagoE"
-            }
+            headers: headers
         })
     }
 
@@ -56,27 +58,6 @@ class HttpRequest {
         })
     }
 
-    request(type, url, data) {
-        let promise = null
-        switch (type) {
-            case 'GET':
-                promise = axios.get(url, { params: data });
-                break
-            case 'POST':
-                promise = axios.post(url, data);
-                break
-            case 'PUT':
-                promise = axios.put(url, data);
-                break
-            case 'DELETE':
-                promise = axios.delete(url, data);
-                break
-            default:
-                promise = axios.get(url, { params: data });
-                break
-        }
-        return promise
-    }
 }
 
 export default HttpRequest

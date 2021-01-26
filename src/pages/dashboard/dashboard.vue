@@ -8,14 +8,14 @@
               <div class="card-icon">
                 <i class="material-icons">equalizer</i>
               </div>
-              <p class="card-category">{{firstName}}</p>
+              <p class="card-category">จำนวนชุดข้อมูลทั้งหมด</p>
               <h3 class="card-title">
                 <span class="text-success">100</span> / 100
               </h3>
             </div>
             <div class="card-footer text-right">
               <button @click="getUser()">get User from API</button> <br />
-      {{ user }}
+              {{ user }}
               <p class="card-category"></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
@@ -141,10 +141,11 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "App",
   components: {},
-   data () {
+  data() {
     return {
       firstName: process.env.API_URL + "/dms_base_categories",
-    }
+      url: process.env.VUE_APP_TITLE,
+    };
   },
   methods: {
     ...mapActions({
