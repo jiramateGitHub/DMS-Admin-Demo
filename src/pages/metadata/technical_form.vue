@@ -19,7 +19,7 @@
                     data-placement="top"
                     title=""
                     data-original-title="คลิกเพื่อเพิ่มข้อมูล"
-                    @click="Save()"
+                    @click="addItem()"
                   >
                     <span class="btn-label"
                       ><i class="material-icons">add</i></span
@@ -29,45 +29,83 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12">
-                  <div class="table-responsive">
+                <div class="col-md-12">
+                  <div class="">
                     <table
                       class="table table-striped table-hover table-color-header table-border"
                     >
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>ฟิลด์ข้อมูลในตารางข้อมูล</th>
-                          <th>ประเภทข้อมูล</th>
-                          <th>ความกว้างของฟิลด์ข้อมูล</th>
-                          <th>คีย์ข้อมูล</th>
-                          <th>ตัวอย่างข้อมูล</th>
-                          <th>หมายเหตุ</th>
-                          <th>ข้อมูลนิรนาม</th>
-                          <th>ดำเนินการ</th>
+                          <th style="width: 5%">#</th>
+                          <th style="width: 20%">ฟิลด์ข้อมูลในตารางข้อมูล</th>
+                          <th style="width: 15%">ประเภทข้อมูล</th>
+                          <th style="width: 10%">ความกว้างของฟิลด์ข้อมูล</th>
+                          <th style="width: 12%">คีย์ข้อมูล</th>
+                          <th style="width: 12%">ตัวอย่างข้อมูล</th>
+                          <th style="width: 10%">หมายเหตุ</th>
+                          <th style="width: 8%">ข้อมูลนิรนาม</th>
+                          <th style="width: 8%">ดำเนินการ</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td class="text-center">1</td>
-                          <td>Andrew Mike</td>
-                          <td>Develop</td>
-                          <td class="text-center">2013</td>
-                          <td class="text-right">€ 99,225</td>
-                          <td class="text-right">€ 99,225</td>
-                          <td class="text-right">€ 99,225</td>
+                        <tr
+                          v-for="(item, index) in $v.items.$each.$iter"
+                          :key="index"
+                        >
+                          <td class="text-center">{{ genIndex(index) }}</td>
+                          <td>
+                            <input
+                              type="text"
+                              placeholder="ระบุชื่อฟิลด์ เช่น รหัสพนักงาน"
+                              v-model.trim="item.tcd_attribute.$model"
+                            />
+                          </td>
+                          <td class="text-right">
+                            <v-select
+                              class="style-chooser"
+                              placeholder="เลือกรายการ"
+                              :options="optionType"
+                              v-model="item.tcd_type.$model"
+                            ></v-select>
+                          </td>
+                          <td class="text-right">
+                            <input
+                              type="number"
+                              placeholder=""
+                              v-model="item.tcd_length.$model"
+                            />
+                          </td>
+                          <td class="text-right">
+                            <v-select
+                              class="style-chooser"
+                              placeholder="เลือกรายการ"
+                              :options="optionKey"
+                              v-model="item.tcd_key.$model"
+                            ></v-select>
+                          </td>
+                          <td class="text-right">
+                            <input
+                              type="text"
+                              placeholder="ตัวอย่าง A001"
+                              v-model="item.tcd_sample.$model"
+                            />
+                          </td>
+                          <td class="text-right">
+                            <input
+                              type="text"
+                              placeholder=""
+                              v-model="item.tcd_comment.$model"
+                            />
+                          </td>
                           <td class="text-center">
-                            <div class="form-check">
-                              <label class="form-check-label">
+                            <div class="togglebutton">
+                              <label>
                                 <input
-                                  class="form-check-input"
                                   type="checkbox"
-                                  value=""
-                                  checked
+                                  checked=""
+                                  v-model="item.tcd_anonymous.$model"
                                 />
-                                <span class="form-check-sign">
-                                  <span class="check"></span>
-                                </span>
+                                <span class="toggle"></span>
                               </label>
                             </div>
                           </td>
@@ -79,6 +117,7 @@
                               data-placement="top"
                               title=""
                               data-original-title="คลิกเพื่อลบข้อมูล"
+                              @click="deleteItem(index)"
                             >
                               <i class="material-icons">close</i>
                             </button>
@@ -97,7 +136,7 @@
                     rel="tooltip"
                     data-placement="top"
                     title="คลิกเพื่อบันทึกข้อมูล"
-                     @click="Save()"
+                    @click="Save()"
                   >
                     <span class="btn-label"
                       ><i class="material-icons">check</i></span
@@ -116,22 +155,135 @@
 </template>
 
 <script>
+import { required, minLength } from "vuelidate/lib/validators";
 export default {
   name: "TechnicalForm",
   props: {},
+  data() {
+    return {
+      items: [
+        {
+          tcd_attribute: "",
+          tcd_type: "",
+          tcd_length: 0,
+          tcd_key: "",
+          tcd_sample: "",
+          tcd_anonymous: false,
+          tcd_comment: "",
+        },
+      ],
+      optionType: [
+        { label: "Spatial", code: "1" },
+        { label: "JSON", code: "2" },
+        { label: "TINYINT", code: "4" },
+        { label: "SMALLINT", code: "5" },
+        { label: "INT", code: "6" },
+        { label: "BIGINT", code: "7" },
+        { label: "DECIMAL", code: "8" },
+        { label: "FLOAT", code: "9" },
+        { label: "DOUBLE", code: "10" },
+        { label: "REAL", code: "11" },
+        { label: "BIT", code: "12" },
+        { label: "BOOLEAN", code: "13" },
+        { label: "SERIAL", code: "14" },
+        { label: "DATE", code: "15" },
+        { label: "DATETIME", code: "16" },
+        { label: "TIMESTAMP", code: "17" },
+        { label: "YEAR", code: "18" },
+        { label: "CHAR", code: "19" },
+        { label: "VARCHAR", code: "20" },
+        { label: "TINYTEXT", code: "21" },
+        { label: "TEXT", code: "22" },
+        { label: "MEDIUMTEXT", code: "23" },
+        { label: "BINARY", code: "24" },
+        { label: "VARBINARY", code: "25" },
+        { label: "TINYBLOB", code: "26" },
+        { label: "BLOB", code: "27" },
+        { label: "MEDIUMBLOB", code: "28" },
+        { label: "LONGBLOB", code: "29" },
+        { label: "ENUM", code: "30" },
+      ],
+      optionKey: [
+        { label: "-", code: "0" },
+        { label: "PK", code: "1" },
+        { label: "FK", code: "2" },
+      ],
+    };
+  },
+  validations: {
+    items: {
+      required,
+      minLength: minLength(3),
+      $each: {
+        tcd_attribute: {
+          required,
+        },
+        tcd_type: {
+          required,
+        },
+        tcd_length: {
+          required,
+        },
+        tcd_key: {
+          required,
+        },
+        tcd_sample: {
+          required,
+        },
+        tcd_anonymous: {
+          required,
+        },
+        tcd_comment: {
+          required,
+        },
+      },
+    },
+  },
   methods: {
+    genIndex: function (index) {
+      return parseInt(index) + 1;
+    },
     Back() {
       this.$router.replace({ path: "/metadata/business_form" });
     },
     Save() {
-      this.$router.replace({ path: "/metadata" });
+      console.log(this.items);
+      // this.$router.replace({ path: "/metadata" });
     },
-  },
-  data() {
-    return {
-      options: ["foo", "bar", "baz"],
-      render: (createElement) => createElement("span", "❌"),
-    };
+    addItem: function () {
+      this.items.push({
+        tcd_attribute: "",
+        tcd_type: "",
+        tcd_length: 0,
+        tcd_key: "",
+        tcd_anonymous: false,
+        tcd_comment: "",
+      });
+    },
+    deleteItem: function (index) {
+      this.$swal
+        .fire({
+          title: "คุณต้องการลบใช้หรือไม่",
+          text: "คุณจะไม่สามารถย้อนกลับการลบได้!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "ยืนยัน",
+          cancelButtonText:"ยกเลิก"
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.items.splice(index, 1);
+
+            this.$swal.fire(
+              "ลบสำเร็จ!",
+              "",
+              "success"
+            );
+          }
+        });
+    },
   },
 };
 </script>
@@ -145,14 +297,22 @@ input {
   border: solid 1px #ccc;
   border-radius: 5px;
 }
-textarea {
-  width: 100%;
-  padding: 5px;
-  border: none; /* <-- This thing here */
-  border: solid 1px #ccc;
-  border-radius: 5px;
-}
+
 .row {
   padding-bottom: 1%;
+}
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+  background: #ffffff;
+}
+
+.form-check .form-check-sign:before {
+  background-color: #3f51b5;
+}
+
+.form-check .form-check-sign:before {
+  position: absolute;
 }
 </style>

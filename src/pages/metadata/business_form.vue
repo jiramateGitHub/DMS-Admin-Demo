@@ -568,7 +568,5 @@ textarea {
   border-color: red;
 }
 
-.style-chooser .vs__selected {
-  background-color: #e7a33d;
-}
+
 </style>
