@@ -11,7 +11,7 @@
         </nav>
         <div class="copyright float-right">
           COPYRIGHT © 2020 - 2021
-          <a href="" target="_blank">PROJECT.</a> ALL
+          <a href="" target="_blank">ALLOSOFT.</a> ALL
           RIGHTS RESERVED
         </div>
       </div>

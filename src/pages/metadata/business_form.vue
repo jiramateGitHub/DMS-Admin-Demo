@@ -17,7 +17,7 @@
                     <label class="form__label"
                       >ชุดข้อข้อมูล <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_name.required"
+                        v-if="submitted && !$v.form.meta_name.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -28,8 +28,8 @@
                     <input
                       type="text"
                       placeholder="ระบุชื่อชุดข้อข้อมูล เช่น ผู้บริหารและพนักงาน"
-                      :class="{ 'input-required': $v.meta_name.$error }"
-                      v-model.trim="meta_name"
+                      :class="{ 'input-required': $v.form.meta_name.$error }"
+                      v-model="form.meta_name"
                     />
                   </div>
                 </div>
@@ -38,7 +38,7 @@
                     <label
                       >เลขที่เมทาดาตา <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_code.required"
+                        v-if="submitted && !$v.form.meta_code.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -46,9 +46,9 @@
                     ><br />
                     <input
                       type="text"
-                      :class="{ 'input-required': $v.meta_code.$error }"
+                      :class="{ 'input-required': $v.form.meta_code.$error }"
                       placeholder="ระบุเลขที่เมทาดาตา เช่น 01-01-01"
-                      v-model="meta_code"
+                      v-model="form.meta_code"
                     />
                   </div>
 
@@ -56,7 +56,7 @@
                     <label
                       >หมวดหมู่ข้อมูล <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_bc_object.required"
+                        v-if="submitted && !$v.form.meta_bc_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -66,9 +66,9 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseCategories"
                       :class="{
-                        'style-chooser-required': $v.meta_bc_object.$error,
+                        'style-chooser-required': $v.form.meta_bc_object.$error,
                       }"
-                      v-model="meta_bc_object"
+                      v-model="form.meta_bc_object"
                     ></v-select>
                   </div>
                 </div>
@@ -77,7 +77,7 @@
                     <label
                       >เจ้าของข้อมูล <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_code.required"
+                        v-if="submitted && !$v.form.meta_code.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -85,16 +85,16 @@
                     ><br />
                     <input
                       type="text"
-                      :class="{ 'input-required': $v.bsds_owner.$error }"
+                      :class="{ 'input-required': $v.form.bsds_owner.$error }"
                       placeholder="ระบุเจ้าของข้อมูล เช่น ฝ่ายบริหารงานบุคคล"
-                      v-model="bsds_owner"
+                      v-model="form.bsds_owner"
                     />
                   </div>
                   <div class="col-sm-6">
                     <label
                       >หน่วยงานภายใน <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_ins_object.required"
+                        v-if="submitted && !$v.form.meta_ins_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -104,9 +104,10 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectInstitution"
                       :class="{
-                        'style-chooser-required': $v.meta_ins_object.$error,
+                        'style-chooser-required':
+                          $v.form.meta_ins_object.$error,
                       }"
-                      v-model="meta_ins_object"
+                      v-model="form.meta_ins_object"
                     ></v-select>
                   </div>
                 </div>
@@ -116,7 +117,7 @@
                     <label
                       >คำอธิบาย <code>*</code
                       ><span
-                        v-if="submitted && !$v.bsds_text.required"
+                        v-if="submitted && !$v.form.bsds_text.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -125,9 +126,9 @@
                     <textarea
                       rows="4"
                       cols="50"
-                      :class="{ 'input-required': $v.bsds_text.$error }"
+                      :class="{ 'input-required': $v.form.bsds_text.$error }"
                       placeholder="ระบบุคำอธิบายของชื่อชุดข้อมูล"
-                      v-model="bsds_text"
+                      v-model="form.bsds_text"
                     />
                   </div>
                 </div>
@@ -137,7 +138,7 @@
                     <input
                       type="text"
                       placeholder="ระบุแหล่งที่มาของคำอธิบาย เช่น ข้อบังคับบุคคล พ.ศ. 2559"
-                      v-model="bsds_ref"
+                      v-model="form.bsds_ref"
                     />
                   </div>
                   <div class="col-sm-6">
@@ -145,7 +146,7 @@
                     <input
                       type="text"
                       placeholder="ระบุ URL เพิ่มเติม เช่น www.google.com"
-                      v-model="bsds_url"
+                      v-model="form.bsds_url"
                     />
                   </div>
                 </div>
@@ -155,7 +156,7 @@
                     <label
                       >คําสําคัญ (Keywords) <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_bsk_object.required"
+                        v-if="submitted && !$v.form.meta_bsk_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -166,9 +167,10 @@
                       taggable
                       multiple
                       :class="{
-                        'style-chooser-required': $v.meta_bsk_object.$error,
+                        'style-chooser-required':
+                          $v.form.meta_bsk_object.$error,
                       }"
-                      v-model="meta_bsk_object"
+                      v-model="form.meta_bsk_object"
                     />
                   </div>
                 </div>
@@ -177,7 +179,7 @@
                     <label
                       >ภาษาที่ใช้ <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_lg_object.required"
+                        v-if="submitted && !$v.form.meta_lg_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -188,16 +190,16 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseLanguages"
                       :class="{
-                        'style-chooser-required': $v.meta_lg_object.$error,
+                        'style-chooser-required': $v.form.meta_lg_object.$error,
                       }"
-                      v-model="meta_lg_object"
+                      v-model="form.meta_lg_object"
                     ></v-select>
                   </div>
                   <div class="col-sm-6">
                     <label
                       >รูปแบบข้อมูล <code>*</code
                       ><span
-                        v-if="submitted && !$v.meta_ft_object.required"
+                        v-if="submitted && !$v.form.meta_ft_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -207,9 +209,9 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseFormats"
                       :class="{
-                        'style-chooser-required': $v.meta_ft_object.$error,
+                        'style-chooser-required': $v.form.meta_ft_object.$error,
                       }"
-                      v-model="meta_ft_object"
+                      v-model="form.meta_ft_object"
                     ></v-select>
                   </div>
                 </div>
@@ -219,7 +221,7 @@
                     <label
                       >ความถี่ในการเผยแพร่ข้อมูล <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_dt_object.required"
+                        v-if="submitted && !$v.form.meta_dt_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -229,16 +231,16 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseDurations"
                       :class="{
-                        'style-chooser-required': $v.meta_dt_object.$error,
+                        'style-chooser-required': $v.form.meta_dt_object.$error,
                       }"
-                      v-model="meta_dt_object"
+                      v-model="form.meta_dt_object"
                     ></v-select>
                   </div>
                   <div class="col-sm-6">
                     <label
                       >ขอบเขตที่เผยแพร่ข้อมูล <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_sc_object.required"
+                        v-if="submitted && !$v.form.meta_sc_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -248,9 +250,9 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseScopes"
                       :class="{
-                        'style-chooser-required': $v.meta_sc_object.$error,
+                        'style-chooser-required': $v.form.meta_sc_object.$error,
                       }"
-                      v-model="meta_sc_object"
+                      v-model="form.meta_sc_object"
                     ></v-select>
                   </div>
                 </div>
@@ -259,7 +261,7 @@
                     <label
                       >สิทธิ์ในการใช้ข้อมูล <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_pers_object.required"
+                        v-if="submitted && !$v.form.meta_pers_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -269,16 +271,17 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBasePermissions"
                       :class="{
-                        'style-chooser-required': $v.meta_pers_object.$error,
+                        'style-chooser-required':
+                          $v.form.meta_pers_object.$error,
                       }"
-                      v-model="meta_pers_object"
+                      v-model="form.meta_pers_object"
                     ></v-select>
                   </div>
                   <div class="col-sm-6">
                     <label
                       >ระดับชั้นความลับ <code>*</code>
                       <span
-                        v-if="submitted && !$v.meta_cf_object.required"
+                        v-if="submitted && !$v.form.meta_cf_object.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -288,9 +291,9 @@
                       placeholder="เลือกรายการ"
                       :options="vSelectBaseClassified"
                       :class="{
-                        'style-chooser-required': $v.meta_cf_object.$error,
+                        'style-chooser-required': $v.form.meta_cf_object.$error,
                       }"
-                      v-model="meta_cf_object"
+                      v-model="form.meta_cf_object"
                     ></v-select>
                   </div>
                 </div>
@@ -301,7 +304,7 @@
                     <input
                       type="text"
                       placeholder="ระบุชื่อและนามสกุล"
-                      v-model="metac_name"
+                      v-model="form.metac_name"
                     />
                   </div>
                   <div class="col-sm-6">
@@ -309,7 +312,7 @@
                     <input
                       type="text"
                       placeholder="ระบุอีเมล์ เช่น abc@abc.com"
-                      v-model="metac_email"
+                      v-model="form.metac_email"
                     />
                   </div>
                 </div>
@@ -319,7 +322,7 @@
                     <input
                       type="text"
                       placeholder="ระบุเบอร์โทร"
-                      v-model="metac_phone"
+                      v-model="form.metac_phone"
                     />
                   </div>
                 </div>
@@ -346,92 +349,103 @@
         </div>
       </div>
     </form>
+    <div v-if="submitted && showNonity">
+      <notify states="alert-danger" detail="กรุณากรอกข้อมูลให้ครบถ้วน" />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required, maxLength } from "vuelidate/lib/validators";
+import notify from "../../components/modules/notify.vue";
 export default {
   name: "BusinessForm",
+  components: {
+    notify,
+  },
   props: {},
   data() {
     return {
-      meta_name: null,
-      meta_code: null,
-      bsds_text: null,
-      bsds_owner: null,
-      bsds_ref: null,
-      bsds_url: null,
-      metac_name: null,
-      metac_email: null,
-      metac_phone: null,
-      meta_bc_object: null,
-      meta_grp_object: null,
-      meta_ins_object: null,
-      meta_bsk_object: null,
-      meta_lg_object: null,
-      meta_dt_object: null,
-      meta_ft_object: null,
-      meta_sc_object: null,
-      meta_pers_object: null,
-      meta_cf_object: null,
-      options: ["foo", "bar", "baz"],
+      form: {
+        meta_name: null,
+        meta_code: null,
+        bsds_text: null,
+        bsds_owner: null,
+        bsds_ref: null,
+        bsds_url: null,
+        metac_name: null,
+        metac_email: null,
+        metac_phone: null,
+        meta_bc_object: null,
+        meta_grp_object: null,
+        meta_ins_object: null,
+        meta_bsk_object: null,
+        meta_lg_object: null,
+        meta_dt_object: null,
+        meta_ft_object: null,
+        meta_sc_object: null,
+        meta_pers_object: null,
+        meta_cf_object: null,
+      },
       submitted: false,
+      showNonity: false,
     };
   },
   validations: {
-    meta_name: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_code: {
-      required,
-      minLength: maxLength(255),
-    },
-    bsds_text: {
-      required,
-      minLength: maxLength(255),
-    },
-    bsds_owner: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_bc_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_ins_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_lg_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_ft_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_bsk_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_dt_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_sc_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_pers_object: {
-      required,
-      minLength: maxLength(255),
-    },
-    meta_cf_object: {
-      required,
-      minLength: maxLength(255),
+    form: {
+      meta_name: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_code: {
+        required,
+        minLength: maxLength(255),
+      },
+      bsds_text: {
+        required,
+        minLength: maxLength(255),
+      },
+      bsds_owner: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_bc_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_ins_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_lg_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_ft_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_bsk_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_dt_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_sc_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_pers_object: {
+        required,
+        minLength: maxLength(255),
+      },
+      meta_cf_object: {
+        required,
+        minLength: maxLength(255),
+      },
     },
   },
   created() {
@@ -466,33 +480,33 @@ export default {
       // stop here if form is invalid
       this.$v.$touch();
       if (this.$v.$invalid) {
-        console.log("invalid!");
+        this.showNonity = true;
+        setTimeout(() => (this.showNonity = false), 3000);
         return;
       }
 
       this.formSave();
-      // alert("SUCCESS!! :-)\n\n" + JSON.stringify(this.meta_lg_object));
     },
     formSave() {
       let saveObj = {
-        meta_name: this.meta_name,
-        meta_code: this.meta_code,
-        bsds_text: this.bsds_text,
-        bsds_owner: this.bsds_owner,
-        bsds_ref: this.bsds_ref,
-        bsds_url: this.bsds_url,
-        metac_name: this.metac_name,
-        metac_email: this.metac_email,
-        metac_phone: this.metac_phone,
-        bc_id: this.meta_bc_object.code,
-        ins_id: this.meta_ins_object.code,
-        bsk_id: this.meta_bsk_object,
-        lg_id: this.meta_lg_object,
-        dt_id: this.meta_dt_object.code,
-        ft_id: this.meta_ft_object.code,
-        sc_id: this.meta_sc_object.code,
-        pers_id: this.meta_pers_object.code,
-        cf_id: this.meta_cf_object.code,
+        meta_name: this.form.meta_name,
+        meta_code: this.form.meta_code,
+        bsds_text: this.form.bsds_text,
+        bsds_owner: this.form.bsds_owner,
+        bsds_ref: this.form.bsds_ref,
+        bsds_url: this.form.bsds_url,
+        metac_name: this.form.metac_name,
+        metac_email: this.form.metac_email,
+        metac_phone: this.form.metac_phone,
+        bc_id: this.form.meta_bc_object.code,
+        ins_id: this.form.meta_ins_object.code,
+        bsk_id: this.form.meta_bsk_object,
+        lg_id: this.form.meta_lg_object,
+        dt_id: this.form.meta_dt_object.code,
+        ft_id: this.form.meta_ft_object.code,
+        sc_id: this.form.meta_sc_object.code,
+        pers_id: this.form.meta_pers_object.code,
+        cf_id: this.form.meta_cf_object.code,
       };
       console.log(saveObj);
       alert("SUCCESS!! :-)\n\n" + JSON.stringify(saveObj));
