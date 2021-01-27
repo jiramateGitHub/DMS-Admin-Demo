@@ -91,34 +91,18 @@
               </div>
               <hr />
               <div class="row">
-                <div class="col-sm-6 text-left">
+                <div class="col-sm-12 text-right">
                   <button
-                    class="btn btn-danger"
+                    class="btn btn-success"
                     rel="tooltip"
                     data-placement="top"
-                    title=""
-                    data-original-title="คลิกเพื่อเพิ่มข้อมูล"
-                    @click="Back()"
+                    title="คลิกเพื่อบันทึกข้อมูล"
+                     @click="Save()"
                   >
                     <span class="btn-label"
-                      ><i class="material-icons">navigate_before</i></span
+                      ><i class="material-icons">check</i></span
                     >
-                    ย้อนกลับ
-                  </button>
-                </div>
-                <div class="col-sm-6 text-right">
-                  <button
-                    class="btn btn-primary"
-                    rel="tooltip"
-                    data-placement="top"
-                    title=""
-                    data-original-title="คลิกเพื่อเพิ่มข้อมูล"
-                    @click="Save()"
-                  >
-                    <span class="btn-label"
-                      ><i class="material-icons">navigate_next</i></span
-                    >
-                    ถัดไป
+                    บันทึก
                   </button>
                 </div>
               </div>

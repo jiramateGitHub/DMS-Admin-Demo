@@ -4,6 +4,7 @@ import store from './store'
 import VueRouter from "vue-router";
 import Chartist from "chartist";
 import vSelect from 'vue-select'
+import Vuelidate from 'vuelidate'
 Vue.config.productionTip = false
 
 // router setup
@@ -15,7 +16,7 @@ const router = new VueRouter({
 });
 
 Vue.component('v-select', vSelect)
-
+Vue.use(Vuelidate)
 Vue.use(VueRouter);
 
 /* eslint-disable no-new */
