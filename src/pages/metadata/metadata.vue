@@ -15,7 +15,7 @@
             <div class="card-footer text-right">
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <v-select
-                  placeholder="เลือกรายการ"
+                  placeholder="ทั้งหมด"
                   :options="vSelectBaseCategories"
                 ></v-select>
               </div>
@@ -76,8 +76,26 @@
               </div>
               <h4 class="card-title">ค้นหา</h4>
             </div>
-            <div class="card-footer text-right">
-              {{vSelectBaseCategories}}
+            <div class="card-footer text-left">
+              <div class="col-md-4">
+                <label>หน่วยงานภายใน</label
+                ><br />
+                <v-select
+                  placeholder="ทั้งหมด"
+                  :options="vSelectBaseCategories"
+                ></v-select>
+              </div>
+              <div class="col-md-4">
+                <label>สถานะชุดข้อมูล </label
+                ><br />
+                <v-select
+                  placeholder="ทั้งหมด"
+                  :options="vSelectBaseCategories"
+                ></v-select>
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control datepicker" value="10/06/2018">
+              </div>
             </div>
           </div>
         </div>
@@ -112,13 +130,16 @@ export default {
     ...mapState({
       baseCategoriesList: (state) => state.metadata_management.base_categories,
     }),
-     ...mapGetters({
-      vSelectBaseCategories: 'metadata_management/vSelectBaseCategories'
-    })
+    ...mapGetters({
+      vSelectBaseCategories: "metadata_management/vSelectBaseCategories",
+    }),
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.row{
+  padding:0px
+}
 </style>

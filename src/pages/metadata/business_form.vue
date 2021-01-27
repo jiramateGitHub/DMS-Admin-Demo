@@ -349,7 +349,7 @@
         </div>
       </div>
     </form>
-    <div v-if="submitted && showNonity">
+    <div v-if="submitted && showNotity">
       <notify states="alert-danger" detail="กรุณากรอกข้อมูลให้ครบถ้วน" />
     </div>
   </div>
@@ -389,7 +389,7 @@ export default {
         meta_cf_object: null,
       },
       submitted: false,
-      showNonity: false,
+      showNotity: false,
     };
   },
   validations: {
@@ -480,8 +480,8 @@ export default {
       // stop here if form is invalid
       this.$v.$touch();
       if (this.$v.$invalid) {
-        this.showNonity = true;
-        setTimeout(() => (this.showNonity = false), 3000);
+        this.showNotity = true;
+        setTimeout(() => (this.showNotity = false), 3000);
         return;
       }
 

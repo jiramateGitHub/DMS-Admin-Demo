@@ -149,7 +149,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr role="row" class="odd">
+                        <tr role="row">
                           <td tabindex="0" class="sorting_1">Airi Satou</td>
                           <td>Accountant</td>
                           <td>Tokyo</td>
@@ -165,47 +165,6 @@
                               data-original-title="คลิกเพื่อค้นหาข้อมูล"
                               data-toggle="modal"
                               data-target="#myModal"
-                            >
-                              <i class="material-icons">search</i>
-                            </button>
-                            &nbsp;
-                            <button
-                              type="button"
-                              rel="tooltip"
-                              class="btn btn-warning"
-                              data-placement="top"
-                              title=""
-                              data-original-title="คลิกเพื่อแก้ไขข้อมูล"
-                            >
-                              <i class="material-icons">edit</i>
-                            </button>
-                            &nbsp;
-                            <button
-                              type="button"
-                              rel="tooltip"
-                              class="btn btn-danger"
-                              data-placement="top"
-                              title=""
-                              data-original-title="คลิกเพื่อลบข้อมูล"
-                            >
-                              <i class="material-icons">close</i>
-                            </button>
-                          </td>
-                        </tr>
-                        <tr role="row" class="even">
-                          <td class="sorting_1" tabindex="0">Angelica Ramos</td>
-                          <td>Chief Executive Officer (CEO)</td>
-                          <td>London</td>
-                          <td class="text-center">47</td>
-                          <td class="text-center">2009/10/09</td>
-                          <td class="td-actions text-center">
-                            <button
-                              type="button"
-                              rel="tooltip"
-                              class="btn btn-primary"
-                              data-placement="top"
-                              title=""
-                              data-original-title="คลิกเพื่อค้นหาข้อมูล"
                             >
                               <i class="material-icons">search</i>
                             </button>

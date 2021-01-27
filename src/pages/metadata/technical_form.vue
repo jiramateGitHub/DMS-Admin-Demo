@@ -57,6 +57,9 @@
                             <input
                               type="text"
                               placeholder="ระบุชื่อฟิลด์ เช่น รหัสพนักงาน"
+                              :class="{
+                                'input-required': $v.$error,
+                              }"
                               v-model.trim="item.tcd_attribute.$model"
                             />
                           </td>
@@ -65,6 +68,9 @@
                               class="style-chooser"
                               placeholder="เลือกรายการ"
                               :options="optionType"
+                              :class="{
+                                'style-chooser-required': $v.$error,
+                              }"
                               v-model="item.tcd_type.$model"
                             ></v-select>
                           </td>
@@ -72,6 +78,9 @@
                             <input
                               type="number"
                               placeholder=""
+                              :class="{
+                                'input-required': $v.$error,
+                              }"
                               v-model="item.tcd_length.$model"
                             />
                           </td>
@@ -80,6 +89,9 @@
                               class="style-chooser"
                               placeholder="เลือกรายการ"
                               :options="optionKey"
+                              :class="{
+                                'style-chooser-required': $v.$error,
+                              }"
                               v-model="item.tcd_key.$model"
                             ></v-select>
                           </td>
@@ -87,6 +99,9 @@
                             <input
                               type="text"
                               placeholder="ตัวอย่าง A001"
+                              :class="{
+                                'input-required': $v.$error,
+                              }"
                               v-model="item.tcd_sample.$model"
                             />
                           </td>
@@ -136,7 +151,7 @@
                     rel="tooltip"
                     data-placement="top"
                     title="คลิกเพื่อบันทึกข้อมูล"
-                    @click="Save()"
+                    @click="formValidation()"
                   >
                     <span class="btn-label"
                       ><i class="material-icons">check</i></span
@@ -151,16 +166,26 @@
         </div>
       </div>
     </div>
+    <div v-if=" showNotify">
+      <notify states="alert-danger" v-bind:detail="messageNotify" />
+    </div>
   </div>
 </template>
 
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
+import notify from "../../components/modules/notify.vue";
+
 export default {
   name: "TechnicalForm",
-  props: {},
+  components: {
+    notify,
+  },
   data() {
     return {
+      submitted: false,
+      showNotify: false,
+      messageNotify: "s",
       items: [
         {
           tcd_attribute: "",
@@ -213,7 +238,7 @@ export default {
   validations: {
     items: {
       required,
-      minLength: minLength(3),
+      minLength: minLength(1),
       $each: {
         tcd_attribute: {
           required,
@@ -230,12 +255,8 @@ export default {
         tcd_sample: {
           required,
         },
-        tcd_anonymous: {
-          required,
-        },
-        tcd_comment: {
-          required,
-        },
+        tcd_anonymous: {},
+        tcd_comment: {},
       },
     },
   },
@@ -243,10 +264,21 @@ export default {
     genIndex: function (index) {
       return parseInt(index) + 1;
     },
-    Back() {
-      this.$router.replace({ path: "/metadata/business_form" });
+    formValidation() {
+      this.submitted = true;
+
+      // stop here if form is invalid
+      this.$v.items.$touch();
+      if (this.$v.$invalid) {
+        this.showNotify = true;
+        this.messageNotify = "กรุณากรอกข้อมูลให้ครบถ้วน";
+        setTimeout(() => (this.showNotify = false), 3000);
+        return;
+      }
+
+      this.formSave();
     },
-    Save() {
+    formSave() {
       console.log(this.items);
       // this.$router.replace({ path: "/metadata" });
     },
@@ -256,33 +288,37 @@ export default {
         tcd_type: "",
         tcd_length: 0,
         tcd_key: "",
+        tcd_sample: "",
         tcd_anonymous: false,
         tcd_comment: "",
       });
     },
     deleteItem: function (index) {
-      this.$swal
-        .fire({
-          title: "คุณต้องการลบใช้หรือไม่",
-          text: "คุณจะไม่สามารถย้อนกลับการลบได้!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "ยืนยัน",
-          cancelButtonText:"ยกเลิก"
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.items.splice(index, 1);
+      console.log(this.items.length);
+      if (parseInt(this.items.length) <= 1) {
+        this.showNotify = true;
+        this.messageNotify = "ไม่สามารถลบแถวได้";
+        setTimeout(() => (this.showNotify = false), 3000);
+      } else {
+        this.$swal
+          .fire({
+            title: "คุณต้องการลบใช้หรือไม่",
+            text: "คุณจะไม่สามารถย้อนกลับการลบได้!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.items.splice(index, 1);
 
-            this.$swal.fire(
-              "ลบสำเร็จ!",
-              "",
-              "success"
-            );
-          }
-        });
+              this.$swal.fire("ลบสำเร็จ!", "", "success");
+            }
+          });
+      }
     },
   },
 };
@@ -298,8 +334,19 @@ input {
   border-radius: 5px;
 }
 
+.input-required {
+  border-style: 1px solid;
+  border-color: red;
+}
+
 .row {
   padding-bottom: 1%;
+}
+
+.style-chooser-required .vs__dropdown-toggle,
+.style-chooser-required .vs__dropdown-menu {
+  border: 1px solid;
+  border-color: red;
 }
 
 .style-chooser .vs__search::placeholder,
