@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUser: "dms_base_categories/getUser",
+      getUser: "metadata_management/getUser",
     }),
   },
   computed: {

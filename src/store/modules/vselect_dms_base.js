@@ -8,12 +8,14 @@ let headers = {
 
 const state = {
     base_categories: [],
+    base_classified: [],
     base_datagroups: [],
     base_durations: [],
     base_formats: [],
     base_languages: [],
     base_permissions: [],
     base_scopes: [],
+    institution: [],
 }
 
 const getters = {
@@ -25,7 +27,15 @@ const getters = {
         }
         return myArray
     },
-    fetchBaseDatagroups: (state) => {
+    vSelectBaseClassified: (state) => {
+        let myArray = [];
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(state.base_classified)) {
+            myArray.push({ code: value.cf_id, label: value.cf_text })
+        }
+        return myArray
+    },
+    vSelectBaseDatagroups: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_datagroups)) {
@@ -33,7 +43,7 @@ const getters = {
         }
         return myArray
     },
-    fetchBaseDurations: (state) => {
+    vSelectBaseDurations: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_durations)) {
@@ -41,7 +51,7 @@ const getters = {
         }
         return myArray
     },
-    fetchBaseFormats: (state) => {
+    vSelectBaseFormats: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_formats)) {
@@ -49,7 +59,7 @@ const getters = {
         }
         return myArray
     },
-    fetchBaseLanguages: (state) => {
+    vSelectBaseLanguages: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_languages)) {
@@ -57,7 +67,7 @@ const getters = {
         }
         return myArray
     },
-    fetchBasePermissions: (state) => {
+    vSelectBasePermissions: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_permissions)) {
@@ -65,11 +75,19 @@ const getters = {
         }
         return myArray
     },
-    fetchBaseScopes: (state) => {
+    vSelectBaseScopes: (state) => {
         let myArray = [];
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(state.base_scopes)) {
             myArray.push({ code: value.sc_id, label: value.sc_text })
+        }
+        return myArray
+    },
+    vSelectInstitution: (state) => {
+        let myArray = [];
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(state.institution)) {
+            myArray.push({ code: value.ins_id, label: value.ins_name })
         }
         return myArray
     },
@@ -79,6 +97,11 @@ const actions = {
     async fetchBaseCategories({ commit }) {
         await Axios.get(api + "/dms_base_categories", { headers: headers })
             .then(res => commit("fetchBaseCategories", { res }))
+            .catch(err => alert(err));
+    },
+    async fetchBaseClassified({ commit }) {
+        await Axios.get(api + "/dms_base_classified", { headers: headers })
+            .then(res => commit("fetchBaseClassified", { res }))
             .catch(err => alert(err));
     },
     async fetchBaseDatagroups({ commit }) {
@@ -111,12 +134,21 @@ const actions = {
             .then(res => commit("fetchBaseScopes", { res }))
             .catch(err => alert(err));
     },
+    async fetchInstitution({ commit }) {
+        await Axios.get(api + "/dms_institution", { headers: headers })
+            .then(res => commit("fetchInstitution", { res }))
+            .catch(err => alert(err));
+    },
 }
 
 const mutations = {
     fetchBaseCategories(state, { res }) {
         state.base_categories = res.data;
         console.log(state.base_categories);
+    },
+    fetchBaseClassified(state, { res }) {
+        state.base_classified = res.data;
+        console.log(state.base_classified);
     },
     fetchBaseDatagroups(state, { res }) {
         state.base_datagroups = res.data;
@@ -141,6 +173,10 @@ const mutations = {
     fetchBaseScopes(state, { res }) {
         state.base_scopes = res.data;
         console.log(state.base_scopes);
+    },
+    fetchInstitution(state, { res }) {
+        state.institution = res.data;
+        console.log(state.institution);
     },
 
 }

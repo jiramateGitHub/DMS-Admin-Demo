@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetchBaseCategoriesAction: "dms_base_categories/fetchBaseCategories",
+      fetchBaseCategoriesAction: "metadata_management/fetchBaseCategories",
     }),
     fetchBaseCategories() {
       this.fetchBaseCategoriesAction();
@@ -113,7 +113,7 @@ export default {
       baseCategoriesList: (state) => state.metadata_management.base_categories,
     }),
      ...mapGetters({
-      vSelectBaseCategories: 'dms_base_categories/vSelectBaseCategories'
+      vSelectBaseCategories: 'metadata_management/vSelectBaseCategories'
     })
   },
 };
