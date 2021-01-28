@@ -144,39 +144,30 @@ const actions = {
 const mutations = {
     fetchBaseCategories(state, { res }) {
         state.base_categories = res.data;
-        console.log(state.base_categories);
     },
     fetchBaseClassified(state, { res }) {
         state.base_classified = res.data;
-        console.log(state.base_classified);
     },
     fetchBaseDatagroups(state, { res }) {
         state.base_datagroups = res.data;
-        console.log(state.base_datagroups);
     },
     fetchBaseDurations(state, { res }) {
         state.base_durations = res.data;
-        console.log(state.base_durations);
     },
     fetchBaseFormats(state, { res }) {
         state.base_formats = res.data;
-        console.log(state.base_formats);
     },
     fetchBaseLanguages(state, { res }) {
         state.base_languages = res.data;
-        console.log(state.base_languages);
     },
     fetchBasePermissions(state, { res }) {
         state.base_permissions = res.data;
-        console.log(state.base_permissions);
     },
     fetchBaseScopes(state, { res }) {
         state.base_scopes = res.data;
-        console.log(state.base_scopes);
     },
     fetchInstitution(state, { res }) {
         state.institution = res.data;
-        console.log(state.institution);
     },
 
 }

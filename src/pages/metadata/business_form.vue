@@ -14,6 +14,11 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-12">
+                    <h4>รายละเอียดชุดข้อมูล</h4>
+                  </div>
+                </div>
+                <div class="row section-form">
+                  <div class="col-sm-12">
                     <label class="form__label"
                       >ชุดข้อข้อมูล <code>*</code>
                       <span
@@ -33,8 +38,8 @@
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6">
+                <div class="row section-form">
+                  <div class="col-sm-4">
                     <label
                       >เลขที่เมทาดาตา <code>*</code
                       ><span
@@ -52,7 +57,7 @@
                     />
                   </div>
 
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     <label
                       >หมวดหมู่ข้อมูล <code>*</code
                       ><span
@@ -71,13 +76,33 @@
                       v-model="form.meta_bc_object"
                     ></v-select>
                   </div>
+                  <div class="col-sm-4">
+                    <label
+                      >กลุ่มข้อมูล <code>*</code
+                      ><span
+                        v-if="submitted && !$v.form.meta_grp_object.required"
+                        class="text-danger"
+                      >
+                        This field is required.</span
+                      ></label
+                    ><br />
+                    <v-select
+                      placeholder="เลือกรายการ"
+                      :options="vSelectBaseDatagroups"
+                      :class="{
+                        'style-chooser-required':
+                          $v.form.meta_grp_object.$error,
+                      }"
+                      v-model="form.meta_grp_object"
+                    ></v-select>
+                  </div>
                 </div>
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label
                       >เจ้าของข้อมูล <code>*</code
                       ><span
-                        v-if="submitted && !$v.form.meta_code.required"
+                        v-if="submitted && !$v.form.bsds_owner.required"
                         class="text-danger"
                       >
                         This field is required.</span
@@ -111,8 +136,7 @@
                     ></v-select>
                   </div>
                 </div>
-                <hr />
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-12">
                     <label
                       >คำอธิบาย <code>*</code
@@ -132,7 +156,7 @@
                     />
                   </div>
                 </div>
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label>แหล่งที่มาของคำอธิบาย </label><br />
                     <input
@@ -150,8 +174,12 @@
                     />
                   </div>
                 </div>
-                <hr />
-                <div class="row">
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-sm-12">
+                    <h4>รายละเอียดเพิ่มเติม</h4>
+                  </div>
+                </div>
+                <div class="row section-form">
                   <div class="col-sm-12">
                     <label
                       >คําสําคัญ (Keywords) <code>*</code>
@@ -174,7 +202,7 @@
                     />
                   </div>
                 </div>
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label
                       >ภาษาที่ใช้ <code>*</code
@@ -216,7 +244,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label
                       >ความถี่ในการเผยแพร่ข้อมูล <code>*</code>
@@ -256,7 +284,7 @@
                     ></v-select>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label
                       >สิทธิ์ในการใช้ข้อมูล <code>*</code>
@@ -297,8 +325,12 @@
                     ></v-select>
                   </div>
                 </div>
-                <hr />
-                <div class="row">
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-sm-12">
+                    <h4>รายละเอียดการติดต่อ</h4>
+                  </div>
+                </div>
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label>ชื่อ-นามสกุล ผู้ติดต่อ </label><br />
                     <input
@@ -316,7 +348,7 @@
                     />
                   </div>
                 </div>
-                <div class="row">
+                <div class="row section-form">
                   <div class="col-sm-6">
                     <label>เบอร์โทรผู้ติดต่อ </label><br />
                     <input
@@ -414,6 +446,10 @@ export default {
         required,
         minLength: maxLength(255),
       },
+      meta_grp_object: {
+        required,
+        minLength: maxLength(255),
+      },
       meta_ins_object: {
         required,
         minLength: maxLength(255),
@@ -450,6 +486,7 @@ export default {
   },
   created() {
     this.fetchvSelectBase();
+    this.formEdit();
   },
   methods: {
     ...mapActions({
@@ -462,6 +499,7 @@ export default {
       fetchBasePermissionsAction: "vselect_dms_base/fetchBasePermissions",
       fetchBaseScopesAction: "vselect_dms_base/fetchBaseScopes",
       fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
+      saveAction1: "business_meatadata/saveMetadata",
     }),
     fetchvSelectBase() {
       this.fetchBaseCategoriesAction();
@@ -487,31 +525,61 @@ export default {
 
       this.formSave();
     },
-    formSave() {
-      let saveObj = {
-        meta_name: this.form.meta_name,
-        meta_code: this.form.meta_code,
-        bsds_text: this.form.bsds_text,
-        bsds_owner: this.form.bsds_owner,
-        bsds_ref: this.form.bsds_ref,
-        bsds_url: this.form.bsds_url,
-        metac_name: this.form.metac_name,
-        metac_email: this.form.metac_email,
-        metac_phone: this.form.metac_phone,
-        bc_id: this.form.meta_bc_object.code,
-        ins_id: this.form.meta_ins_object.code,
-        bsk_id: this.form.meta_bsk_object,
-        lg_id: this.form.meta_lg_object,
-        dt_id: this.form.meta_dt_object.code,
-        ft_id: this.form.meta_ft_object.code,
-        sc_id: this.form.meta_sc_object.code,
-        pers_id: this.form.meta_pers_object.code,
-        cf_id: this.form.meta_cf_object.code,
-      };
-      console.log(saveObj);
-      alert("SUCCESS!! :-)\n\n" + JSON.stringify(saveObj));
-
+    async formSave() {
+      let payload = this.form;
+      console.log(payload);
+      await this.saveAction1(payload);
+      // alert("SUCCESS!! :-)\n\n" + JSON.stringify(payload));
       // this.$router.replace({ path: "/metadata/technical_form" });
+    },
+    formEdit() {
+      this.form.meta_name = "ทดสอบ";
+      this.form.meta_code = "TEST001";
+      this.form.bsds_text = "คำอธิบาย";
+      this.form.bsds_owner = "เจ้าของข้อมูล";
+      this.form.bsds_ref = "แหล่งที่มาของคำอธิบาย";
+      this.form.bsds_url = "URL เพิ่มเติม";
+      this.form.metac_name = "ชื่อ-นามสกุล ผู้ติดต่อ";
+      this.form.metac_email = "อีเมล์ผู้ติดต่อ";
+      this.form.metac_phone = "เบอร์โทรผู้ติดต่อ";
+      this.form.meta_bc_object = {
+        code: 1,
+        label: "ข้อมูลส่วนบุคคล",
+      };
+
+      (this.form.meta_grp_object = {
+        code: 1,
+        label: "สถิติทางการ",
+      }),
+        (this.form.meta_ins_object = {
+          code: 1,
+          label: "สำนักงานสถิติแห่งชาติ",
+        }),
+        (this.form.meta_bsk_object = ["key1", "key2"]);
+      this.form.meta_lg_object = [
+        { code: 1, label: "ภาษาไทย" },
+        { code: 2, label: "ภาษาอังกฤษ" },
+      ];
+      this.form.meta_dt_object = {
+        code: 1,
+        label: "ไม่เผยแพร่",
+      };
+      this.form.meta_ft_object = {
+        code: 1,
+        label: "JSON",
+      };
+      this.form.meta_sc_object = {
+        code: 1,
+        label: "ภายในหน่วยงาน",
+      };
+      this.form.meta_pers_object = {
+        code: 1,
+        label: "ใช้โดยอิสระ",
+      };
+      this.form.meta_cf_object = {
+        code: 1,
+        label: "ไม่เป็นความลับ",
+      };
     },
   },
   computed: {
@@ -552,6 +620,10 @@ textarea {
   padding-bottom: 1%;
 }
 
+.section-form {
+  margin-left: 5px;
+}
+
 .input-required {
   border-style: 1px solid;
   border-color: red;
@@ -567,6 +639,4 @@ textarea {
   border: 1px solid;
   border-color: red;
 }
-
-
 </style>
