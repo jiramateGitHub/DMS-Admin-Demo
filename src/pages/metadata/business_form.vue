@@ -366,11 +366,21 @@
                       rel="tooltip"
                       data-placement="top"
                       title="คลิกเพื่อบันทึกข้อมูล"
+                      :disabled="
+                        submitStatus === 'PENDING' || submitStatus === 'ERROR'
+                      "
                     >
                       <span class="btn-label"
                         ><i class="material-icons">check</i></span
                       >
-                      บันทึก
+                      &nbsp;
+                      <span v-if="submitStatus === 'OK'">บันทึก</span>
+                      <span v-if="submitStatus === 'PENDING'"
+                        >กำลังบันทึกข้อมูล...</span
+                      >
+                      <span v-if="submitStatus === 'ERROR'"
+                        >เกิดข้อผิดพลาด กรุณารีเฟรชหน้าเว็บ!</span
+                      >
                     </button>
                   </div>
                 </div>
@@ -381,8 +391,11 @@
         </div>
       </div>
     </form>
-    <div v-if="submitted && showNotity">
+    <div v-if="submitted && showNotityWarning">
       <notify states="alert-danger" detail="กรุณากรอกข้อมูลให้ครบถ้วน" />
+    </div>
+    <div v-if="submitted && showNotityComplete">
+      <notify states="alert-success" detail="บันทึกข้อมูลสำเร็จ" />
     </div>
   </div>
 </template>
@@ -420,8 +433,10 @@ export default {
         meta_pers_object: null,
         meta_cf_object: null,
       },
-      submitted: false,
-      showNotity: false,
+      submitted: null,
+      submitStatus: null,
+      showNotityComplete: false,
+      showNotityWarning: false,
     };
   },
   validations: {
@@ -487,6 +502,7 @@ export default {
   created() {
     this.fetchvSelectBase();
     this.formEdit();
+    this.submitStatus = "OK";
   },
   methods: {
     ...mapActions({
@@ -499,7 +515,7 @@ export default {
       fetchBasePermissionsAction: "vselect_dms_base/fetchBasePermissions",
       fetchBaseScopesAction: "vselect_dms_base/fetchBaseScopes",
       fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
-      saveAction1: "business_meatadata/saveMetadata",
+      saveAction: "business_meatadata/saveMetadata",
     }),
     fetchvSelectBase() {
       this.fetchBaseCategoriesAction();
@@ -518,19 +534,28 @@ export default {
       // stop here if form is invalid
       this.$v.$touch();
       if (this.$v.$invalid) {
-        this.showNotity = true;
-        setTimeout(() => (this.showNotity = false), 3000);
+        this.showNotityWarning = true;
+        setTimeout(() => (this.showNotityWarning = false), 3000);
         return;
       }
 
       this.formSave();
     },
     async formSave() {
+      this.submitStatus = "PENDING";
+
       let payload = this.form;
-      console.log(payload);
-      await this.saveAction1(payload);
-      // alert("SUCCESS!! :-)\n\n" + JSON.stringify(payload));
-      // this.$router.replace({ path: "/metadata/technical_form" });
+      await this.saveAction(payload);
+
+      console.log(this.businessSaveStatus);
+
+      if (this.businessSaveStatus.code == 0) {
+        this.submitStatus = "OK";
+        this.showNotityComplete = true;
+        setTimeout(() => (this.showNotityComplete = false), 3000);
+      } else {
+        this.submitStatus = "ERROR";
+      }
     },
     formEdit() {
       this.form.meta_name = "ทดสอบ";
@@ -593,6 +618,7 @@ export default {
       vSelectBasePermissions: "vselect_dms_base/vSelectBasePermissions",
       vSelectBaseScopes: "vselect_dms_base/vSelectBaseScopes",
       vSelectInstitution: "vselect_dms_base/vSelectInstitution",
+      businessSaveStatus: "business_meatadata/businessSaveStatus",
     }),
   },
 };
