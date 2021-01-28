@@ -300,6 +300,7 @@
 </template>
 <script>
 import MetadataInfo from "../../pages/metadata/metadata_info.vue";
+// import $ from "jquery";
 export default {
   name: "TableMetadata",
   props: {},
@@ -310,6 +311,10 @@ export default {
     addMetadata() {
       this.$router.replace({ path: "/metadata/business_form" });
     },
+  },
+  mounted() {
+    // Your JQuery code here
+    
   },
 };
 </script>

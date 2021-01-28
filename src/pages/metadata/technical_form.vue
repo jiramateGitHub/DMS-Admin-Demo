@@ -161,7 +161,9 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer text-right"></div>
+            <div class="card-footer text-right">
+              <pre>{{getDmsMetadata}}</pre>
+            </div>
           </div>
         </div>
       </div>
@@ -173,6 +175,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import { required, minLength } from "vuelidate/lib/validators";
 import notify from "../../components/modules/notify.vue";
 
@@ -180,6 +183,9 @@ export default {
   name: "TechnicalForm",
   components: {
     notify,
+  },
+  created() {
+   
   },
   data() {
     return {
@@ -261,6 +267,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      saveAction: "business_meatadata/saveMetadata",
+    }),
     genIndex: function (index) {
       return parseInt(index) + 1;
     },
@@ -302,7 +311,7 @@ export default {
       } else {
         this.$swal
           .fire({
-            title: "คุณต้องการลบใช้หรือไม่",
+            title: "คุณต้องการลบใช่หรือไม่",
             text: "คุณจะไม่สามารถย้อนกลับการลบได้!",
             icon: "warning",
             showCancelButton: true,
@@ -314,18 +323,22 @@ export default {
           .then((result) => {
             if (result.isConfirmed) {
               this.items.splice(index, 1);
-
               this.$swal.fire("ลบสำเร็จ!", "", "success");
             }
           });
       }
     },
   },
+   computed: {
+    ...mapGetters({
+      getDmsMetadata: "business_meatadata/getDmsMetadata",
+    }),
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style >
 input {
   width: 100%;
   padding: 5px;

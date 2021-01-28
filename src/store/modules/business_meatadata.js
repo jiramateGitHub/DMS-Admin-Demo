@@ -35,6 +35,10 @@ const getters = {
             }
         }
     },
+    getDmsMetadata: (state) => {
+        return state.dms_metadata;
+    },
+
 }
 
 const actions = {
