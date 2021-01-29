@@ -193,6 +193,7 @@ export default {
   components: {
     notify,
   },
+  props: ["edit_meta_id"],
   created() {
     this.setMetaId();
     this.submitStatus = "OK";

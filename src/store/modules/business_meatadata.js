@@ -37,6 +37,7 @@ const getters = {
 
 const actions = {
     async saveMetadata({ commit }, payload) {
+        console.log(payload)
         let setStateError = true
             // Step 1 : Insert payload_dms_metadata into database.
         let payload_dms_metadata = {

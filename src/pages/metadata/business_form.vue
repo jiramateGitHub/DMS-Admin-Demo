@@ -418,7 +418,7 @@ export default {
   components: {
     notify,
   },
-  props: {},
+  props: ["edit_meta_id"],
   data() {
     return {
       form: {
