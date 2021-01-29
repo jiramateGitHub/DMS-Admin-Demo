@@ -554,8 +554,6 @@ export default {
       let payload = this.form;
       await this.saveAction(payload);
 
-      console.log(this.businessSaveStatus);
-
       if (this.businessSaveStatus.code == 0) {
         this.submitStatus = "OK";
         this.$swal
@@ -674,7 +672,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style >
 input {
   width: 100%;
   padding: 5px;

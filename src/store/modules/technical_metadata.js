@@ -8,6 +8,7 @@ let headers = {
 
 const state = {
     state_error: false,
+    tsm_meta_id: null,
     dms_technical_metadata: {},
     dms_technical_detail: [],
 }
@@ -36,18 +37,11 @@ const getters = {
 }
 
 const actions = {
-    async saveMetadata({ commit }, payload) {
+    async saveMetadata({ commit, state }, payload) {
         let setStateError = true
             // Step 1 : Insert payload_dms_technical_metadata into database.
         let payload_dms_technical_metadata = {
-            meta_code: payload.meta_code,
-            meta_name: payload.meta_name,
-            meta_active: "Y",
-            meta_create_user: 1,
-            meta_update_user: 1,
-            meta_bc_id: payload.meta_bc_object.code,
-            meta_grp_id: payload.meta_grp_object.code,
-            meta_ins_id: payload.meta_ins_object.code,
+            tsm_meta_id: state.tsm_meta_id,
         };
         //**-- Insert level (1) -----------------------*/
         await Axios.post(api + "/dms_technical_metadata", payload_dms_technical_metadata, { headers: headers })
@@ -57,16 +51,26 @@ const actions = {
                     //**-- Insert level (2) -----------------------------------------------------------------------------------*/
                     // Step 2 : Insert payload_dms_technical_detail into database.
                     //          affer step 1 complate, set payload value "tcd_tsm_id" form res.data.tsm_id
-                    let payload_dms_technical_detail = {
-                        metac_name: payload.metac_name,
-                        metac_phone: payload.metac_phone,
-                        metac_email: payload.metac_email,
-                        metac_detail: "",
-                        metac_meta_id: res.data.meta_id
-                    };
-                    await Axios.post(api + "/dms_technical_detail", payload_dms_technical_detail, { headers: headers })
-                        .then(res => commit("setDmsTechnicalDetail", { res }))
-                        .catch(err => alert(err));
+                    for (var i = 0; i < payload.length; i++) {
+                        let payload_dms_technical_detail = {
+                            tcd_tsm_id: res.data.tsm_id,
+                            tcd_seq: i,
+                            tcd_attribute: payload[i].tcd_attribute,
+                            tcd_type: payload[i].tcd_type.label,
+                            tcd_length: payload[i].tcd_length,
+                            tcd_key: payload[i].tcd_key.label,
+                            tcd_sample: payload[i].tcd_sample,
+                            tcd_comment: payload[i].tcd_comment,
+                            tcd_anonymous: payload[i].tcd_anonymous,
+                            tcd_active: "Y",
+                            tcd_create_user: 1,
+                            tcd_update_user: 1,
+                        };
+                        console.log(payload_dms_technical_detail)
+                        await Axios.post(api + "/dms_technical_detail", payload_dms_technical_detail, { headers: headers })
+                            .then(res => commit("setDmsTechnicalDetail", { res }))
+                            .catch(err => alert(err));
+                    }
 
                     setStateError = false
                     commit("setStateError", setStateError)
@@ -79,12 +83,18 @@ const actions = {
                 commit("setStateError", setStateError)
             })
     },
+    async setMetaId({ commit }, payload) {
+        commit("setMetaId", payload)
+    }
 
 }
 
 const mutations = {
     setStateError(state, res) {
         state.state_error = res
+    },
+    setMetaId(state, res) {
+        state.tsm_meta_id = res
     },
     setDmsTechnicalMetadata(state, { res }) {
         state.dms_technical_metadata = res.data

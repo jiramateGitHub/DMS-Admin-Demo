@@ -106,8 +106,8 @@
 </template>
 
 <script>
+import { mapActions,  mapGetters } from "vuex";
 import TableMetadata from "../../components/modules/table_metadata.vue";
-import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "Metadata",
@@ -120,18 +120,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetchBaseCategoriesAction: "metadata_management/fetchBaseCategories",
+      fetchBaseCategoriesAction: "vselect_dms_base/fetchBaseCategories",
     }),
     fetchBaseCategories() {
       this.fetchBaseCategoriesAction();
     },
   },
   computed: {
-    ...mapState({
-      baseCategoriesList: (state) => state.metadata_management.base_categories,
-    }),
     ...mapGetters({
-      vSelectBaseCategories: "metadata_management/vSelectBaseCategories",
+      vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
     }),
   },
 };

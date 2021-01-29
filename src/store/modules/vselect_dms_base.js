@@ -1,10 +1,4 @@
-import Axios from "axios";
-
-let api = process.env.VUE_APP_API_ROOT;
-let JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTE1NTg2ODMwNzksImV4cCI6MTYxMTU1ODY4MzEzOX0.c-_ROyG-LiLxdHhU2Dd2XQ54rOnRzE-E60PPS9DagoE"
-let headers = {
-    Authorization: "Bearer " + JWTToken
-};
+import mixinHttpRequest from '../../utils/http_request.js'
 
 const state = {
     base_categories: [],
@@ -95,49 +89,31 @@ const getters = {
 
 const actions = {
     async fetchBaseCategories({ commit }) {
-        await Axios.get(api + "/dms_base_categories", { headers: headers })
-            .then(res => commit("fetchBaseCategories", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_categories").then(res => { commit("fetchBaseCategories", { res }) })
     },
     async fetchBaseClassified({ commit }) {
-        await Axios.get(api + "/dms_base_classified", { headers: headers })
-            .then(res => commit("fetchBaseClassified", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_classified").then(res => { commit("fetchBaseClassified", { res }) })
     },
     async fetchBaseDatagroups({ commit }) {
-        await Axios.get(api + "/dms_base_datagroups", { headers: headers })
-            .then(res => commit("fetchBaseDatagroups", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_datagroups").then(res => { commit("fetchBaseDatagroups", { res }) })
     },
     async fetchBaseDurations({ commit }) {
-        await Axios.get(api + "/dms_base_durations", { headers: headers })
-            .then(res => commit("fetchBaseDurations", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_durations").then(res => { commit("fetchBaseDurations", { res }) })
     },
     async fetchBaseFormats({ commit }) {
-        await Axios.get(api + "/dms_base_formats", { headers: headers })
-            .then(res => commit("fetchBaseFormats", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_formats").then(res => { commit("fetchBaseFormats", { res }) })
     },
     async fetchBaseLanguages({ commit }) {
-        await Axios.get(api + "/dms_base_languages", { headers: headers })
-            .then(res => commit("fetchBaseLanguages", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_languages").then(res => { commit("fetchBaseLanguages", { res }) })
     },
     async fetchBasePermissions({ commit }) {
-        await Axios.get(api + "/dms_base_permissions", { headers: headers })
-            .then(res => commit("fetchBasePermissions", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_permissions").then(res => { commit("fetchBasePermissions", { res }) })
     },
     async fetchBaseScopes({ commit }) {
-        await Axios.get(api + "/dms_base_scopes", { headers: headers })
-            .then(res => commit("fetchBaseScopes", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_base_scopes").then(res => { commit("fetchBaseScopes", { res }) })
     },
     async fetchInstitution({ commit }) {
-        await Axios.get(api + "/dms_institution", { headers: headers })
-            .then(res => commit("fetchInstitution", { res }))
-            .catch(err => alert(err));
+        mixinHttpRequest.methods.get("/dms_institution").then(res => { commit("fetchInstitution", { res }) })
     },
 }
 

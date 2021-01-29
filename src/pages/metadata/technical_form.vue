@@ -8,7 +8,9 @@
               <div class="card-icon">
                 <i class="material-icons">add</i>
               </div>
-              <h4 class="card-title">เพิ่มชุดข้อมูล</h4>
+              <h4 class="card-title">
+                เพิ่มชุดข้อมูลเชิงเทคนิค - {{ getDmsMetadata.meta_name }}
+              </h4>
             </div>
             <div class="card-body">
               <div class="row">
@@ -152,23 +154,30 @@
                     data-placement="top"
                     title="คลิกเพื่อบันทึกข้อมูล"
                     @click="formValidation()"
+                    :disabled="
+                      submitStatus === 'PENDING' || submitStatus === 'ERROR'
+                    "
                   >
                     <span class="btn-label"
                       ><i class="material-icons">check</i></span
                     >
-                    บันทึก
+                    <span v-if="submitStatus === 'OK'">บันทึก</span>
+                    <span v-if="submitStatus === 'PENDING'"
+                      >กำลังบันทึกข้อมูล...</span
+                    >
+                    <span v-if="submitStatus === 'ERROR'"
+                      >เกิดข้อผิดพลาด กรุณารีเฟรชหน้าเว็บ!</span
+                    >
                   </button>
                 </div>
               </div>
             </div>
-            <div class="card-footer text-right">
-              <pre>{{getDmsMetadata}}</pre>
-            </div>
+            <div class="card-footer text-right"></div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if=" showNotify">
+    <div v-if="showNotify">
       <notify states="alert-danger" v-bind:detail="messageNotify" />
     </div>
   </div>
@@ -185,13 +194,15 @@ export default {
     notify,
   },
   created() {
-   
+    this.setMetaId();
+    this.submitStatus = "OK";
   },
   data() {
     return {
-      submitted: false,
+      submitted: null,
+      submitStatus: null,
       showNotify: false,
-      messageNotify: "s",
+      messageNotify: "",
       items: [
         {
           tcd_attribute: "",
@@ -268,8 +279,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveAction: "business_meatadata/saveMetadata",
+      setMetaIdAction: "technical_metadata/setMetaId",
+      saveAction: "technical_metadata/saveMetadata",
     }),
+    setMetaId() {
+      this.setMetaIdAction(this.getDmsMetadata.meta_id);
+    },
     genIndex: function (index) {
       return parseInt(index) + 1;
     },
@@ -287,8 +302,30 @@ export default {
 
       this.formSave();
     },
-    formSave() {
-      console.log(this.items);
+    async formSave() {
+      this.submitStatus = "PENDING";
+
+      let payload = this.items;
+      await this.saveAction(payload);
+
+      if (this.technicalSaveStatus.code == 0) {
+        this.submitStatus = "OK";
+        this.$swal.fire({
+          title: "บันทึกชุดข้อมูลเชิงเทคนิคสำเร็จ",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+          preConfirm: () => {
+            this.$router.replace({ path: "/metadata" });
+          },
+        });
+      } else {
+        this.submitStatus = "ERROR";
+        this.$swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      }
       // this.$router.replace({ path: "/metadata" });
     },
     addItem: function () {
@@ -329,9 +366,10 @@ export default {
       }
     },
   },
-   computed: {
+  computed: {
     ...mapGetters({
       getDmsMetadata: "business_meatadata/getDmsMetadata",
+      technicalSaveStatus: "technical_metadata/technicalSaveStatus",
     }),
   },
 };

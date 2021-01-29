@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+
 import metadata_management from './modules/metadata_management'
 import business_meatadata from './modules/business_meatadata'
 import technical_metadata from './modules/technical_metadata'

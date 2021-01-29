@@ -1,10 +1,4 @@
-import Axios from "axios";
-
-let api = process.env.VUE_APP_API_ROOT;
-let JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTE1NTg2ODMwNzksImV4cCI6MTYxMTU1ODY4MzEzOX0.c-_ROyG-LiLxdHhU2Dd2XQ54rOnRzE-E60PPS9DagoE"
-let headers = {
-    Authorization: "Bearer " + JWTToken
-};
+import mixinHttpRequest from '../../utils/http_request.js'
 
 const state = {
     state_error: false,
@@ -56,7 +50,7 @@ const actions = {
             meta_ins_id: payload.meta_ins_object.code,
         };
         //**-- Insert level (1) -----------------------*/
-        await Axios.post(api + "/dms_metadata", payload_dms_metadata, { headers: headers })
+        await mixinHttpRequest.methods.post("/dms_metadata/", payload_dms_metadata)
             .then(async(res) => {
                 commit("setDmsMetadata", { res })
                 if (res.status == 200) {
@@ -69,7 +63,7 @@ const actions = {
                         bsm_active: "Y",
                         bsm_meta_id: res.data.meta_id
                     };
-                    await Axios.post(api + "/dms_business_metadata", payload_dms_business_metadata, { headers: headers })
+                    await mixinHttpRequest.methods.post("/dms_business_metadata/", payload_dms_business_metadata)
                         .then(async(res) => {
                             commit("setDmsBusinessMetadata", { res })
                             if (res.status == 200) {
@@ -81,7 +75,7 @@ const actions = {
                                     bcf_cf_id: payload.meta_cf_object.code,
                                     bcf_bsm_id: res.data.bsm_id
                                 };
-                                await Axios.post(api + "/dms_business_classified", payload_dms_business_classified, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_classified/", payload_dms_business_classified)
                                     .then(res => commit("setDmsBusinessClassified", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -99,7 +93,7 @@ const actions = {
                                     bsds_url: payload.bsds_url,
                                     bsds_bsm_id: res.data.bsm_id,
                                 };
-                                await Axios.post(api + "/dms_business_description", payload_dms_business_description, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_description/", payload_dms_business_description)
                                     .then(res => commit("setDmsBusinessDescription", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -114,7 +108,7 @@ const actions = {
                                     bsd_dt_id: payload.meta_dt_object.code,
                                     bsd_bsm_id: res.data.bsm_id,
                                 };
-                                await Axios.post(api + "/dms_business_duration", payload_dms_business_duration, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_duration/", payload_dms_business_duration)
                                     .then(res => commit("setDmsBusinessDuration", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -129,7 +123,7 @@ const actions = {
                                     bsf_bsm_id: res.data.bsm_id,
                                     bsf_ft_id: payload.meta_ft_object.code,
                                 };
-                                await Axios.post(api + "/dms_business_format", payload_dms_business_format, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
                                     .then(res => commit("setDmsBusinessFormat", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -144,7 +138,7 @@ const actions = {
                                     bsp_pers_id: payload.meta_pers_object.code,
                                     bsp_bsm_id: res.data.bsm_id,
                                 };
-                                await Axios.post(api + "/dms_business_permission", payload_dms_business_permission, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_permission/", payload_dms_business_permission)
                                     .then(res => commit("setDmsBusinessPermission", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -159,7 +153,7 @@ const actions = {
                                     bss_bsm_id: res.data.bsm_id,
                                     bss_sc_id: payload.meta_sc_object.code,
                                 };
-                                await Axios.post(api + "/dms_business_scope", payload_dms_business_scope, { headers: headers })
+                                await mixinHttpRequest.methods.post("/dms_business_scope/", payload_dms_business_scope)
                                     .then(res => commit("setDmsBusinessScope", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
@@ -175,7 +169,7 @@ const actions = {
                                         bsk_text: payload.meta_bsk_object[i],
                                         bsk_bsm_id: res.data.bsm_id,
                                     };
-                                    await Axios.post(api + "/dms_business_keyword", payload_dms_business_keyword, { headers: headers })
+                                    await mixinHttpRequest.methods.post("/dms_business_keyword/", payload_dms_business_keyword)
                                         .then(res => commit("setDmsBusinessKeyword", { res }))
                                         .catch((err) => {
                                             commit("setStateError", setStateError)
@@ -187,13 +181,12 @@ const actions = {
                                 // Step 10 : Insert payload_dms_business_language into database.
                                 //          set payload value "bsk_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
-                                console.log(payload.meta_lg_object)
                                 for (var j = 0; j < payload.meta_lg_object.length; j++) {
                                     let payload_dms_business_language = {
                                         bsl_bsm_id: res.data.bsm_id,
                                         bsl_lg_id: payload.meta_lg_object[j].code,
                                     };
-                                    await Axios.post(api + "/dms_business_language", payload_dms_business_language, { headers: headers })
+                                    await mixinHttpRequest.methods.post("/dms_business_language/", payload_dms_business_language)
                                         .then(res => commit("setDmsBusinessLanguage", { res }))
                                         .catch((err) => {
                                             commit("setStateError", setStateError)
@@ -219,7 +212,7 @@ const actions = {
                         metac_detail: "",
                         metac_meta_id: res.data.meta_id
                     };
-                    await Axios.post(api + "/dms_metadata_contact", payload_dms_metadata_contact, { headers: headers })
+                    await mixinHttpRequest.methods.post("/dms_metadata_contact/", payload_dms_metadata_contact)
                         .then(res => commit("setMetadataContact", { res }))
                         .catch(err => alert(err));
 
@@ -235,12 +228,6 @@ const actions = {
             })
     },
 
-    // async edit({ commit }, payload) {
-    //     await Axios.put(api + "/dms_base_categories", { headers: headers })
-    //         .then(res => commit("fetchBaseCategories", { res }))
-    //         .catch(err => alert(err));
-    // },
-
 }
 
 const mutations = {
@@ -249,58 +236,36 @@ const mutations = {
     },
     setDmsMetadata(state, { res }) {
         state.dms_metadata = res.data
-        console.log("mutations setDmsMetadata")
-        console.log(state.dms_metadata);
     },
     setMetadataContact(state, { res }) {
         state.dms_metadata_contact = res.data
-        console.log("mutations setMetadataContact")
-        console.log(state.dms_metadata_contact);
     },
     setDmsBusinessMetadata(state, { res }) {
         state.dms_business_metadata = res.data
-        console.log("mutations setDmsBusinessMetadata")
-        console.log(state.dms_business_metadata);
     },
     setDmsBusinessClassified(state, { res }) {
         state.dms_business_classified = res.data
-        console.log("mutations setDmsBusinessClassified")
-        console.log(state.dms_business_classified);
     },
     setDmsBusinessDescription(state, { res }) {
         state.dms_business_description = res.data
-        console.log("mutations setDmsBusinessDescription")
-        console.log(state.dms_business_description);
     },
     setDmsBusinessDuration(state, { res }) {
         state.dms_business_duration = res.data
-        console.log("mutations setDmsBusinessDuration")
-        console.log(state.dms_business_duration);
     },
     setDmsBusinessFormat(state, { res }) {
         state.dms_business_format = res.data
-        console.log("mutations setDmsBusinessFormat")
-        console.log(state.dms_business_format);
     },
     setDmsBusinessPermission(state, { res }) {
         state.dms_business_permission = res.data
-        console.log("mutations setDmsBusinessPermission")
-        console.log(state.dms_business_permission);
     },
     setDmsBusinessScope(state, { res }) {
         state.dms_business_scope = res.data
-        console.log("mutations setDmsBusinessScope")
-        console.log(state.dms_business_scope);
     },
     setDmsBusinessKeyword(state, { res }) {
         state.dms_business_keyword.push(res.data)
-        console.log("mutations setDmsBusinessKeyword")
-        console.log(state.dms_business_keyword);
     },
     setDmsBusinessLanguage(state, { res }) {
         state.dms_business_language.push(res.data)
-        console.log("mutations setDmsBusinessLanguage")
-        console.log(state.dms_business_language);
     },
 }
 export default {
