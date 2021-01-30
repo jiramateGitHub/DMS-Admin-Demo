@@ -8,10 +8,10 @@
               <div class="card-icon">
                 <i class="material-icons">add</i>
               </div>
-              <h4 class="card-title" v-if="typeFormEdit.type === false">
+              <h4 class="card-title" v-if="typeFormEdit === false">
                 เพิ่มชุดข้อมูลเชิงเทคนิค - {{ getDmsMetadata.meta_name }}
               </h4>
-              <h4 class="card-title" v-if="typeFormEdit.type === true">
+              <h4 class="card-title" v-if="typeFormEdit === true">
                 แก้ไขชุดข้อมูลเชิงเทคนิค - {{ getDmsMetadata.meta_name }}
               </h4>
             </div>
@@ -175,9 +175,11 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer">
               <div class="row">
-                <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
+                <div class="col-md-12">
+                  <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
+                </div>
               </div>
             </div>
           </div>
@@ -203,13 +205,12 @@ export default {
   props: ["edit_meta_id"],
   created() {
     this.submitStatus = "OK";
-    console.log("this.typeFormEdit.type : " + this.typeFormEdit.type);
-    if (this.typeFormEdit.type == undefined) {
+    if (this.typeFormEdit == undefined) {
       this.$router.replace({ path: "/metadata" });
-    } else if (this.typeFormEdit.type == false) {
+    } else if (this.typeFormEdit == false) {
       this.setMetaId();
-    } else if (this.typeFormEdit.type) {
-      // this.setMetaId();
+    } else if (this.typeFormEdit) {
+      this.setMetaId();
       this.formEdit();
     }
   },
@@ -310,12 +311,7 @@ export default {
       setTypeFormEditAction: "technical_metadata/setTypeFormEdit",
     }),
     setMetaId() {
-      console.log("setMetaId");
-      console.log(this.getDmsMetadata);
       this.setMetaIdAction(this.getDmsMetadata.meta_id);
-    },
-    genIndex: function (index) {
-      return parseInt(index) + 1;
     },
     formValidation() {
       this.submitted = true;
@@ -336,9 +332,16 @@ export default {
 
       let payload = this.items;
 
-      if (this.typeFormEdit) {
+      console.log("formSave")
+      console.log("this.typeFormEdit " + this.typeFormEdit)
+      console.log(this.getCurrentDmsTechnicalDetailList)
+
+      if (this.typeFormEdit && this.getCurrentDmsTechnicalDetailList != null) {
+        console.log("updateAction")
         await this.updateAction(payload);
       } else {
+        console.log("saveAction")
+
         await this.saveAction(payload);
       }
 
@@ -364,6 +367,12 @@ export default {
     },
     formEdit() {
       console.log("formEdit");
+      if(this.getCurrentDmsTechnicalDetailList != null){
+        this.items = this.getCurrentDmsTechnicalDetailList;
+      }
+    },
+    genIndex: function (index) {
+      return parseInt(index) + 1;
     },
     addItem: function () {
       this.items.push({
@@ -377,7 +386,6 @@ export default {
       });
     },
     deleteItem: function (index) {
-      console.log(this.items.length);
       if (parseInt(this.items.length) <= 1) {
         this.showNotify = true;
         this.messageNotify = "ไม่สามารถลบแถวได้";

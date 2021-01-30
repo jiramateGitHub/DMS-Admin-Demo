@@ -1,11 +1,4 @@
 import mixinHttpRequest from '../../utils/http_request.js'
-import Axios from "axios";
-
-let api = process.env.VUE_APP_API_ROOT;
-let JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTE1NTg2ODMwNzksImV4cCI6MTYxMTU1ODY4MzEzOX0.c-_ROyG-LiLxdHhU2Dd2XQ54rOnRzE-E60PPS9DagoE"
-let headers = {
-    Authorization: "Bearer " + JWTToken
-};
 
 const state = {
     state_error: false,
@@ -39,12 +32,11 @@ const getters = {
     getCurrentDmsTechnicalDetail: (state) => {
         return state.current_dms_technical_detail;
     },
-
 }
 
 const actions = {
     async setTypeFormEdit({ commit }, type) {
-        commit("setTypeFormEdit", { type })
+        commit("setTypeFormEdit", type)
     },
 
     async setMetaId({ commit }, payload) {
@@ -57,7 +49,7 @@ const actions = {
             tsm_meta_id: state.tsm_meta_id,
         };
         //**-- Insert level (1) -----------------------*/
-        await Axios.post(api + "/dms_technical_metadata", payload_dms_technical_metadata, { headers: headers })
+        await mixinHttpRequest.methods.post("/dms_technical_metadata", payload_dms_technical_metadata)
             .then(async(res) => {
                 commit("setDmsTechnicalMetadata", { res })
                 if (res.status == 200) {
@@ -80,7 +72,7 @@ const actions = {
                             tcd_update_user: 1,
                         };
                         console.log(payload_dms_technical_detail)
-                        await Axios.post(api + "/dms_technical_detail", payload_dms_technical_detail, { headers: headers })
+                        await mixinHttpRequest.methods.post("/dms_technical_detail", payload_dms_technical_detail)
                             .then(res => commit("setStateSave", { res }))
                             .catch(err => alert(err));
                     }
@@ -125,7 +117,6 @@ const mutations = {
     },
     setDmsTechnicalMetadata(state, { res }) {
         state.dms_technical_metadata = res.data
-        console.log("mutations dms_technical_metadata")
     },
     setCurrentDmsTechnicalDetail(state, { res }) {
         state.current_dms_technical_detail = res.data

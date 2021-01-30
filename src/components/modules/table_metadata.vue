@@ -47,9 +47,7 @@
                         <th width="13%">กลุ่มชุดข้อมูล</th>
                         <th width="15%">หน่วยงานภายใน</th>
                         <th width="12%">วันที่ปรับปรุง</th>
-                        <th width="18%" class="disabled-sorting">
-                          ดำเนินการ
-                        </th>
+                        <th width="18%" class="disabled-sorting">ดำเนินการ</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -183,6 +181,11 @@ export default {
   created() {
     this.fetchDmsMetadataAction();
   },
+  computed: {
+    ...mapGetters({
+      fetchDmsMetadataList: "metadata_management/fetchDmsMetadata",
+    }),
+  },
   methods: {
     ...mapActions({
       fetchDmsMetadataAction: "metadata_management/fetchDmsMetadata",
@@ -192,6 +195,7 @@ export default {
         "technical_metadata/getCurrentTechnicalMetadata",
       setTypeFormEditBAction: "business_metadata/setTypeFormEdit",
       setTypeFormEditTAction: "technical_metadata/setTypeFormEdit",
+      updateMetadataActiveAction: "business_metadata/updateMetadataActive",
     }),
     async addMetadata() {
       await this.setTypeFormEditBAction(false);
@@ -208,6 +212,7 @@ export default {
           title: "เลือกรายการที่ต้องการแก้ไข",
           text: "ชื่อชุดข้อมูล: " + obj_metadata.meta_name,
           width: 650,
+          icon : "question",
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: `Business`,
@@ -243,7 +248,7 @@ export default {
           title: "คุณต้องการลบ “" + obj_metadata.meta_name + "” ใช่หรือไม่",
           text: "คุณจะไม่สามารถย้อนกลับการลบได้!",
           icon: "warning",
-          width:650,
+          width: 650,
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
@@ -252,15 +257,13 @@ export default {
         })
         .then(async (result) => {
           if (result.isConfirmed) {
+            await this.setCurrentDmsMetadataAction(obj_metadata);
+            await this.updateMetadataActiveAction();
+            await this.fetchDmsMetadataAction();
             this.$swal.fire("ลบสำเร็จ!", "", "success");
           }
         });
     },
-  },
-  computed: {
-    ...mapGetters({
-      fetchDmsMetadataList: "metadata_management/fetchDmsMetadata",
-    }),
   },
 };
 </script>

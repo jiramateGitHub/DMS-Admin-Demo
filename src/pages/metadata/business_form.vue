@@ -8,10 +8,10 @@
               <div class="card-icon">
                 <i class="material-icons">add</i>
               </div>
-              <h4 class="card-title" v-if="typeFormEdit.type === false">
+              <h4 class="card-title" v-if="typeFormEdit === false">
                 เพิ่มชุดข้อมูล
               </h4>
-              <h4 class="card-title" v-if="typeFormEdit.type === true">
+              <h4 class="card-title" v-if="typeFormEdit === true">
                 แก้ไขชุดข้อมูล
               </h4>
             </div>
@@ -522,9 +522,9 @@ export default {
   created() {
     this.fetchvSelectBase();
     this.submitStatus = "OK";
-    if (this.typeFormEdit.type == undefined) {
-      this.setTypeFormBEditAction(false);
-    } else if (this.typeFormEdit.type) {
+    if (this.typeFormEdit == undefined) {
+      this.setTypeFormEditBAction(false);
+    } else if (this.typeFormEdit) {
       this.formEdit();
     }
   },
@@ -587,9 +587,8 @@ export default {
     },
     async formSave() {
       this.submitStatus = "PENDING";
-
       let payload = this.form;
-
+      
       if (this.typeFormEdit) {
         await this.updateAction(payload);
       } else {

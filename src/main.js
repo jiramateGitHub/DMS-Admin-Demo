@@ -2,14 +2,19 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 import Chartist from "chartist";
-
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import routes from "./routes/routes";
 const router = new VueRouter({
     routes, // short for routes: routes
+    // eslint-disable-next-line no-unused-vars
+    scrollBehavior(to, from, savedPosition) {
+        return { x: 0, y: 0 }
+    }
 });
+
+
 
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)

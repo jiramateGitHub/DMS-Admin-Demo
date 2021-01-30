@@ -1,4 +1,5 @@
 import mixinHttpRequest from '../../utils/http_request.js'
+import mixinHelpers from '../../utils/helpers.js'
 
 const state = {
     state_error: false,
@@ -35,7 +36,7 @@ const getters = {
 
 const actions = {
     async setTypeFormEdit({ commit }, type) {
-        commit("setTypeFormEdit", { type })
+        commit("setTypeFormEdit", type)
     },
     async setCurrentDmsMetadata({ commit }, payload) {
         let res = payload;
@@ -234,19 +235,15 @@ const actions = {
             })
     },
     async updateMetadata({ commit, state }, payload) {
-        console.log("payload")
-        console.log(payload)
         let currentValue = [state.current_dms_metadata, state.current_dms_business_metadata]
-        console.log(currentValue)
 
         // Step 1 : Update payload_dms_metadata into database.
         let payload_dms_metadata = {
             meta_id: currentValue[0].meta_id,
             meta_code: payload.meta_code,
             meta_name: payload.meta_name,
-            meta_active: "Y",
-            meta_create_user: 1,
             meta_update_user: 1,
+            meta_update_time: mixinHelpers.methods.getDateNow(),
             meta_bc_id: payload.meta_bc_object.code,
             meta_grp_id: payload.meta_grp_object.code,
             meta_ins_id: payload.meta_ins_object.code,
@@ -467,8 +464,22 @@ const actions = {
             })
         commit("setStateError", false)
     },
+    async updateMetadataActive({ commit, state }) {
+        let payload_dms_metadata = {
+            meta_id: state.current_dms_metadata.meta_id,
+            meta_active: "N"
+        };
+        await mixinHttpRequest.methods.put("/dms_metadata/" + payload_dms_metadata.meta_id, payload_dms_metadata)
+            .then(res => {
+                if (res.status == 200) {
+                    commit("setStateError", false)
+                } else {
+                    commit("setStateError", true)
+                }
+            })
+    },
     async getCurrentBusinessMetadata({ commit, state }) {
-        mixinHttpRequest.methods.get("/dms_business_metadata/join/" + state.current_dms_metadata.meta_id).then(res => { commit("setCurrentBusinessMetadata", { res }) })
+        await mixinHttpRequest.methods.get("/dms_business_metadata/join/" + state.current_dms_metadata.meta_id).then(res => { commit("setCurrentBusinessMetadata", { res }) })
     },
 
 }

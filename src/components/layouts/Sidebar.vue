@@ -12,7 +12,7 @@
           </div>
         </div>
         <ul class="nav">
-          <router-link to="/dashboard">
+          <router-link to="/dashboard" @click="scrollToTop()">
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="material-icons">dashboard</i>
@@ -20,7 +20,7 @@
               </a>
             </li>
           </router-link>
-          <router-link to="/metadata">
+          <router-link to="/metadata" @click="scrollToTop()">
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="material-icons">settings</i>
@@ -51,5 +51,19 @@ export default {
     DashboardContent,
     ContentFooter,
   },
+  methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+  },
 };
 </script>
+
+<style >
+.main-dashboard {
+  position: relative;
+  float: right;
+  width: calc(100% - 260px);
+  transition: 0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1);
+}
+</style>
