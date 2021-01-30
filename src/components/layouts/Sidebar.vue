@@ -3,36 +3,38 @@
     <div class="sidebar" data-color="rose" data-background-color="white">
       <div class="sidebar-wrapper">
         <div class="user">
-          <div class="user-info" >
+          <div class="user-info">
             <a data-toggle="collapse" href="#collapseExample">
               <span>
-                <h5>AllOSoft Co.,Ltd.</h5> 
+                <h5>AllOSoft Co.,Ltd.</h5>
               </span>
             </a>
           </div>
         </div>
         <ul class="nav">
-          <li class="nav-item" @click="dashboard()">
-            <a class="nav-link" href="#">
-              <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item" @click="metadata()">
-            <a class="nav-link" href="#">
-              <i class="material-icons">settings</i>
-              <p>Meatadata</p>
-            </a>
-          </li>
+          <router-link to="/dashboard">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="material-icons">dashboard</i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+          </router-link>
+          <router-link to="/metadata">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="material-icons">settings</i>
+                <p>Meatadata</p>
+              </a>
+            </li>
+          </router-link>
         </ul>
       </div>
     </div>
 
     <div class="main-panel">
       <top-navbar></top-navbar>
-
       <dashboard-content> </dashboard-content>
-
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
   </div>
@@ -48,17 +50,6 @@ export default {
     TopNavbar,
     DashboardContent,
     ContentFooter,
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    dashboard() {
-      this.$router.push({ path: "/dashboard" });
-    },
-    metadata() {
-      this.$router.push({ path: "/metadata" });
-    },
   },
 };
 </script>

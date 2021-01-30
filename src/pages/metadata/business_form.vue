@@ -8,7 +8,12 @@
               <div class="card-icon">
                 <i class="material-icons">add</i>
               </div>
-              <h4 class="card-title">เพิ่มชุดข้อมูล</h4>
+              <h4 class="card-title" v-if="typeFormEdit.type === false">
+                เพิ่มชุดข้อมูล
+              </h4>
+              <h4 class="card-title" v-if="typeFormEdit.type === true">
+                แก้ไขชุดข้อมูล
+              </h4>
             </div>
             <div class="card-body">
               <div class="row">
@@ -398,7 +403,14 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer text-right"></div>
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- <pre>{{ getCurrentMetadata }}</pre> -->
+                  <!-- <pre>{{ getBusinessMetadata }}</pre> -->
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -510,6 +522,28 @@ export default {
   created() {
     this.fetchvSelectBase();
     this.submitStatus = "OK";
+    if (this.typeFormEdit.type == undefined) {
+      this.setTypeFormBEditAction(false);
+    } else if (this.typeFormEdit.type) {
+      this.formEdit();
+    }
+  },
+  computed: {
+    ...mapGetters({
+      vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
+      vSelectBaseClassified: "vselect_dms_base/vSelectBaseClassified",
+      vSelectBaseDatagroups: "vselect_dms_base/vSelectBaseDatagroups",
+      vSelectBaseDurations: "vselect_dms_base/vSelectBaseDurations",
+      vSelectBaseFormats: "vselect_dms_base/vSelectBaseFormats",
+      vSelectBaseLanguages: "vselect_dms_base/vSelectBaseLanguages",
+      vSelectBasePermissions: "vselect_dms_base/vSelectBasePermissions",
+      vSelectBaseScopes: "vselect_dms_base/vSelectBaseScopes",
+      vSelectInstitution: "vselect_dms_base/vSelectInstitution",
+      getCurrentMetadata: "business_metadata/getCurrentDmsMetadata",
+      getBusinessMetadata: "business_metadata/getCurrentBusinessMetadata",
+      businessSaveStatus: "business_metadata/businessSaveStatus",
+      typeFormEdit: "business_metadata/typeFormEdit",
+    }),
   },
   methods: {
     ...mapActions({
@@ -522,7 +556,9 @@ export default {
       fetchBasePermissionsAction: "vselect_dms_base/fetchBasePermissions",
       fetchBaseScopesAction: "vselect_dms_base/fetchBaseScopes",
       fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
-      saveAction: "business_meatadata/saveMetadata",
+      saveAction: "business_metadata/saveMetadata",
+      setTypeFormEditBAction: "business_metadata/setTypeFormEdit",
+      setTypeFormEditTAction: "technical_metadata/setTypeFormEdit",
     }),
     fetchvSelectBase() {
       this.fetchBaseCategoriesAction();
@@ -567,8 +603,9 @@ export default {
             confirmButtonText: "ยืนยัน",
             cancelButtonText: "ยกเลิก",
           })
-          .then((result) => {
+          .then(async (result) => {
             if (result.isConfirmed) {
+              await this.setTypeFormEditTAction(false);
               this.$router.replace({ path: "/metadata/technical_form" });
             } else {
               this.$router.replace({ path: "/metadata/" });
@@ -582,6 +619,76 @@ export default {
           text: "Something went wrong!",
         });
       }
+    },
+    formEdit() {
+      // getCurrentMetadata
+      // getBusinessMetadata
+      this.form.meta_name = this.getCurrentMetadata.meta_name;
+      this.form.meta_code = this.getCurrentMetadata.meta_code;
+      this.form.bsds_text = this.getBusinessMetadata.dms_business_descriptions[0].bsds_text;
+      this.form.bsds_owner = this.getBusinessMetadata.dms_business_descriptions[0].bsds_owner;
+      this.form.bsds_ref = this.getBusinessMetadata.dms_business_descriptions[0].bsds_ref;
+      this.form.bsds_url = this.getBusinessMetadata.dms_business_descriptions[0].bsds_url;
+      this.form.metac_name = this.getCurrentMetadata.dms_metadata_contacts[0].metac_name;
+      this.form.metac_email = this.getCurrentMetadata.dms_metadata_contacts[0].metac_email;
+      this.form.metac_phone = this.getCurrentMetadata.dms_metadata_contacts[0].metac_phone;
+
+      this.form.meta_bc_object = {
+        code: this.getCurrentMetadata.dms_base_category.bc_id,
+        label: this.getCurrentMetadata.dms_base_category.bc_name,
+      };
+
+      this.form.meta_grp_object = {
+        code: this.getCurrentMetadata.dms_base_datagroup.grp_id,
+        label: this.getCurrentMetadata.dms_base_datagroup.grp_name,
+      };
+
+      this.form.meta_ins_object = {
+        code: this.getCurrentMetadata.dms_institution.ins_id,
+        label: this.getCurrentMetadata.dms_institution.ins_name,
+      };
+
+      let temp_meta_bsk_object = [];
+      // eslint-disable-next-line no-unused-vars
+      for (const [key, value] of Object.entries(
+        this.getBusinessMetadata.dms_business_keywords
+      )) {
+        temp_meta_bsk_object.push(value.bsk_text);
+      }
+      this.form.meta_bsk_object = temp_meta_bsk_object;
+
+      let temp_meta_lg_object = [];
+      // eslint-disable-next-line no-unused-vars
+      for (const [key, value] of Object.entries(
+        this.getBusinessMetadata.dms_base_languages
+      )) {
+        temp_meta_lg_object.push({
+          code: value.lg_id,
+          label: value.lg_text,
+        });
+      }
+      this.form.meta_lg_object = temp_meta_lg_object;
+
+      this.form.meta_dt_object = {
+        code: this.getBusinessMetadata.dms_base_durations[0].dt_id,
+        label: this.getBusinessMetadata.dms_base_durations[0].dt_text,
+      };
+      this.form.meta_ft_object = {
+        code: this.getBusinessMetadata.dms_base_formats[0].ft_id,
+        label: this.getBusinessMetadata.dms_base_formats[0].ft_text,
+      };
+      this.form.meta_sc_object = {
+        code: this.getBusinessMetadata.dms_base_scopes[0].sc_id,
+        label: this.getBusinessMetadata.dms_base_scopes[0].sc_text,
+      };
+      this.form.meta_pers_object = {
+        code: this.getBusinessMetadata.dms_base_permissions[0].pers_id,
+        label: this.getBusinessMetadata.dms_base_permissions[0].pers_text,
+      };
+      this.form.meta_cf_object = {
+        code: this.getBusinessMetadata.dms_base_classifieds[0].cf_id,
+        label: this.getBusinessMetadata.dms_base_classifieds[0].cf_text,
+      };
     },
     formTest() {
       this.form.meta_name = "ทดสอบ";
@@ -643,9 +750,9 @@ export default {
       this.form.metac_email = "";
       this.form.metac_phone = "";
       this.form.meta_bc_object = null;
-      (this.form.meta_grp_object = null),
-        (this.form.meta_ins_object = null),
-        (this.form.meta_bsk_object = null);
+      this.form.meta_grp_object = null;
+      this.form.meta_ins_object = null;
+      this.form.meta_bsk_object = null;
       this.form.meta_lg_object = null;
       this.form.meta_dt_object = null;
       this.form.meta_ft_object = null;
@@ -654,20 +761,7 @@ export default {
       this.form.meta_cf_object = null;
     },
   },
-  computed: {
-    ...mapGetters({
-      vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
-      vSelectBaseClassified: "vselect_dms_base/vSelectBaseClassified",
-      vSelectBaseDatagroups: "vselect_dms_base/vSelectBaseDatagroups",
-      vSelectBaseDurations: "vselect_dms_base/vSelectBaseDurations",
-      vSelectBaseFormats: "vselect_dms_base/vSelectBaseFormats",
-      vSelectBaseLanguages: "vselect_dms_base/vSelectBaseLanguages",
-      vSelectBasePermissions: "vselect_dms_base/vSelectBasePermissions",
-      vSelectBaseScopes: "vselect_dms_base/vSelectBaseScopes",
-      vSelectInstitution: "vselect_dms_base/vSelectInstitution",
-      businessSaveStatus: "business_meatadata/businessSaveStatus",
-    }),
-  },
+  
 };
 </script>
 

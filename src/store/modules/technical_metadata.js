@@ -1,3 +1,4 @@
+import mixinHttpRequest from '../../utils/http_request.js'
 import Axios from "axios";
 
 let api = process.env.VUE_APP_API_ROOT;
@@ -8,9 +9,11 @@ let headers = {
 
 const state = {
     state_error: false,
+    state_save: {},
+    type_form_edit: false,
     tsm_meta_id: null,
     dms_technical_metadata: {},
-    dms_technical_detail: [],
+    current_dms_technical_detail: [],
 }
 
 const getters = {
@@ -27,16 +30,26 @@ const getters = {
             }
         }
     },
+    typeFormEdit: (state) => {
+        return state.type_form_edit;
+    },
     getDmsTechnicalMetadata: (state) => {
         return state.dms_technical_metadata;
     },
-    getDmsTechnicalDetail: (state) => {
-        return state.dms_technical_detail;
+    getCurrentDmsTechnicalDetail: (state) => {
+        return state.current_dms_technical_detail;
     },
 
 }
 
 const actions = {
+    async setTypeFormEdit({ commit }, type) {
+        commit("setTypeFormEdit", { type })
+    },
+
+    async setMetaId({ commit }, payload) {
+        commit("setMetaId", payload)
+    },
     async saveMetadata({ commit, state }, payload) {
         let setStateError = true
             // Step 1 : Insert payload_dms_technical_metadata into database.
@@ -68,7 +81,7 @@ const actions = {
                         };
                         console.log(payload_dms_technical_detail)
                         await Axios.post(api + "/dms_technical_detail", payload_dms_technical_detail, { headers: headers })
-                            .then(res => commit("setDmsTechnicalDetail", { res }))
+                            .then(res => commit("setStateSave", { res }))
                             .catch(err => alert(err));
                     }
 
@@ -83,9 +96,17 @@ const actions = {
                 commit("setStateError", setStateError)
             })
     },
-    async setMetaId({ commit }, payload) {
-        commit("setMetaId", payload)
-    }
+    async getCurrentTechnicalMetadata({ commit }, payload) {
+        // payload is dms_technical_metadatum.tsm_id
+        console.log("payload " + payload)
+        if (payload != null) {
+            mixinHttpRequest.methods.get("/dms_technical_detail/join/" + payload).then(res => { commit("setCurrentDmsTechnicalDetail", { res }) })
+        } else {
+            let res = {};
+            commit("setCurrentDmsTechnicalDetail", { res })
+        }
+    },
+
 
 }
 
@@ -93,18 +114,21 @@ const mutations = {
     setStateError(state, res) {
         state.state_error = res
     },
+    setStateSave(state, { res }) {
+        state.state_save = res.data
+    },
+    setTypeFormEdit(state, type) {
+        state.type_form_edit = type
+    },
     setMetaId(state, res) {
         state.tsm_meta_id = res
     },
     setDmsTechnicalMetadata(state, { res }) {
         state.dms_technical_metadata = res.data
         console.log("mutations dms_technical_metadata")
-        console.log(state.dms_technical_metadata);
     },
-    setDmsTechnicalDetail(state, { res }) {
-        state.dms_technical_detail.push(res.data)
-        console.log("mutations dms_technical_detail")
-        console.log(state.dms_technical_detail);
+    setCurrentDmsTechnicalDetail(state, { res }) {
+        state.current_dms_technical_detail = res.data
     },
 }
 export default {

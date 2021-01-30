@@ -2,17 +2,10 @@ import mixinHttpRequest from '../../utils/http_request.js'
 
 const state = {
     state_error: false,
-    dms_metadata: {},
-    dms_business_metadata: {},
-    dms_metadata_contact: {},
-    dms_business_description: {},
-    dms_business_classified: {},
-    dms_business_duration: {},
-    dms_business_format: {},
-    dms_business_permission: {},
-    dms_business_scope: {},
-    dms_business_keyword: [],
-    dms_business_language: [],
+    state_save: {},
+    type_form_edit: false,
+    current_dms_metadata: {},
+    current_dms_business_metadata: {},
 }
 
 const getters = {
@@ -29,13 +22,25 @@ const getters = {
             }
         }
     },
-    getDmsMetadata: (state) => {
-        return state.dms_metadata;
+    typeFormEdit: (state) => {
+        return state.type_form_edit;
     },
-
+    getCurrentDmsMetadata: (state) => {
+        return state.current_dms_metadata;
+    },
+    getCurrentBusinessMetadata: (state) => {
+        return state.current_dms_business_metadata;
+    },
 }
 
 const actions = {
+    async setTypeFormEdit({ commit }, type) {
+        commit("setTypeFormEdit", { type })
+    },
+    async setCurrentDmsMetadata({ commit }, payload) {
+        let res = payload;
+        commit("setCurrentDmsMetadata", { res })
+    },
     async saveMetadata({ commit }, payload) {
         console.log(payload)
         let setStateError = true
@@ -53,7 +58,7 @@ const actions = {
         //**-- Insert level (1) -----------------------*/
         await mixinHttpRequest.methods.post("/dms_metadata/", payload_dms_metadata)
             .then(async(res) => {
-                commit("setDmsMetadata", { res })
+                commit("setCurrentDmsMetadata", { res })
                 if (res.status == 200) {
                     //**-- Insert level (2) -----------------------------------------------------------------------------------*/
                     // Step 2 : Insert payload_dms_business_metadata into database.
@@ -66,7 +71,7 @@ const actions = {
                     };
                     await mixinHttpRequest.methods.post("/dms_business_metadata/", payload_dms_business_metadata)
                         .then(async(res) => {
-                            commit("setDmsBusinessMetadata", { res })
+                            commit("setStateError", { res })
                             if (res.status == 200) {
                                 //**-- Insert level (3) -----------------------------------------------------------------------------------*/
                                 // Step 3 : Insert payload_dms_business_classified into database.
@@ -77,7 +82,7 @@ const actions = {
                                     bcf_bsm_id: res.data.bsm_id
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_classified/", payload_dms_business_classified)
-                                    .then(res => commit("setDmsBusinessClassified", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -95,7 +100,7 @@ const actions = {
                                     bsds_bsm_id: res.data.bsm_id,
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_description/", payload_dms_business_description)
-                                    .then(res => commit("setDmsBusinessDescription", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -110,7 +115,7 @@ const actions = {
                                     bsd_bsm_id: res.data.bsm_id,
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_duration/", payload_dms_business_duration)
-                                    .then(res => commit("setDmsBusinessDuration", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -125,7 +130,7 @@ const actions = {
                                     bsf_ft_id: payload.meta_ft_object.code,
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
-                                    .then(res => commit("setDmsBusinessFormat", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -140,7 +145,7 @@ const actions = {
                                     bsp_bsm_id: res.data.bsm_id,
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_permission/", payload_dms_business_permission)
-                                    .then(res => commit("setDmsBusinessPermission", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -155,7 +160,7 @@ const actions = {
                                     bss_sc_id: payload.meta_sc_object.code,
                                 };
                                 await mixinHttpRequest.methods.post("/dms_business_scope/", payload_dms_business_scope)
-                                    .then(res => commit("setDmsBusinessScope", { res }))
+                                    .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", setStateError)
                                         console.log(err)
@@ -171,7 +176,7 @@ const actions = {
                                         bsk_bsm_id: res.data.bsm_id,
                                     };
                                     await mixinHttpRequest.methods.post("/dms_business_keyword/", payload_dms_business_keyword)
-                                        .then(res => commit("setDmsBusinessKeyword", { res }))
+                                        .then(res => commit("setStateSave", { res }))
                                         .catch((err) => {
                                             commit("setStateError", setStateError)
                                             console.log(err)
@@ -188,7 +193,7 @@ const actions = {
                                         bsl_lg_id: payload.meta_lg_object[j].code,
                                     };
                                     await mixinHttpRequest.methods.post("/dms_business_language/", payload_dms_business_language)
-                                        .then(res => commit("setDmsBusinessLanguage", { res }))
+                                        .then(res => commit("setStateSave", { res }))
                                         .catch((err) => {
                                             commit("setStateError", setStateError)
                                             console.log(err)
@@ -214,7 +219,7 @@ const actions = {
                         metac_meta_id: res.data.meta_id
                     };
                     await mixinHttpRequest.methods.post("/dms_metadata_contact/", payload_dms_metadata_contact)
-                        .then(res => commit("setMetadataContact", { res }))
+                        .then(res => commit("setStateSave", { res }))
                         .catch(err => alert(err));
 
                     setStateError = false
@@ -228,6 +233,9 @@ const actions = {
                 commit("setStateError", setStateError)
             })
     },
+    async getCurrentBusinessMetadata({ commit, state }) {
+        mixinHttpRequest.methods.get("/dms_business_metadata/join/" + state.current_dms_metadata.meta_id).then(res => { commit("setCurrentBusinessMetadata", { res }) })
+    },
 
 }
 
@@ -235,38 +243,21 @@ const mutations = {
     setStateError(state, res) {
         state.state_error = res
     },
-    setDmsMetadata(state, { res }) {
-        state.dms_metadata = res.data
+    setStateSave(state, { res }) {
+        state.state_save = res.data
     },
-    setMetadataContact(state, { res }) {
-        state.dms_metadata_contact = res.data
+    setTypeFormEdit(state, type) {
+        state.type_form_edit = type
     },
-    setDmsBusinessMetadata(state, { res }) {
-        state.dms_business_metadata = res.data
+    setCurrentDmsMetadata(state, { res }) {
+        if (res.data != undefined) {
+            state.current_dms_metadata = res.data;
+        } else {
+            state.current_dms_metadata = res;
+        }
     },
-    setDmsBusinessClassified(state, { res }) {
-        state.dms_business_classified = res.data
-    },
-    setDmsBusinessDescription(state, { res }) {
-        state.dms_business_description = res.data
-    },
-    setDmsBusinessDuration(state, { res }) {
-        state.dms_business_duration = res.data
-    },
-    setDmsBusinessFormat(state, { res }) {
-        state.dms_business_format = res.data
-    },
-    setDmsBusinessPermission(state, { res }) {
-        state.dms_business_permission = res.data
-    },
-    setDmsBusinessScope(state, { res }) {
-        state.dms_business_scope = res.data
-    },
-    setDmsBusinessKeyword(state, { res }) {
-        state.dms_business_keyword.push(res.data)
-    },
-    setDmsBusinessLanguage(state, { res }) {
-        state.dms_business_language.push(res.data)
+    setCurrentBusinessMetadata(state, { res }) {
+        state.current_dms_business_metadata = res.data;
     },
 }
 export default {

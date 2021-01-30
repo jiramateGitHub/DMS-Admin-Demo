@@ -16,7 +16,7 @@
           <label
             >หมวดหมู่ข้อมูล:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_base_category.bc_name
+              getCurrentMetadata.dms_base_category.bc_name 
             }}</span></label
           ><br />
         </div>
@@ -24,7 +24,7 @@
           <label
             >กลุ่มข้อมูล:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_base_datagroup.grp_name
+              getCurrentMetadata.dms_base_datagroup.grp_name 
             }}</span></label
           ><br />
         </div>
@@ -34,7 +34,7 @@
           <label
             >เจ้าของข้อมูล:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_owner
+              getBusinessMetadata.dms_business_descriptions[0].bsds_owner 
             }}</span></label
           ><br />
         </div>
@@ -42,7 +42,7 @@
           <label
             >หน่วยงานภายใน:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_institution.ins_name
+              getCurrentMetadata.dms_institution.ins_name  
             }}</span></label
           ><br />
         </div>
@@ -62,7 +62,7 @@
           <label
             >แหล่งที่มาของคำอธิบาย:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_ref
+              getBusinessMetadata.dms_business_descriptions[0].bsds_ref 
             }}</span></label
           ><br />
         </div>
@@ -72,7 +72,7 @@
           <label
             >URL เพิ่มเติม:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_url
+              getBusinessMetadata.dms_business_descriptions[0].bsds_url 
             }}</span></label
           ><br />
         </div>
@@ -210,8 +210,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCurrentMetadata: "metadata_management/getCurrentMetadata",
-      getBusinessMetadata: "metadata_management/getBusinessMetadata",
+      getCurrentMetadata: "business_metadata/getCurrentDmsMetadata",
+      getBusinessMetadata: "business_metadata/getCurrentBusinessMetadata",
     }),
   },
 };

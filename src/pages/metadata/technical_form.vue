@@ -8,8 +8,11 @@
               <div class="card-icon">
                 <i class="material-icons">add</i>
               </div>
-              <h4 class="card-title">
+              <h4 class="card-title" v-if="typeFormEdit.type === false">
                 เพิ่มชุดข้อมูลเชิงเทคนิค - {{ getDmsMetadata.meta_name }}
+              </h4>
+              <h4 class="card-title" v-if="typeFormEdit.type === true">
+                แก้ไขชุดข้อมูลเชิงเทคนิค - {{ getDmsMetadata.meta_name }}
               </h4>
             </div>
             <div class="card-body">
@@ -172,7 +175,11 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer text-right"></div>
+            <div class="card-footer text-right">
+              <div class="row">
+                <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -195,8 +202,16 @@ export default {
   },
   props: ["edit_meta_id"],
   created() {
-    this.setMetaId();
     this.submitStatus = "OK";
+    console.log("this.typeFormEdit.type : " + this.typeFormEdit.type)
+    if (this.typeFormEdit.type == undefined) {
+      this.$router.replace({ path: "/metadata" });
+    } else if (this.typeFormEdit.type == false) {
+      this.setMetaId();
+    } else if (this.typeFormEdit.type) {
+      // this.setMetaId();
+      this.formEdit();
+    }
   },
   data() {
     return {
@@ -278,12 +293,24 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapGetters({
+      getDmsMetadata: "business_metadata/getCurrentDmsMetadata",
+      getCurrentDmsTechnicalDetailList:
+        "technical_metadata/getCurrentDmsTechnicalDetail",
+      technicalSaveStatus: "technical_metadata/technicalSaveStatus",
+      typeFormEdit: "technical_metadata/typeFormEdit",
+    }),
+  },
   methods: {
     ...mapActions({
       setMetaIdAction: "technical_metadata/setMetaId",
       saveAction: "technical_metadata/saveMetadata",
+      setTypeFormEditAction: "technical_metadata/setTypeFormEdit",
     }),
     setMetaId() {
+      console.log("setMetaId")
+      console.log(this.getDmsMetadata)
       this.setMetaIdAction(this.getDmsMetadata.meta_id);
     },
     genIndex: function (index) {
@@ -329,6 +356,9 @@ export default {
       }
       // this.$router.replace({ path: "/metadata" });
     },
+    formEdit (){
+      console.log("formEdit")
+    },
     addItem: function () {
       this.items.push({
         tcd_attribute: "",
@@ -366,12 +396,6 @@ export default {
           });
       }
     },
-  },
-  computed: {
-    ...mapGetters({
-      getDmsMetadata: "business_meatadata/getDmsMetadata",
-      technicalSaveStatus: "technical_metadata/technicalSaveStatus",
-    }),
   },
 };
 </script>

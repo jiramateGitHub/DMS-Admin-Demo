@@ -9,7 +9,6 @@ Vue.use(VueRouter);
 import routes from "./routes/routes";
 const router = new VueRouter({
     routes, // short for routes: routes
-    linkExactActiveClass: "nav-item active"
 });
 
 import Vuelidate from 'vuelidate'
