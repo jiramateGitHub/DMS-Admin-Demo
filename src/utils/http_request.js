@@ -38,11 +38,15 @@ export default {
             return dataPromise
         },
 
-        delete(methodName, param, data) {
-            return this.axiosInstance.delete(methodName, {
-                params: param,
-                data: data
-            })
+        delete(methodName, payload) {
+            // create a promise for the axios request
+            const promise = Axios.delete(baseApiURL + methodName, payload, { headers: headers })
+
+            // using .then, create a new promise which extracts the data
+            const dataPromise = promise.then((res) => res).catch((err) => console.log(err));
+
+            // return it
+            return dataPromise
         }
     }
 };

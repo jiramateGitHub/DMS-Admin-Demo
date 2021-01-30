@@ -203,7 +203,7 @@ export default {
   props: ["edit_meta_id"],
   created() {
     this.submitStatus = "OK";
-    console.log("this.typeFormEdit.type : " + this.typeFormEdit.type)
+    console.log("this.typeFormEdit.type : " + this.typeFormEdit.type);
     if (this.typeFormEdit.type == undefined) {
       this.$router.replace({ path: "/metadata" });
     } else if (this.typeFormEdit.type == false) {
@@ -306,11 +306,12 @@ export default {
     ...mapActions({
       setMetaIdAction: "technical_metadata/setMetaId",
       saveAction: "technical_metadata/saveMetadata",
+      updateAction: "technical_metadata/updateMetadata",
       setTypeFormEditAction: "technical_metadata/setTypeFormEdit",
     }),
     setMetaId() {
-      console.log("setMetaId")
-      console.log(this.getDmsMetadata)
+      console.log("setMetaId");
+      console.log(this.getDmsMetadata);
       this.setMetaIdAction(this.getDmsMetadata.meta_id);
     },
     genIndex: function (index) {
@@ -334,7 +335,12 @@ export default {
       this.submitStatus = "PENDING";
 
       let payload = this.items;
-      await this.saveAction(payload);
+
+      if (this.typeFormEdit) {
+        await this.updateAction(payload);
+      } else {
+        await this.saveAction(payload);
+      }
 
       if (this.technicalSaveStatus.code == 0) {
         this.submitStatus = "OK";
@@ -356,8 +362,8 @@ export default {
       }
       // this.$router.replace({ path: "/metadata" });
     },
-    formEdit (){
-      console.log("formEdit")
+    formEdit() {
+      console.log("formEdit");
     },
     addItem: function () {
       this.items.push({

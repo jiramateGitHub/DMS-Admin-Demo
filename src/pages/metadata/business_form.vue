@@ -557,6 +557,7 @@ export default {
       fetchBaseScopesAction: "vselect_dms_base/fetchBaseScopes",
       fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
       saveAction: "business_metadata/saveMetadata",
+      updateAction: "business_metadata/updateMetadata",
       setTypeFormEditBAction: "business_metadata/setTypeFormEdit",
       setTypeFormEditTAction: "technical_metadata/setTypeFormEdit",
     }),
@@ -588,29 +589,45 @@ export default {
       this.submitStatus = "PENDING";
 
       let payload = this.form;
-      await this.saveAction(payload);
+
+      if (this.typeFormEdit) {
+        await this.updateAction(payload);
+      } else {
+        await this.saveAction(payload);
+      }
 
       if (this.businessSaveStatus.code == 0) {
         this.submitStatus = "OK";
-        this.$swal
-          .fire({
+        if (this.typeFormEdit) {
+          this.$swal.fire({
             title: "บันทึกชุดข้อมูลสำเร็จ",
-            text: "คุณต้องการจัดการชุดข้อมูลเชิงเทคนิคหรือไม่!",
             icon: "success",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ยืนยัน",
-            cancelButtonText: "ยกเลิก",
-          })
-          .then(async (result) => {
-            if (result.isConfirmed) {
-              await this.setTypeFormEditTAction(false);
-              this.$router.replace({ path: "/metadata/technical_form" });
-            } else {
-              this.$router.replace({ path: "/metadata/" });
-            }
+            confirmButtonText: "ตกลง",
+            preConfirm: () => {
+              this.$router.replace({ path: "/metadata" });
+            },
           });
+        } else {
+          this.$swal
+            .fire({
+              title: "บันทึกชุดข้อมูลสำเร็จ",
+              text: "คุณต้องการจัดการชุดข้อมูลเชิงเทคนิคหรือไม่!",
+              icon: "success",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "ยืนยัน",
+              cancelButtonText: "ยกเลิก",
+            })
+            .then(async (result) => {
+              if (result.isConfirmed) {
+                await this.setTypeFormEditTAction(false);
+                this.$router.replace({ path: "/metadata/technical_form" });
+              } else {
+                this.$router.replace({ path: "/metadata/" });
+              }
+            });
+        }
       } else {
         this.submitStatus = "ERROR";
         this.$swal.fire({
@@ -761,7 +778,6 @@ export default {
       this.form.meta_cf_object = null;
     },
   },
-  
 };
 </script>
 
