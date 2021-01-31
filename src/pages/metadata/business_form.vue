@@ -588,7 +588,7 @@ export default {
     async formSave() {
       this.submitStatus = "PENDING";
       let payload = this.form;
-      
+
       if (this.typeFormEdit) {
         await this.updateAction(payload);
       } else {

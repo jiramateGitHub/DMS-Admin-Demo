@@ -47,7 +47,6 @@
                         <th width="10%">หมวดหมู่ข้อมูล</th>
                         <th width="13%">กลุ่มชุดข้อมูล</th>
                         <th width="15%">หน่วยงานภายใน</th>
-                        <th width="12%">วันที่ปรับปรุง</th>
                         <th width="18%" class="disabled-sorting">ดำเนินการ</th>
                       </tr>
                     </thead>
@@ -67,9 +66,6 @@
                         </td>
                         <td>
                           {{ value.dms_institution.ins_name }}
-                        </td>
-                        <td class="text-center">
-                          {{ value.meta_update_time | moment("calendar") }}
                         </td>
                         <td class="text-center">
                           <button
