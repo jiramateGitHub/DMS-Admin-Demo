@@ -2,6 +2,11 @@
   <div>
     <div class="container-fluid">
       <div class="row">
+        <div class="col-md-12">
+          
+        </div>
+      </div>
+      <div class="row">
         <div class="col-lg-8 col-md-6 col-sm-6">
           <div class="card card-stats">
             <div class="card-header card-header-info card-header-icon">

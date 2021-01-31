@@ -1,4 +1,4 @@
-<template>
+<template >
   <div>
     <div class="row">
       <div class="col-md-12">
@@ -33,6 +33,7 @@
               <div class="col-md-12">
                 <div class="material-datatables">
                   <table
+                    id="datatables"
                     class="table table-striped table-color-header table-hover table-border"
                     cellspacing="0"
                     width="100%"
@@ -212,7 +213,7 @@ export default {
           title: "เลือกรายการที่ต้องการแก้ไข",
           text: "ชื่อชุดข้อมูล: " + obj_metadata.meta_name,
           width: 650,
-          icon : "question",
+          icon: "question",
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: `Business`,

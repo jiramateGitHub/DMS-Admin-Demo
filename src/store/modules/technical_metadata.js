@@ -71,10 +71,9 @@ const actions = {
                             tcd_create_user: 1,
                             tcd_update_user: 1,
                         };
-                        console.log(payload_dms_technical_detail)
                         await mixinHttpRequest.methods.post("/dms_technical_detail", payload_dms_technical_detail)
                             .then(res => commit("setStateSave", { res }))
-                            .catch(err => alert(err));
+                            .catch(err => console.log(err));
                     }
 
                     setStateError = false
@@ -88,9 +87,41 @@ const actions = {
                 commit("setStateError", setStateError)
             })
     },
+    async updateMetadata({ commit }, payload) {
+        let tsm_id = payload[0].dms_technical_metadatum.tsm_id
+        let payload_dms_technical_detail = {
+            tcd_active: "N"
+        };
+        await mixinHttpRequest.methods.put("/dms_technical_detail/active_all/" + tsm_id, payload_dms_technical_detail)
+            .then(async res => {
+                if (res.status == 200) {
+                    for (var i = 0; i < payload.length; i++) {
+                        let payload_dms_technical_detail = {
+                            tcd_tsm_id: tsm_id,
+                            tcd_seq: i,
+                            tcd_attribute: payload[i].tcd_attribute,
+                            tcd_type: payload[i].tcd_type.label == undefined ? payload[i].tcd_type : payload[i].tcd_type.label,
+                            tcd_length: payload[i].tcd_length,
+                            tcd_key: payload[i].tcd_key.label == undefined ? payload[i].tcd_key : payload[i].tcd_key.label,
+                            tcd_sample: payload[i].tcd_sample,
+                            tcd_comment: payload[i].tcd_comment,
+                            tcd_anonymous: payload[i].tcd_anonymous,
+                            tcd_active: "Y",
+                            tcd_create_user: 1,
+                            tcd_update_user: 1,
+                        };
+                        await mixinHttpRequest.methods.post("/dms_technical_detail", payload_dms_technical_detail)
+                            .then(res => commit("setStateSave", { res }))
+                            .catch(err => console.log(err));
+                    }
+                    commit("setStateError", false)
+                } else {
+                    commit("setStateError", true)
+                }
+            })
+    },
     async getCurrentTechnicalMetadata({ commit }, payload) {
         // payload is dms_technical_metadatum.tsm_id
-        console.log("payload " + payload)
         if (payload != null) {
             mixinHttpRequest.methods.get("/dms_technical_detail/join/" + payload).then(res => { commit("setCurrentDmsTechnicalDetail", { res }) })
         } else {

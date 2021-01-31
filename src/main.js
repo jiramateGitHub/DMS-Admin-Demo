@@ -5,6 +5,10 @@ import Chartist from "chartist";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
+import { VuejsDatatableFactory } from 'vuejs-datatable';
+
+Vue.use(VuejsDatatableFactory);
+
 import routes from "./routes/routes";
 const router = new VueRouter({
     routes, // short for routes: routes
@@ -30,7 +34,7 @@ Vue.use(VueSweetalert2);
 Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false
-    /* eslint-disable no-new */
+
 new Vue({
     store,
     el: "#app",
@@ -38,5 +42,5 @@ new Vue({
     router,
     data: {
         Chartist: Chartist
-    }
+    },
 })

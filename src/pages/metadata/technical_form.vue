@@ -178,7 +178,14 @@
             <div class="card-footer">
               <div class="row">
                 <div class="col-md-12">
+                  getCurrentDmsTechnicalDetailList
                   <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  items
+                  <pre>{{ items }}</pre>
                 </div>
               </div>
             </div>
@@ -227,7 +234,7 @@ export default {
           tcd_length: 0,
           tcd_key: "",
           tcd_sample: "",
-          tcd_anonymous: false,
+          tcd_anonymous: true,
           tcd_comment: "",
         },
       ],
@@ -341,9 +348,11 @@ export default {
         await this.updateAction(payload);
       } else {
         console.log("saveAction")
-
         await this.saveAction(payload);
       }
+
+      console.log("payload")
+      console.log(payload)
 
       if (this.technicalSaveStatus.code == 0) {
         this.submitStatus = "OK";
@@ -381,7 +390,7 @@ export default {
         tcd_length: 0,
         tcd_key: "",
         tcd_sample: "",
-        tcd_anonymous: false,
+        tcd_anonymous: true,
         tcd_comment: "",
       });
     },
