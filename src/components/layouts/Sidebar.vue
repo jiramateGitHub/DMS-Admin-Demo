@@ -24,7 +24,7 @@
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="material-icons">settings</i>
-                <p>Meatadata</p>
+                <p>Metadata</p>
               </a>
             </li>
           </router-link>
