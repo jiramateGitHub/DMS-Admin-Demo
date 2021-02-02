@@ -339,8 +339,6 @@ export default {
 
       let payload = this.items;
 
-      console.log("formSave")
-      console.log("this.typeFormEdit " + this.typeFormEdit)
       console.log(this.getCurrentDmsTechnicalDetailList)
 
       if (this.typeFormEdit && this.getCurrentDmsTechnicalDetailList != null) {

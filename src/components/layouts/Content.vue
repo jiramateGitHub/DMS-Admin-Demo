@@ -1,13 +1,15 @@
 <template>
-  <transition @before-enter="scrollTop" name="fade" mode="out-in" appear>
-    <router-view></router-view>
-  </transition>
+  <div>
+    <transition @before-enter="scrollTop" name="fade" mode="out-in" appear>
+      <router-view></router-view>
+    </transition>
+  </div>
 </template>
 <script>
 export default {
   methods: {
     scrollTop() {
-     window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     },
   },
 };

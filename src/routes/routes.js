@@ -4,11 +4,12 @@ import Dashboard from "@/pages/dashboard/dashboard.vue";
 import Metadata from "@/pages/metadata/metadata.vue";
 import BusineesForm from "@/pages/metadata/business_form.vue";
 import TechnicalForm from "@/pages/metadata/technical_form.vue";
+import AuthDev from "@/components/auth_dev.vue";
 
 const routes = [{
     path: "/",
     component: Sidebar,
-    redirect: "/dashboard",
+    redirect: "/auth",
     children: [{
             path: "dashboard",
             name: "Dashboard",
@@ -28,6 +29,11 @@ const routes = [{
             path: "metadata/technical_form",
             name: "TechnicalForm",
             component: TechnicalForm
+        },
+        {
+            path: "auth",
+            name: "authDev",
+            component: AuthDev
         }
     ]
 }];

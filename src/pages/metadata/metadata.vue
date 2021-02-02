@@ -78,23 +78,25 @@
             </div>
             <div class="card-footer text-left">
               <div class="col-md-4">
-                <label>หน่วยงานภายใน</label
-                ><br />
+                <label>กลุ่มข้อมูล</label><br />
                 <v-select
                   placeholder="ทั้งหมด"
                   :options="vSelectBaseCategories"
                 ></v-select>
               </div>
               <div class="col-md-4">
-                <label>สถานะชุดข้อมูล </label
-                ><br />
+                <label>หน่วยงานภายใน</label><br />
                 <v-select
                   placeholder="ทั้งหมด"
                   :options="vSelectBaseCategories"
                 ></v-select>
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control datepicker" value="10/06/2018">
+                <label>สถานะชุดข้อมูล </label><br />
+                <v-select
+                v-model="search.active"
+                  :options="optionActive"
+                ></v-select>
               </div>
             </div>
           </div>
@@ -106,12 +108,23 @@
 </template>
 
 <script>
-import { mapActions,  mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import TableMetadata from "../../components/modules/table_metadata.vue";
 
 export default {
   name: "Metadata",
   props: {},
+  data() {
+    return {
+      search : {
+          active : "เปิดใช้งาน"
+      },
+      optionActive: [
+        { label: "เปิดใช้งาน", code: "1" },
+        { label: "ไม่เปิดใช้งาน", code: "2" },
+      ],
+    };
+  },
   components: {
     TableMetadata,
   },
@@ -121,14 +134,20 @@ export default {
   methods: {
     ...mapActions({
       fetchBaseCategoriesAction: "vselect_dms_base/fetchBaseCategories",
+      fetchBaseDatagroupsAction: "vselect_dms_base/fetchBaseDatagroups",
+      fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
     }),
     fetchBaseCategories() {
       this.fetchBaseCategoriesAction();
+      this.fetchBaseDatagroupsAction();
+      this.fetchInstitutionAction();
     },
   },
   computed: {
     ...mapGetters({
       vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
+      vSelectInstitution: "vselect_dms_base/vSelectInstitution",
+      vSelectBaseDatagroups: "vselect_dms_base/vSelectBaseDatagroups",
     }),
   },
 };
@@ -136,7 +155,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.row{
-  padding:0px
+.row {
+  padding: 0px;
 }
 </style>

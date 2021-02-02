@@ -12,6 +12,7 @@ Vue.use(VuejsDatatableFactory);
 import routes from "./routes/routes";
 const router = new VueRouter({
     routes, // short for routes: routes
+    linkActiveClass: "active",
     // eslint-disable-next-line no-unused-vars
     scrollBehavior(to, from, savedPosition) {
         return { x: 0, y: 0 }

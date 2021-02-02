@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <div class="row">
       <div class="col-md-12">
@@ -7,7 +7,9 @@
             <div class="card-icon">
               <i class="material-icons">assignment</i>
             </div>
-            <h4 class="card-title">ตารางแสดงรายการชุดข้อมูล</h4>
+            <h4 class="card-title" id="datatablessss">
+              ตารางแสดงรายการชุดข้อมูล
+            </h4>
           </div>
           <div class="card-body">
             <div class="row">
@@ -30,6 +32,40 @@
               </div>
             </div>
             <div class="row">
+              <div class="offset-md-8 col-md-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="filter"
+                  placeholder="Search records"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 center">
+                <div id="vue-root">
+                  <datatable
+                    :columns="columns"
+                    :data="fetchDmsMetadataList"
+                    :per-page="10"
+                    :filter="filter"
+                    class="table table-striped table-color-header table-hover table-border"
+                    cellspacing="0"
+                    width="100%"
+                    style="width: 100%"
+                  >
+                  </datatable>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <section class="pagers-table">
+                  <datatable-pager v-model="page"></datatable-pager>
+                </section>
+              </div>
+            </div>
+            <!-- <div class="row">
               <div class="col-md-12">
                 <div class="material-datatables">
                   <table
@@ -108,12 +144,17 @@
                   </table>
                 </div>
               </div>
-            </div>
+            </div> -->
             <!-- <div class="row">
               <div class="col-md-12">
                 <pre>{{ fetchDmsMetadataList }}</pre>
               </div>
             </div> -->
+            <div class="row">
+              <div class="col-md-12">
+                <data-table :users="filteredUsers"></data-table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -161,8 +202,78 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import $ from 'jquery'
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
+import { VuejsDatatableFactory } from "vuejs-datatable";
+
+VuejsDatatableFactory.useDefaultType(false).registerTableType(
+  "datatable",
+  (tableType) =>
+    tableType.mergeSettings({
+      table: {},
+      pager: {
+        classes: {
+          pager: "pagination pagination-primary",
+          selected: "active",
+        },
+        icons: {
+          next: '<i class="material-icons">search</i>',
+          previous: '<i class="material-icons">search</i>',
+        },
+      },
+    })
+);
+
+Vue.component("data-table", {
+  template: `
+  <table id="myTable">
+    <tbody>
+      <tr v-for="user in users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.phone }}</td> 
+        <td>{{ user.email }}</td>
+        <td>{{ user.website }}</td>
+        <td><button @click="buttonPressed">Press</button></td>
+      </tr>
+    </tbody>
+  </table>
+  `,
+  props: ["users"],
+  data() {
+    return {
+      headers: [
+        { title: "ID" },
+        { title: "Username", class: "some-special-class" },
+        { title: "Real Name" },
+        { title: "Phone" },
+        { title: "Email" },
+        { title: "Website" },
+      ],
+    };
+  },
+  methods: {
+    buttonPressed() {
+      alert("Button was pressed");
+    },
+    createDataTable() {
+      if (this.users) {
+        if ($.fn.dataTable.isDataTable("#myTable"))
+          $("#myTable")
+            .DataTable()
+            .destroy();
+        $("#myTable").DataTable({
+          columns: this.headers,
+        });
+      }
+    },
+  },
+  updated() {
+    this.createDataTable();
+  },
+});
 
 export default {
   name: "TableMetadata",
@@ -172,12 +283,67 @@ export default {
   },
   data() {
     return {
+      filter: "",
+      page: 1,
+      columns: [
+        { label: "#", field: "meta_id" },
+        {
+          label: "รหัส",
+          field: "meta_code",
+        },
+        { label: "ชุดข้อมูล", field: "meta_name" },
+        { label: "หมวดหมู่ข้อมูล", field: "dms_base_category.bc_name" },
+        { label: "กลุ่มชุดข้อมูล", field: "dms_base_datagroup.grp_name" },
+        {
+          label: "หน่วยงานภายใน",
+          field: "dms_institution.ins_name",
+        },
+        {
+          label: "ดำเนินการ",
+          representedAs: ({ meta_id }) => ` <button
+                            type="button"
+                            rel="tooltip"
+                            class="btn btn-fab btn-primary"
+                            data-placement="top"
+                            title="คลิกเพื่อค้นหาข้อมูล"
+                            data-toggle="modal"
+                            data-target="#myModal"
+                           @click="openInfo(${meta_id})"
+                          >
+                            <i class="material-icons">search</i>
+                          </button>
+                           <button
+                            style="margin-left: 5px"
+                            type="button"
+                            rel="tooltip"
+                            class="btn btn-fab btn-warning"
+                            data-placement="top"
+                            title="คลิกเพื่อแก้ไขข้อมูล"
+                            v-on:click="openEdit(${meta_id})"
+                          >
+                            <i class="material-icons">edit</i>
+                          </button>
+                          <button
+                            style="margin-left: 5px"
+                            type="button"
+                            rel="tooltip"
+                            class="btn btn-fab btn-danger"
+                            data-placement="top"
+                            title="คลิกเพื่อลบข้อมูล"
+                            v-on:click="openDelete(${meta_id})"
+                          >
+                            <i class="material-icons">close</i>
+                          </button>`,
+          interpolate: true,
+        },
+      ],
       modalTitle: "",
     };
   },
   created() {
     this.fetchDmsMetadataAction();
   },
+  mounted: function() {},
   computed: {
     ...mapGetters({
       fetchDmsMetadataList: "metadata_management/fetchDmsMetadata",
@@ -198,12 +364,22 @@ export default {
       await this.setTypeFormEditBAction(false);
       this.$router.replace({ path: "/metadata/business_form" });
     },
-    async openInfo(obj_metadata) {
-      this.modalTitle = obj_metadata.meta_name;
-      await this.setCurrentDmsMetadataAction(obj_metadata);
+    async openInfo(meta_id) {
+      let index = this.fetchDmsMetadataList.findIndex(
+        (item) => item.meta_id === meta_id
+      );
+      this.modalTitle = this.fetchDmsMetadataList[index].meta_name;
+      await this.setCurrentDmsMetadataAction(
+        this.fetchDmsMetadataList[index].meta_name
+      );
       await this.getBusinessMetadataAction();
     },
-    async openEdit(obj_metadata) {
+    async openEdit(meta_id) {
+      let index = this.fetchDmsMetadataList.findIndex(
+        (item) => item.meta_id === meta_id
+      );
+      let obj_metadata = this.fetchDmsMetadataList[index];
+      this.modalTitle = obj_metadata.meta_name;
       this.$swal
         .fire({
           title: "เลือกรายการที่ต้องการแก้ไข",
@@ -239,7 +415,11 @@ export default {
           }
         });
     },
-    async openDelete(obj_metadata) {
+    async openDelete(meta_id) {
+      let index = this.fetchDmsMetadataList.findIndex(
+        (item) => item.meta_id === meta_id
+      );
+      let obj_metadata = this.fetchDmsMetadataList[index];
       this.$swal
         .fire({
           title: "คุณต้องการลบ “" + obj_metadata.meta_name + "” ใช่หรือไม่",
@@ -264,3 +444,5 @@ export default {
   },
 };
 </script>
+
+<style></style>

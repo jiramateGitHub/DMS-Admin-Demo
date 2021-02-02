@@ -4,29 +4,39 @@
       <div class="sidebar-wrapper">
         <div class="user">
           <div class="user-info">
-            <a data-toggle="collapse" href="#collapseExample">
-              <span>
-                <h5>AllOSoft Co.,Ltd.</h5>
+            <a
+              data-toggle="collapse"
+              href="#collapseExample"
+              style="padding:0px"
+            >
+              <span class="text-center">
+                <h4 style="margin:0px">AllOSoft</h4>
               </span>
             </a>
           </div>
         </div>
         <ul class="nav">
-          <router-link to="/dashboard" @click="scrollToTop()">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="material-icons">dashboard</i>
-                <p>Dashboard</p>
-              </a>
-            </li>
+          <router-link
+            tag="li"
+            active-class="active"
+            to="/dashboard"
+            @click="scrollToTop()"
+          >
+            <a class="nav-link" href="#">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
           </router-link>
-          <router-link to="/metadata" @click="scrollToTop()">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="material-icons">settings</i>
-                <p>Metadata</p>
-              </a>
-            </li>
+          <router-link
+            tag="li"
+            active-class="active"
+            to="/metadata"
+            @click="scrollToTop()"
+          >
+            <a class="nav-link" href="#">
+              <i class="material-icons">settings</i>
+              <p>Metadata</p>
+            </a>
           </router-link>
         </ul>
       </div>
@@ -59,11 +69,22 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .main-dashboard {
   position: relative;
   float: right;
   width: calc(100% - 260px);
   transition: 0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1);
+}
+
+scrollbar-on .main-panel {
+  height: 100%;
+  max-height: 100%;
+}
+
+.wrapper {
+  position: relative;
+  top: 0;
+  height: 100%;
 }
 </style>
