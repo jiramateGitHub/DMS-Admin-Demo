@@ -31,7 +31,7 @@
                 </button>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="offset-md-8 col-md-4">
                 <input
                   type="text"
@@ -64,11 +64,12 @@
                   <datatable-pager v-model="page"></datatable-pager>
                 </section>
               </div>
-            </div>
-            <!-- <div class="row">
+            </div> -->
+            <div class="row">
               <div class="col-md-12">
                 <div class="material-datatables">
                   <table
+                    v-inview
                     id="datatables"
                     class="table table-striped table-color-header table-hover table-border"
                     cellspacing="0"
@@ -112,7 +113,7 @@
                             title="คลิกเพื่อค้นหาข้อมูล"
                             data-toggle="modal"
                             data-target="#myModal"
-                            v-on:click="openInfo(value)"
+                            v-on:click="openInfo(value.meta_id)"
                           >
                             <i class="material-icons">search</i>
                           </button>
@@ -123,7 +124,7 @@
                             class="btn btn-fab btn-warning"
                             data-placement="top"
                             title="คลิกเพื่อแก้ไขข้อมูล"
-                            v-on:click="openEdit(value)"
+                            v-on:click="openEdit(value.meta_id)"
                           >
                             <i class="material-icons">edit</i>
                           </button>
@@ -134,7 +135,7 @@
                             class="btn btn-fab btn-danger"
                             data-placement="top"
                             title="คลิกเพื่อลบข้อมูล"
-                            v-on:click="openDelete(value)"
+                            v-on:click="openDelete(value.meta_id)"
                           >
                             <i class="material-icons">close</i>
                           </button>
@@ -144,17 +145,12 @@
                   </table>
                 </div>
               </div>
-            </div> -->
+            </div>
             <!-- <div class="row">
               <div class="col-md-12">
-                <pre>{{ fetchDmsMetadataList }}</pre>
+                <pre>{{ fetchDmsMetadataList[0] }}</pre>
               </div>
             </div> -->
-            <div class="row">
-              <div class="col-md-12">
-                <data-table :users="filteredUsers"></data-table>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -202,10 +198,10 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
-import $ from 'jquery'
+// import $ from "jquery";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
+
 import { VuejsDatatableFactory } from "vuejs-datatable";
 
 VuejsDatatableFactory.useDefaultType(false).registerTableType(
@@ -225,55 +221,6 @@ VuejsDatatableFactory.useDefaultType(false).registerTableType(
       },
     })
 );
-
-Vue.component("data-table", {
-  template: `
-  <table id="myTable">
-    <tbody>
-      <tr v-for="user in users">
-        <td>{{ user.username }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.phone }}</td> 
-        <td>{{ user.email }}</td>
-        <td>{{ user.website }}</td>
-        <td><button @click="buttonPressed">Press</button></td>
-      </tr>
-    </tbody>
-  </table>
-  `,
-  props: ["users"],
-  data() {
-    return {
-      headers: [
-        { title: "ID" },
-        { title: "Username", class: "some-special-class" },
-        { title: "Real Name" },
-        { title: "Phone" },
-        { title: "Email" },
-        { title: "Website" },
-      ],
-    };
-  },
-  methods: {
-    buttonPressed() {
-      alert("Button was pressed");
-    },
-    createDataTable() {
-      if (this.users) {
-        if ($.fn.dataTable.isDataTable("#myTable"))
-          $("#myTable")
-            .DataTable()
-            .destroy();
-        $("#myTable").DataTable({
-          columns: this.headers,
-        });
-      }
-    },
-  },
-  updated() {
-    this.createDataTable();
-  },
-});
 
 export default {
   name: "TableMetadata",
@@ -308,7 +255,7 @@ export default {
                             title="คลิกเพื่อค้นหาข้อมูล"
                             data-toggle="modal"
                             data-target="#myModal"
-                           @click="openInfo(${meta_id})"
+                            @click="openInfo(${meta_id})"
                           >
                             <i class="material-icons">search</i>
                           </button>
@@ -343,7 +290,6 @@ export default {
   created() {
     this.fetchDmsMetadataAction();
   },
-  mounted: function() {},
   computed: {
     ...mapGetters({
       fetchDmsMetadataList: "metadata_management/fetchDmsMetadata",
@@ -365,13 +311,11 @@ export default {
       this.$router.replace({ path: "/metadata/business_form" });
     },
     async openInfo(meta_id) {
-      let index = this.fetchDmsMetadataList.findIndex(
+      let index = await this.fetchDmsMetadataList.findIndex(
         (item) => item.meta_id === meta_id
       );
       this.modalTitle = this.fetchDmsMetadataList[index].meta_name;
-      await this.setCurrentDmsMetadataAction(
-        this.fetchDmsMetadataList[index].meta_name
-      );
+      await this.setCurrentDmsMetadataAction(this.fetchDmsMetadataList[index]);
       await this.getBusinessMetadataAction();
     },
     async openEdit(meta_id) {

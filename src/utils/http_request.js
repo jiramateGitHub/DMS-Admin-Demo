@@ -18,9 +18,6 @@ export default {
             return dataPromise
         },
         post(methodName, payload) {
-            const headers = {
-                Authorization: "Bearer " + this.jwtToken
-            };
             // create a promise for the axios request
             const promise = Axios.post(baseApiURL + methodName, payload, { headers: headers })
 

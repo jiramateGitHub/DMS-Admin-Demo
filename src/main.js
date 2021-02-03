@@ -19,8 +19,6 @@ const router = new VueRouter({
     }
 });
 
-
-
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
@@ -34,6 +32,9 @@ Vue.use(VueSweetalert2);
 
 Vue.use(require('vue-moment'));
 
+import Inview from 'vue-inview'
+Vue.use(Inview)
+
 Vue.config.productionTip = false
 
 new Vue({
@@ -43,5 +44,13 @@ new Vue({
     router,
     data: {
         Chartist: Chartist
+    },
+    mounted() {
+        // this.$on('inview-enter', (data, node) => {
+        //     console.log(data, node)
+        // })
+        // this.$on('inview-leave', (data, node) => {
+        //     console.log(data, node)
+        // })
     },
 })

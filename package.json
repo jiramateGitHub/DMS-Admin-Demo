@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "axios": "^0.21.1",
+        "chart.js": "^2.9.4",
         "chartist": "0.11.4",
         "core-js": "^3.6.5",
         "es6-promise": "^4.2.8",
@@ -17,7 +18,9 @@
         "save": "^2.4.0",
         "vue": "^2.6.11",
         "vue-axios": "^3.2.2",
+        "vue-chartjs": "^3.5.1",
         "vue-clickaway": "2.2.2",
+        "vue-inview": "^0.2.0",
         "vue-material": "^1.0.0-beta-15",
         "vue-moment": "^4.1.0",
         "vue-nprogress": "^0.2.0",
@@ -52,9 +55,7 @@
         "parserOptions": {
             "parser": "babel-eslint"
         },
-        "rules": {
-            "no-unused-vars": "off"
-        }
+        "rules": {}
     },
     "browserslist": [
         "> 1%",

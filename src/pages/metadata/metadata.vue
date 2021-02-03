@@ -6,96 +6,59 @@
           <div class="card card-stats">
             <div class="card-header card-header-warning card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">search</i>
+                <i class="material-icons">find_in_page</i>
               </div>
               <h3 class="card-title">
                 <span>หมวดหมู่ข้อมูล</span>
               </h3>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer text-left">
               <div class="col-lg-12 col-md-12 col-sm-12">
+                <label>หมวดหมู่ข้อมูล</label><br />
                 <v-select
-                  placeholder="ทั้งหมด"
-                  :options="vSelectBaseCategories"
+                  v-model="searchFilter.bc_id"
+                  :options="optionBaseCategories"
+                  @input="reloadTable"
+                  :clearable="false"
                 ></v-select>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-8 col-md-6 col-sm-6">
           <div class="card card-stats">
-            <div class="card-header card-header-primary card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">public</i>
-              </div>
-              <p class="card-category">จำนวนชุดข้อมูลสาธารณะ</p>
-              <h3 class="card-title">
-                <span class="text-success">4</span> / 4
-              </h3>
-            </div>
-            <div class="card-footer text-right">
-              <p class="card-category"></p>
-              <div class="stats">
-                <i class="material-icons">local_offer</i>
-                <span class="text-success">ข้อมูลใช้งาน</span> /
-                <span class="text-primary">ข้อมูลทั้งหมด</span>
-              </div>
-              <p></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-rose card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">equalizer</i>
-              </div>
-              <p class="card-category">จำนวนชุดข้อมูลทั้งหมด</p>
-              <h3 class="card-title">
-                <span class="text-success">100</span> / 100
-              </h3>
-            </div>
-            <div class="card-footer text-right">
-              <p class="card-category"></p>
-              <div class="stats">
-                <i class="material-icons">local_offer</i>
-                <span class="text-success">ข้อมูลใช้งาน</span> /
-                <span class="text-primary">ข้อมูลทั้งหมด</span>
-              </div>
-              <p></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12 col-md-6 col-sm-6">
-          <div class="card">
             <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
                 <i class="material-icons">search</i>
               </div>
-              <h4 class="card-title">ค้นหา</h4>
+              <h3 class="card-title">ค้นหา</h3>
             </div>
             <div class="card-footer text-left">
               <div class="col-md-4">
                 <label>กลุ่มข้อมูล</label><br />
                 <v-select
-                  placeholder="ทั้งหมด"
-                  :options="vSelectBaseCategories"
+                  v-model="searchFilter.grp_id"
+                  :options="optionBaseDatagroups"
+                  @input="reloadTable"
+                  :clearable="false"
                 ></v-select>
               </div>
               <div class="col-md-4">
                 <label>หน่วยงานภายใน</label><br />
                 <v-select
-                  placeholder="ทั้งหมด"
-                  :options="vSelectBaseCategories"
+                  v-model="searchFilter.ins_id"
+                  :options="optionInstitution"
+                  @input="reloadTable"
+                  :clearable="false"
                 ></v-select>
               </div>
               <div class="col-md-4">
                 <label>สถานะชุดข้อมูล </label><br />
                 <v-select
-                v-model="search.active"
+                  v-model="searchFilter.meta_active"
                   :options="optionActive"
+                  @input="reloadTable"
+                  :clearable="false"
                 ></v-select>
               </div>
             </div>
@@ -116,13 +79,32 @@ export default {
   props: {},
   data() {
     return {
-      search : {
-          active : "เปิดใช้งาน"
+      searchFilter: {
+        case: 0,
+        bc_id: {
+          code: "0",
+          label: "ทั้งหมด",
+        },
+        grp_id: {
+          code: "0",
+          label: "ทั้งหมด",
+        },
+        ins_id: {
+          code: "0",
+          label: "ทั้งหมด",
+        },
+        meta_active: {
+          code: "1",
+          label: "ใช้งาน",
+        },
       },
       optionActive: [
-        { label: "เปิดใช้งาน", code: "1" },
-        { label: "ไม่เปิดใช้งาน", code: "2" },
+        { code: 1, label: "ใช้งาน" },
+        { code: 2, label: "ไม่ใช้งาน" },
       ],
+      optionBaseCategories: [],
+      optionBaseDatagroups: [],
+      optionInstitution: [],
     };
   },
   components: {
@@ -131,16 +113,34 @@ export default {
   created() {
     this.fetchBaseCategories();
   },
+  mounted() {
+    this.optionBaseCategories = this.vSelectBaseCategories;
+    this.optionBaseDatagroups = this.vSelectBaseDatagroups;
+    this.optionInstitution = this.vSelectInstitution;
+
+    this.optionActive.unshift({ code: 0, label: "ทั้งหมด" });
+    this.optionBaseCategories.unshift({ code: 0, label: "ทั้งหมด" });
+    this.optionBaseDatagroups.unshift({ code: 0, label: "ทั้งหมด" });
+    this.optionInstitution.unshift({ code: 0, label: "ทั้งหมด" });
+  },
   methods: {
     ...mapActions({
       fetchBaseCategoriesAction: "vselect_dms_base/fetchBaseCategories",
       fetchBaseDatagroupsAction: "vselect_dms_base/fetchBaseDatagroups",
       fetchInstitutionAction: "vselect_dms_base/fetchInstitution",
+      setFilterAction: "metadata_management/setFilter",
     }),
-    fetchBaseCategories() {
-      this.fetchBaseCategoriesAction();
-      this.fetchBaseDatagroupsAction();
-      this.fetchInstitutionAction();
+    async fetchBaseCategories() {
+      await this.fetchBaseCategoriesAction();
+      await this.fetchBaseDatagroupsAction();
+      await this.fetchInstitutionAction();
+    },
+    reloadTable() {
+      // console.log(this.searchFilter);
+      this.setFilterAction(this.searchFilter);
+
+      // var output = employees.filter((employee) => employee.meta_bc_id == 1);
+      // console.log(output);
     },
   },
   computed: {

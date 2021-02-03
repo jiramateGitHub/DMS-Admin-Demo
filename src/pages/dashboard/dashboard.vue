@@ -2,25 +2,27 @@
   <div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">
-          
-        </div>
-      </div>
-      <div class="row">
         <div class="col-lg-8 col-md-6 col-sm-6">
           <div class="card card-stats">
             <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">equalizer</i>
+                <i class="material-icons">table_chart</i>
               </div>
               <p class="card-category">จำนวนชุดข้อมูลทั้งหมด</p>
               <h3 class="card-title">
-                <span class="text-success">100</span> / 100
+                <span class="text-success">{{
+                  countDmsMetadataByBc[0] +
+                    countDmsMetadataByBc[2] +
+                    countDmsMetadataByBc[4] +
+                    countDmsMetadataByBc[6]
+                }}</span>
+                / {{(countDmsMetadataByBc[0] + countDmsMetadataByBc[1]) +
+                (countDmsMetadataByBc[2] + countDmsMetadataByBc[3]) +
+                (countDmsMetadataByBc[4] + countDmsMetadataByBc[5]) +
+                (countDmsMetadataByBc[6] + countDmsMetadataByBc[7])}}
               </h3>
             </div>
             <div class="card-footer text-right">
-              <button @click="getUser()">get User from API</button> <br />
-              {{ user }}
               <p class="card-category"></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
@@ -45,11 +47,6 @@
                 <div class="col-md-12">
                   <h6 class="card-category">Legend</h6>
                 </div>
-                <div class="col-md-12">
-                  <i class="fa fa-circle text-info"></i> Apple
-                  <i class="fa fa-circle text-warning"></i> Samsung
-                  <i class="fa fa-circle text-danger"></i> Windows Phone
-                </div>
               </div>
             </div>
           </div>
@@ -58,11 +55,12 @@
           <div class="card card-stats">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">equalizer</i>
+                <i class="material-icons">accessibility</i>
               </div>
               <p class="card-category">จำนวนชุดข้อมูลส่วนบุคคล</p>
               <h3 class="card-title">
-                <span class="text-success">100</span> / 100
+                <span class="text-success">{{ countDmsMetadataByBc[0] }}</span>
+                / {{ countDmsMetadataByBc[0] + countDmsMetadataByBc[1] }}
               </h3>
             </div>
             <div class="card-footer text-right">
@@ -75,34 +73,16 @@
               <p></p>
             </div>
           </div>
+
           <div class="card card-stats">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">equalizer</i>
-              </div>
-              <p class="card-category">จำนวนชุดข้อมูลสาธารณะ</p>
-              <h3 class="card-title">
-                <span class="text-success">100</span> / 100
-              </h3>
-            </div>
-            <div class="card-footer text-right">
-              <p class="card-category"></p>
-              <div class="stats">
-                <i class="material-icons">local_offer</i>
-                <span class="text-success">ข้อมูลใช้งาน</span> /
-                <span class="text-primary">ข้อมูลทั้งหมด</span>
-              </div>
-              <p></p>
-            </div>
-          </div>
-          <div class="card card-stats">
-            <div class="card-header card-header-rose card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">equalizer</i>
+                <i class="material-icons">policy</i>
               </div>
               <p class="card-category">จำนวนชุดข้อมูลความลับทางราชการ</p>
               <h3 class="card-title">
-                <span class="text-success">100</span> / 100
+                <span class="text-success">{{ countDmsMetadataByBc[2] }}</span>
+                / {{ countDmsMetadataByBc[2] + countDmsMetadataByBc[3] }}
               </h3>
             </div>
             <div class="card-footer text-right">
@@ -118,11 +98,33 @@
           <div class="card card-stats">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">equalizer</i>
+                <i class="material-icons">gavel</i>
               </div>
               <p class="card-category">จำนวนชุดข้อมูลความมั่นคง</p>
               <h3 class="card-title">
-                <span class="text-success">100</span> / 100
+                <span class="text-success">{{ countDmsMetadataByBc[4] }}</span>
+                / {{ countDmsMetadataByBc[4] + countDmsMetadataByBc[5] }}
+              </h3>
+            </div>
+            <div class="card-footer text-right">
+              <p class="card-category"></p>
+              <div class="stats">
+                <i class="material-icons">local_offer</i>
+                <span class="text-success">ข้อมูลใช้งาน</span> /
+                <span class="text-primary">ข้อมูลทั้งหมด</span>
+              </div>
+              <p></p>
+            </div>
+          </div>
+          <div class="card card-stats">
+            <div class="card-header card-header-rose card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">public</i>
+              </div>
+              <p class="card-category">จำนวนชุดข้อมูลสาธารณะ</p>
+              <h3 class="card-title">
+                <span class="text-success">{{ countDmsMetadataByBc[6] }}</span>
+                / {{ countDmsMetadataByBc[6] + countDmsMetadataByBc[7] }}
               </h3>
             </div>
             <div class="card-footer text-right">
@@ -142,7 +144,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
   components: {},
@@ -152,14 +154,17 @@ export default {
       url: process.env.VUE_APP_TITLE,
     };
   },
+  created() {
+    this.countDmsMetadataByBcAction();
+  },
   methods: {
     ...mapActions({
-      getUser: "metadata_management/getUser",
+      countDmsMetadataByBcAction: "metadata_management/countDmsMetadataByBc",
     }),
   },
   computed: {
-    ...mapState({
-      user: (state) => state.user,
+    ...mapGetters({
+      countDmsMetadataByBc: "metadata_management/countDmsMetadataByBc",
     }),
   },
 };
