@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-lg-8 col-md-6 col-sm-6">
           <div class="card card-stats">
-            <div class="card-header card-header-info card-header-icon">
+            <div class="card-header card-header-primary card-header-icon">
               <div class="card-icon">
                 <i class="material-icons">table_chart</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลทั้งหมด</p>
+              <h3 class="card-title">จำนวนชุดข้อมูลทั้งหมด</h3>
               <h3 class="card-title">
                 <span class="text-success">{{
                   countDmsMetadataByBc[0] +
@@ -41,11 +41,13 @@
               <div class="card-icon">
                 <i class="material-icons">pie_chart</i>
               </div>
-              <h4 class="card-title">Pie Chart</h4>
+              <h4 class="card-title">
+                กราฟรายงานจำนวนชุดข้อมูลจำแนกตามหมวดหมู่ข้อมูล
+              </h4>
             </div>
             <div class="card-body">
               <div class="container">
-                <line-chart />
+                <pie-chart :chart-data="dataPoints" />
               </div>
             </div>
           </div>
@@ -56,7 +58,7 @@
               <div class="card-icon">
                 <i class="material-icons">accessibility</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลส่วนบุคคล</p>
+              <h4 class="card-title">จำนวนชุดข้อมูลส่วนบุคคล</h4>
               <h3 class="card-title">
                 <span class="text-success">{{ countDmsMetadataByBc[0] }}</span>
                 / {{ countDmsMetadataByBc[0] + countDmsMetadataByBc[1] }}
@@ -78,7 +80,7 @@
               <div class="card-icon">
                 <i class="material-icons">policy</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลความลับทางราชการ</p>
+              <h4 class="card-title">จำนวนชุดข้อมูลความลับทางราชการ</h4>
               <h3 class="card-title">
                 <span class="text-success">{{ countDmsMetadataByBc[2] }}</span>
                 / {{ countDmsMetadataByBc[2] + countDmsMetadataByBc[3] }}
@@ -99,7 +101,7 @@
               <div class="card-icon">
                 <i class="material-icons">gavel</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลความมั่นคง</p>
+              <h4 class="card-title">จำนวนชุดข้อมูลความมั่นคง</h4>
               <h3 class="card-title">
                 <span class="text-success">{{ countDmsMetadataByBc[4] }}</span>
                 / {{ countDmsMetadataByBc[4] + countDmsMetadataByBc[5] }}
@@ -120,7 +122,7 @@
               <div class="card-icon">
                 <i class="material-icons">public</i>
               </div>
-              <p class="card-category">จำนวนชุดข้อมูลสาธารณะ</p>
+              <h4 class="card-title">จำนวนชุดข้อมูลสาธารณะ</h4>
               <h3 class="card-title">
                 <span class="text-success">{{ countDmsMetadataByBc[6] }}</span>
                 / {{ countDmsMetadataByBc[6] + countDmsMetadataByBc[7] }}
@@ -143,26 +145,51 @@
 </template>
 
 <script>
-import LineChart from "./pie_chart";
+import PieChart from "./pie_chart";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
   components: {
-    LineChart,
+    PieChart,
   },
   data() {
     return {
-      firstName: process.env.API_URL + "/dms_base_categories",
-      url: process.env.VUE_APP_TITLE,
+      dataPoints: null,
     };
   },
   created() {
     this.countDmsMetadataByBcAction();
   },
+  mounted() {
+    setInterval(() => {
+      this.fillData();
+    }, 500);
+  },
   methods: {
     ...mapActions({
       countDmsMetadataByBcAction: "metadata_management/countDmsMetadataByBc",
     }),
+    fillData() {
+      let value = [];
+      value[0] = this.countDmsMetadataByBc[0] + this.countDmsMetadataByBc[1];
+      value[1] = this.countDmsMetadataByBc[2] + this.countDmsMetadataByBc[3];
+      value[2] = this.countDmsMetadataByBc[4] + this.countDmsMetadataByBc[5];
+      value[3] = this.countDmsMetadataByBc[6] + this.countDmsMetadataByBc[7];
+      this.dataPoints = {
+        labels: [
+          "ข้อมูลส่วนบุคคล",
+          "ข้อมูลความลับทางราชการ",
+          "ข้อมูลความมั่นคง",
+          "ข้อมูลสาธารณะ",
+        ],
+        datasets: [
+          {
+            backgroundColor: ["#4535AA", "#D6D1F5", "#ED639E", "#B05CBA"],
+            data: [value[0], value[1], value[2], value[3]],
+          },
+        ],
+      };
+    },
   },
   computed: {
     ...mapGetters({
