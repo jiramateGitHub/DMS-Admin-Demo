@@ -126,16 +126,28 @@ const actions = {
                                 // Step 6 : Insert payload_dms_business_format into database.
                                 //          set payload value "bsf_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
-                                let payload_dms_business_format = {
-                                    bsf_bsm_id: res.data.bsm_id,
-                                    bsf_ft_id: payload.meta_ft_object.code,
-                                };
-                                await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
-                                    .then(res => commit("setStateSave", { res }))
-                                    .catch((err) => {
-                                        commit("setStateError", setStateError)
-                                        console.log(err)
-                                    });
+                                for (var x = 0; x < payload.meta_ft_object.length; x++) {
+                                    let payload_dms_business_format = {
+                                        bsf_bsm_id: res.data.bsm_id,
+                                        bsf_ft_id: payload.meta_ft_object[x].code,
+                                    };
+                                    await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
+                                        .then(res => commit("setStateSave", { res }))
+                                        .catch((err) => {
+                                            commit("setStateError", setStateError)
+                                            console.log(err)
+                                        });
+                                }
+                                // let payload_dms_business_format = {
+                                //     bsf_bsm_id: res.data.bsm_id,
+                                //     bsf_ft_id: payload.meta_ft_object.code,
+                                // };
+                                // await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
+                                //     .then(res => commit("setStateSave", { res }))
+                                //     .catch((err) => {
+                                //         commit("setStateError", setStateError)
+                                //         console.log(err)
+                                //     });
                                 //**-- End Step -------------------------------------------------------------------------------------------*/
 
                                 // Step 7 : Insert payload_dms_business_permission into database.
@@ -320,17 +332,44 @@ const actions = {
                                 // Step 6 : Insert payload_dms_business_format into database.
                                 //          set payload value "bsf_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
+
                                 let payload_dms_business_format = {
-                                    bsf_id: currentValue[1].dms_base_formats[0].dms_business_format.bsf_id,
-                                    bsf_bsm_id: res.data.bsm_id,
-                                    bsf_ft_id: payload.meta_ft_object.code,
+                                    bsf_active: "N"
                                 };
-                                await mixinHttpRequest.methods.put("/dms_business_format/" + payload_dms_business_format.bsf_id, payload_dms_business_format)
+                                await mixinHttpRequest.methods.put(
+                                        "/dms_business_format/active_all/" +
+                                        currentValue[1].dms_base_formats[0].dms_business_format.bsf_bsm_id,
+                                        payload_dms_business_format)
                                     .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", true)
                                         console.log(err)
                                     });
+
+                                for (var t = 0; t < payload.meta_ft_object.length; t++) {
+                                    let payload_dms_business_format = {
+                                        bsf_bsm_id: currentValue[1].bsm_id,
+                                        bsf_ft_id: payload.meta_ft_object[t].code,
+                                    };
+                                    await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
+                                        .then(res => commit("setStateSave", { res }))
+                                        .catch((err) => {
+                                            commit("setStateError", true)
+                                            console.log(err)
+                                        });
+                                }
+
+                                // let payload_dms_business_format = {
+                                //     bsf_id: currentValue[1].dms_base_formats[0].dms_business_format.bsf_id,
+                                //     bsf_bsm_id: res.data.bsm_id,
+                                //     bsf_ft_id: payload.meta_ft_object.code,
+                                // };
+                                // await mixinHttpRequest.methods.put("/dms_business_format/" + payload_dms_business_format.bsf_id, payload_dms_business_format)
+                                //     .then(res => commit("setStateSave", { res }))
+                                //     .catch((err) => {
+                                //         commit("setStateError", true)
+                                //         console.log(err)
+                                //     });
                                 //**-- End Step -------------------------------------------------------------------------------------------*/
 
                                 // Step 7 : Insert payload_dms_business_permission into database.
@@ -402,7 +441,6 @@ const actions = {
                                 //          then insert payload_dms_business_language into database.
                                 //          set payload value "bsk_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
-                                // for (var l = 0; l < currentValue[1].dms_base_languages.length; l++) {
                                 let payload_dms_business_language = {
                                     bsl_active: "N"
                                 };

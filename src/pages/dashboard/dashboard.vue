@@ -16,10 +16,14 @@
                     countDmsMetadataByBc[4] +
                     countDmsMetadataByBc[6]
                 }}</span>
-                / {{(countDmsMetadataByBc[0] + countDmsMetadataByBc[1]) +
-                (countDmsMetadataByBc[2] + countDmsMetadataByBc[3]) +
-                (countDmsMetadataByBc[4] + countDmsMetadataByBc[5]) +
-                (countDmsMetadataByBc[6] + countDmsMetadataByBc[7])}}
+                /
+                {{
+                  countDmsMetadataByBc[0] +
+                    countDmsMetadataByBc[1] +
+                    (countDmsMetadataByBc[2] + countDmsMetadataByBc[3]) +
+                    (countDmsMetadataByBc[4] + countDmsMetadataByBc[5]) +
+                    (countDmsMetadataByBc[6] + countDmsMetadataByBc[7])
+                }}
               </h3>
             </div>
             <div class="card-footer text-right">
@@ -40,13 +44,8 @@
               <h4 class="card-title">Pie Chart</h4>
             </div>
             <div class="card-body">
-              <div id="chartPreferences" class="ct-chart"></div>
-            </div>
-            <div class="card-footer">
-              <div class="row">
-                <div class="col-md-12">
-                  <h6 class="card-category">Legend</h6>
-                </div>
+              <div class="container">
+                <line-chart />
               </div>
             </div>
           </div>
@@ -144,10 +143,13 @@
 </template>
 
 <script>
+import LineChart from "./pie_chart";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
-  components: {},
+  components: {
+    LineChart,
+  },
   data() {
     return {
       firstName: process.env.API_URL + "/dms_base_categories",

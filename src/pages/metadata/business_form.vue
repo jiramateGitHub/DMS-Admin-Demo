@@ -235,6 +235,7 @@
                     ></label
                   ><br />
                   <v-select
+                    multiple
                     placeholder="เลือกรายการ"
                     :options="vSelectBaseFormats"
                     :class="{
@@ -689,10 +690,24 @@ export default {
         code: this.getBusinessMetadata.dms_base_durations[0].dt_id,
         label: this.getBusinessMetadata.dms_base_durations[0].dt_text,
       };
-      this.form.meta_ft_object = {
-        code: this.getBusinessMetadata.dms_base_formats[0].ft_id,
-        label: this.getBusinessMetadata.dms_base_formats[0].ft_text,
-      };
+
+      console.log(this.getBusinessMetadata)
+      let temp_meta_ft_object = [];
+      // eslint-disable-next-line no-unused-vars
+      for (const [key, value] of Object.entries(
+        this.getBusinessMetadata.dms_base_formats
+      )) {
+        temp_meta_ft_object.push({
+          code: value.ft_id,
+          label: value.ft_text,
+        });
+      }
+      this.form.meta_ft_object = temp_meta_ft_object;
+
+      // this.form.meta_ft_object = {
+      //   code: this.getBusinessMetadata.dms_base_formats[0].ft_id,
+      //   label: this.getBusinessMetadata.dms_base_formats[0].ft_text,
+      // };
       this.form.meta_sc_object = {
         code: this.getBusinessMetadata.dms_base_scopes[0].sc_id,
         label: this.getBusinessMetadata.dms_base_scopes[0].sc_text,
@@ -781,7 +796,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style >
+<style>
 input {
   width: 100%;
   padding: 5px;

@@ -117,10 +117,19 @@
         <div class="col-sm-6">
           <label
             >รูปแบบข้อมูล:
-            <span style="color: grey">{{
-              getBusinessMetadata.dms_base_formats[0].ft_text
-            }}</span></label
-          ><br />
+            <span
+              style="color: grey"
+              v-for="(value, index) in getBusinessMetadata.dms_base_formats"
+              :key="index"
+            >
+              {{ value.ft_text
+              }}<span
+                v-if="index < getBusinessMetadata.dms_base_formats.length - 1"
+                >,</span
+              >
+            </span></label
+          >
+          <br />
         </div>
       </div>
 
@@ -218,11 +227,17 @@
               </thead>
               <tbody>
                 <tr class="text-center">
-                  <td v-if="getCurrentDmsTechnicalDetailList == null" colspan="8">
+                  <td
+                    v-if="getCurrentDmsTechnicalDetailList == null"
+                    colspan="8"
+                  >
                     ไม่พบรายการในตาราง
                   </td>
                 </tr>
-                <tr v-for="(item, index) in getCurrentDmsTechnicalDetailList" :key="index">
+                <tr
+                  v-for="(item, index) in getCurrentDmsTechnicalDetailList"
+                  :key="index"
+                >
                   <td class="text-center">{{ genIndex(index) }}</td>
                   <td>
                     {{ item.tcd_attribute }}
@@ -272,8 +287,7 @@ export default {
     meta_id: Number,
   },
   data() {
-    return {
-    };
+    return {};
   },
   created() {},
   methods: {
