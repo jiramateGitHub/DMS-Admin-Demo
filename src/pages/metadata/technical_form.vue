@@ -303,11 +303,11 @@ export default {
   },
   computed: {
     ...mapGetters({
+      technicalSaveStatus: "technical_metadata/technicalSaveStatus",
+      typeFormEdit: "technical_metadata/typeFormEdit",
       getDmsMetadata: "business_metadata/getCurrentDmsMetadata",
       getCurrentDmsTechnicalDetailList:
         "technical_metadata/getCurrentDmsTechnicalDetail",
-      technicalSaveStatus: "technical_metadata/technicalSaveStatus",
-      typeFormEdit: "technical_metadata/typeFormEdit",
     }),
   },
   methods: {
@@ -339,18 +339,11 @@ export default {
 
       let payload = this.items;
 
-      console.log(this.getCurrentDmsTechnicalDetailList)
-
       if (this.typeFormEdit && this.getCurrentDmsTechnicalDetailList != null) {
-        console.log("updateAction")
         await this.updateAction(payload);
       } else {
-        console.log("saveAction")
         await this.saveAction(payload);
       }
-
-      console.log("payload")
-      console.log(payload)
 
       if (this.technicalSaveStatus.code == 0) {
         this.submitStatus = "OK";
@@ -370,18 +363,16 @@ export default {
           text: "Something went wrong!",
         });
       }
-      // this.$router.replace({ path: "/metadata" });
     },
     formEdit() {
-      console.log("formEdit");
-      if(this.getCurrentDmsTechnicalDetailList != null){
+      if (this.getCurrentDmsTechnicalDetailList != null) {
         this.items = this.getCurrentDmsTechnicalDetailList;
       }
     },
-    genIndex: function (index) {
+    genIndex: function(index) {
       return parseInt(index) + 1;
     },
-    addItem: function () {
+    addItem: function() {
       this.items.push({
         tcd_attribute: "",
         tcd_type: "",
@@ -392,7 +383,7 @@ export default {
         tcd_comment: "",
       });
     },
-    deleteItem: function (index) {
+    deleteItem: function(index) {
       if (parseInt(this.items.length) <= 1) {
         this.showNotify = true;
         this.messageNotify = "ไม่สามารถลบแถวได้";
@@ -421,8 +412,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style >
+<style>
 input {
   width: 100%;
   padding: 5px;

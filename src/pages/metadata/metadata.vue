@@ -65,7 +65,11 @@
           </div>
         </div>
       </div>
-      <TableMetadata />
+      <div class="row">
+        <div class="col-md-12">
+          <TableMetadata />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -76,7 +80,6 @@ import TableMetadata from "../../components/modules/table_metadata.vue";
 
 export default {
   name: "Metadata",
-  props: {},
   data() {
     return {
       searchFilter: {
@@ -98,13 +101,13 @@ export default {
           label: "ใช้งาน",
         },
       },
+      optionBaseCategories: [],
+      optionBaseDatagroups: [],
+      optionInstitution: [],
       optionActive: [
         { code: 1, label: "ใช้งาน" },
         { code: 2, label: "ไม่ใช้งาน" },
       ],
-      optionBaseCategories: [],
-      optionBaseDatagroups: [],
-      optionInstitution: [],
     };
   },
   components: {
@@ -123,6 +126,13 @@ export default {
     this.optionBaseDatagroups.unshift({ code: 0, label: "ทั้งหมด" });
     this.optionInstitution.unshift({ code: 0, label: "ทั้งหมด" });
   },
+  computed: {
+    ...mapGetters({
+      vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
+      vSelectBaseDatagroups: "vselect_dms_base/vSelectBaseDatagroups",
+      vSelectInstitution: "vselect_dms_base/vSelectInstitution",
+    }),
+  },
   methods: {
     ...mapActions({
       fetchBaseCategoriesAction: "vselect_dms_base/fetchBaseCategories",
@@ -136,19 +146,8 @@ export default {
       await this.fetchInstitutionAction();
     },
     reloadTable() {
-      // console.log(this.searchFilter);
       this.setFilterAction(this.searchFilter);
-
-      // var output = employees.filter((employee) => employee.meta_bc_id == 1);
-      // console.log(output);
     },
-  },
-  computed: {
-    ...mapGetters({
-      vSelectBaseCategories: "vselect_dms_base/vSelectBaseCategories",
-      vSelectInstitution: "vselect_dms_base/vSelectInstitution",
-      vSelectBaseDatagroups: "vselect_dms_base/vSelectBaseDatagroups",
-    }),
   },
 };
 </script>

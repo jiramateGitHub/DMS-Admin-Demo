@@ -16,7 +16,7 @@
           <label
             >หมวดหมู่ข้อมูล:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_base_category.bc_name 
+              getCurrentMetadata.dms_base_category.bc_name
             }}</span></label
           ><br />
         </div>
@@ -24,7 +24,7 @@
           <label
             >กลุ่มข้อมูล:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_base_datagroup.grp_name 
+              getCurrentMetadata.dms_base_datagroup.grp_name
             }}</span></label
           ><br />
         </div>
@@ -34,7 +34,7 @@
           <label
             >เจ้าของข้อมูล:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_owner 
+              getBusinessMetadata.dms_business_descriptions[0].bsds_owner
             }}</span></label
           ><br />
         </div>
@@ -42,7 +42,7 @@
           <label
             >หน่วยงานภายใน:
             <span style="color: grey">{{
-              getCurrentMetadata.dms_institution.ins_name  
+              getCurrentMetadata.dms_institution.ins_name
             }}</span></label
           ><br />
         </div>
@@ -62,7 +62,7 @@
           <label
             >แหล่งที่มาของคำอธิบาย:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_ref 
+              getBusinessMetadata.dms_business_descriptions[0].bsds_ref
             }}</span></label
           ><br />
         </div>
@@ -72,7 +72,7 @@
           <label
             >URL เพิ่มเติม:
             <span style="color: grey">{{
-              getBusinessMetadata.dms_business_descriptions[0].bsds_url 
+              getBusinessMetadata.dms_business_descriptions[0].bsds_url
             }}</span></label
           ><br />
         </div>
@@ -193,6 +193,73 @@
           ><br />
         </div>
       </div>
+      <div class="row" style="padding-top: 10px">
+        <div class="col-sm-12">
+          <h4>รายละเอียดเชิงเทคนิค</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="">
+            <table
+              class="table table-striped table-hover table-color-header table-border"
+            >
+              <thead>
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 20%">ฟิลด์ข้อมูลในตารางข้อมูล</th>
+                  <th style="width: 15%">ประเภทข้อมูล</th>
+                  <th style="width: 10%">ความกว้างของฟิลด์ข้อมูล</th>
+                  <th style="width: 12%">คีย์ข้อมูล</th>
+                  <th style="width: 12%">ตัวอย่างข้อมูล</th>
+                  <th style="width: 10%">หมายเหตุ</th>
+                  <th style="width: 8%">ข้อมูลนิรนาม</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td v-if="getCurrentDmsTechnicalDetailList == null" colspan="8">
+                    ไม่พบรายการในตาราง
+                  </td>
+                </tr>
+                <tr v-for="(item, index) in getCurrentDmsTechnicalDetailList" :key="index">
+                  <td class="text-center">{{ genIndex(index) }}</td>
+                  <td>
+                    {{ item.tcd_attribute }}
+                  </td>
+                  <td class="text-left">
+                    {{ item.tcd_type }}
+                  </td>
+                  <td class="text-center">
+                    {{ item.tcd_length }}
+                  </td>
+                  <td class="text-center">
+                    {{ item.tcd_key }}
+                  </td>
+                  <td class="text-left">
+                    {{ item.tcd_sample }}
+                  </td>
+                  <td class="text-left">
+                    {{ item.tcd_comment }}
+                  </td>
+                  <td class="text-center">
+                    <div class="togglebutton">
+                      <label>
+                        <input
+                          type="checkbox"
+                          v-model="item.tcd_anonymous"
+                          disabled
+                        />
+                        <span class="toggle"></span>
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -204,14 +271,23 @@ export default {
   props: {
     meta_id: Number,
   },
+  data() {
+    return {
+    };
+  },
   created() {},
   methods: {
     ...mapActions({}),
+    genIndex: function(index) {
+      return parseInt(index) + 1;
+    },
   },
   computed: {
     ...mapGetters({
       getCurrentMetadata: "business_metadata/getCurrentDmsMetadata",
       getBusinessMetadata: "business_metadata/getCurrentBusinessMetadata",
+      getCurrentDmsTechnicalDetailList:
+        "technical_metadata/getCurrentDmsTechnicalDetail",
     }),
   },
 };
@@ -241,4 +317,3 @@ textarea {
   max-width: 1200px;
 }
 </style>
-
