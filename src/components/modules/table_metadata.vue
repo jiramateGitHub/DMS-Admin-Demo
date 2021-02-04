@@ -16,56 +16,62 @@
               class="btn btn-primary"
               rel="tooltip"
               data-placement="top"
-              title=""
               data-original-title="คลิกเพื่อเพิ่มข้อมูล"
-              aria-describedby="tooltip614929"
               @click="addMetadata()"
             >
               <span class="btn-label"><i class="material-icons">add</i></span>
               เพิ่มชุดข้อมูล
-              <div class="ripple-container"></div>
             </button>
           </div>
         </div>
-        <!-- <div class="row">
-              <div class="offset-md-8 col-md-4">
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="filter"
-                  placeholder="Search records"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 center">
-                <div id="vue-root">
-                  <datatable
-                    :columns="columns"
-                    :data="fetchDmsMetadataList"
-                    :per-page="10"
-                    :filter="filter"
-                    class="table table-striped table-color-header table-hover table-border"
-                    cellspacing="0"
-                    width="100%"
-                    style="width: 100%"
-                  >
-                  </datatable>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <section class="pagers-table">
-                  <datatable-pager v-model="page"></datatable-pager>
-                </section>
-              </div>
-            </div> -->
+
         <div class="row">
+          <div class="col-md-3">
+            <v-select
+              v-model="selectOptPerpage"
+              :options="optionPerpage"
+              :clearable="false"
+              @input="reloadTable"
+            ></v-select>
+          </div>
+          <div class=" offset-md-5 col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              v-model="filter"
+              placeholder="ค้นหารายการ"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 center">
+            <div id="vue-root">
+              <datatable
+                :columns="columns"
+                :data="fetchDmsMetadataList"
+                :per-page="perpage"
+                :filter="filter"
+                class="table table-striped table-color-header table-hover table-border"
+                cellspacing="0"
+                width="100%"
+                style="width: 100%"
+              >
+              </datatable>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <section class="pagers-table text-right">
+              <datatable-pager v-model="page"> </datatable-pager>
+            </section>
+          </div>
+        </div>
+        <!-- <div class="row">
           <div class="col-md-12">
             <div class="material-datatables">
               <table
-                v-inview
+                ref="lists"
                 id="datatables"
                 class="table table-striped table-color-header table-hover table-border"
                 cellspacing="0"
@@ -149,14 +155,14 @@
               </table>
             </div>
           </div>
-        </div>
-        <!-- <div class="row">
-              <div class="col-md-12">
-                <pre>{{ fetchDmsMetadataList[0] }}</pre>
-              </div>
-            </div> -->
+        </div> -->
       </div>
     </div>
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <pre>{{ fetchDmsMetadataList[0] }}</pre>
+      </div>
+    </div> -->
 
     <!-- Classic Modal -->
     <div
@@ -200,8 +206,9 @@
     </div>
   </div>
 </template>
+
 <script>
-// import $ from "jquery";
+import $ from "jquery";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
 
@@ -234,6 +241,19 @@ export default {
     return {
       filter: "",
       page: 1,
+      perpage: 10,
+      selectOptPerpage: {
+        code: 2,
+        label: "แสดง 10 รายการ",
+        value: "10",
+      },
+      optionPerpage: [
+        { code: 1, label: "แสดง 5 รายการ", value: "5" },
+        { code: 2, label: "แสดง 10 รายการ", value: "10" },
+        { code: 3, label: "แสดง 25 รายการ", value: "25" },
+        { code: 4, label: "แสดง 50 รายการ", value: "50" },
+        { code: 5, label: "แสดง 100 รายการ", value: "100" },
+      ],
       columns: [
         { label: "#", field: "meta_id" },
         {
@@ -252,7 +272,8 @@ export default {
           representedAs: ({ meta_id }) => ` <button
                             type="button"
                             rel="tooltip"
-                            class="btn btn-fab btn-primary"
+                            id="${meta_id}"
+                            class="btn btn-fab btn-primary btn-action1"
                             data-placement="top"
                             title="คลิกเพื่อค้นหาข้อมูล"
                             data-toggle="modal"
@@ -265,7 +286,8 @@ export default {
                             style="margin-left: 5px"
                             type="button"
                             rel="tooltip"
-                            class="btn btn-fab btn-warning"
+                             id="${meta_id}"
+                            class="btn btn-fab btn-warning btn-action2"
                             data-placement="top"
                             title="คลิกเพื่อแก้ไขข้อมูล"
                             v-on:click="openEdit(${meta_id})"
@@ -276,7 +298,8 @@ export default {
                             style="margin-left: 5px"
                             type="button"
                             rel="tooltip"
-                            class="btn btn-fab btn-danger"
+                             id="${meta_id}"
+                            class="btn btn-fab btn-danger btn-action3"
                             data-placement="top"
                             title="คลิกเพื่อลบข้อมูล"
                             v-on:click="openDelete(${meta_id})"
@@ -291,6 +314,23 @@ export default {
   },
   created() {
     this.fetchDmsMetadataAction();
+  },
+  mounted() {
+    var _this = this;
+    this.$nextTick(() => {
+      // ES6 arrow function
+      $(function() {
+        $(".btn-action1").click(function(e) {
+          _this.openModal(e, "info");
+        });
+        $(".btn-action2").click(function(e) {
+          _this.openModal(e, "edit");
+        });
+        $(".btn-action3").click(function(e) {
+          _this.openModal(e, "delete");
+        });
+      });
+    });
   },
   computed: {
     ...mapGetters({
@@ -309,9 +349,18 @@ export default {
       updateMetadataActiveAction: "business_metadata/updateMetadataActive",
       setMetaIdAction: "technical_metadata/setMetaId",
     }),
+    reloadTable() {
+      this.perpage = this.selectOptPerpage.value;
+    },
     async addMetadata() {
       await this.setTypeFormEditBAction(false);
       this.$router.replace({ path: "/metadata/business_form" });
+    },
+    openModal(e, type) {
+      let meta_id = e.currentTarget.id;
+      if (type == "info") this.openInfo(parseInt(meta_id));
+      if (type == "edit") this.openEdit(parseInt(meta_id));
+      if (type == "delete") this.openDelete(parseInt(meta_id));
     },
     async openInfo(meta_id) {
       let index = await this.fetchDmsMetadataList.findIndex(
@@ -336,8 +385,10 @@ export default {
       let index = this.fetchDmsMetadataList.findIndex(
         (item) => item.meta_id === meta_id
       );
+      console.log("meta_id : " + meta_id);
       let obj_metadata = this.fetchDmsMetadataList[index];
       this.modalTitle = obj_metadata.meta_name;
+
       this.$swal
         .fire({
           title: "เลือกรายการที่ต้องการแก้ไข",
@@ -346,9 +397,9 @@ export default {
           icon: "question",
           showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: `Business`,
-          denyButtonText: `Technical`,
-          cancelButtonText: `ยกเลิก`,
+          confirmButtonText: "Business",
+          denyButtonText: "Technical",
+          cancelButtonText: "ยกเลิก",
           denyButtonColor: "#999999",
           cancelButtonColor: "#F44336",
         })
@@ -404,3 +455,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.pagination {
+  display: inline-flex;
+}
+</style>

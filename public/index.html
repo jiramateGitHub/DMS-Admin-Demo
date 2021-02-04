@@ -56,7 +56,7 @@
 <script src="./assets/js/plugins/bootstrap-notify.js"></script>
 
 <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-<script src="./assets/js/plugins/jquery.dataTables.min.js"></script>
+<!-- <script src="./assets/js/plugins/jquery.dataTables.min.js"></script> -->
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="./assets/js/plugins/jasny-bootstrap.min.js"></script>
 
@@ -83,19 +83,12 @@
 <!-- Code Prettifier  -->
 <script src="./assets/plugins/codeprettifier/prettify.js"></script>
 
-<script src="/dist/vuejs-datatable.js"></script>
+<script src="./dist/vuejs-datatable.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
 <script type="text/javascript">
-    var isVisible = false;
-
-    $('#myModal').on('inview', function(event, visible) {
-        isVisible = visible;
-    });
-    reloadDatatables()
-
     function reloadDatatables() {
         $('#datatables').DataTable({
             "pagingType": "full_numbers",

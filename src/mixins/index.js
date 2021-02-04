@@ -73,7 +73,7 @@ export const reactiveProp = {
     props: {
         chartData: {
             type: Object,
-            required: true,
+            // required: true,
             default: () => {}
         }
     },
