@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import Chartist from "chartist";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
@@ -42,15 +41,4 @@ new Vue({
     el: "#app",
     render: h => h(App),
     router,
-    data: {
-        Chartist: Chartist
-    },
-    mounted() {
-        // this.$on('inview-enter', (data, node) => {
-        //     console.log(data, node)
-        // })
-        // this.$on('inview-leave', (data, node) => {
-        //     console.log(data, node)
-        // })
-    },
 })
