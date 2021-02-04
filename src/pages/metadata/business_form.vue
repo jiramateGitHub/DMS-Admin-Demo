@@ -375,7 +375,7 @@
                     title="คลิกเพื่อแก้ไขข้อมูล"
                     @click="formTest()"
                   >
-                    Test Data
+                    ดึงข้อมูล
                   </button>
                 </div>
                 <div class="col-sm-6 text-right">
