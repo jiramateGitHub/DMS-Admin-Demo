@@ -63,7 +63,7 @@
         <div class="row">
           <div class="col-md-12">
             <section class="pagers-table text-right">
-              <datatable-pager v-model="page"> </datatable-pager>
+              <datatable-pager v-model="page" type="short"> </datatable-pager>
             </section>
           </div>
         </div>
@@ -218,15 +218,15 @@ VuejsDatatableFactory.useDefaultType(false).registerTableType(
   "datatable",
   (tableType) =>
     tableType.mergeSettings({
-      table: {},
       pager: {
         classes: {
           pager: "pagination pagination-primary",
+          li: "page-item",
           selected: "active",
         },
         icons: {
-          next: '<i class="material-icons">search</i>',
-          previous: '<i class="material-icons">search</i>',
+          next: `<i class="material-icons">keyboard_arrow_right</i>`,
+          previous: `<i class="material-icons">keyboard_arrow_left</i>`,
         },
       },
     })
@@ -255,7 +255,7 @@ export default {
         { code: 5, label: "แสดง 100 รายการ", value: "100" },
       ],
       columns: [
-        { label: "#", field: "meta_id" },
+        // { label: "#", field: "meta_id", align: "center", filterable: false },
         {
           label: "รหัส",
           field: "meta_code",
@@ -269,6 +269,8 @@ export default {
         },
         {
           label: "ดำเนินการ",
+          align: "center",
+          sortable: false,
           representedAs: ({ meta_id }) => ` <button
                             type="button"
                             rel="tooltip"
@@ -319,6 +321,9 @@ export default {
     var _this = this;
     this.$nextTick(() => {
       // ES6 arrow function
+      document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
+        "center";
+
       $(function() {
         $(".btn-action1").click(function(e) {
           _this.openModal(e, "info");
