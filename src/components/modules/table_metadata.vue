@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-<!-- 
+        <!-- 
         <div class="row">
           <div class="col-md-3">
             <v-select
@@ -165,42 +165,46 @@
     </div> -->
 
     <!-- Classic Modal -->
-    <div
-      class="modal fade"
-      id="myModal"
-      tabindex="-1"
-      role="dialog"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3 class="modal-title text-left" style="margin: 5px">
-              ชื่อชุดข้อมูล: {{ modalTitle }}
-            </h3>
-            <button
-              class="btn btn-primary btn-modal"
-              data-placement="top"
-              title="ส่งออกคำอธิบายข้อมูล"
-              style="margin: 0px"
-            >
-              <span class="btn-label"
-                ><i class="material-icons">file_copy</i></span
+    <div id="app">
+      <div
+        class="modal fade"
+        id="myModal"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg" ref="testHtml">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title text-left" style="margin: 5px">
+                ชื่อชุดข้อมูล: {{ modalTitle }}
+              </h3>
+              <button
+                class="btn btn-primary btn-modal"
+                data-placement="top"
+                title="ส่งออกคำอธิบายข้อมูล"
+                style="margin: 0px"
+                id="btncapture"
+                @click="generatePdf"
               >
-              ส่งออกคำอธิบายข้อมูล
-            </button>
-            <button
-              class="btn btn-modal"
-              data-dismiss="modal"
-              aria-hidden="true"
-              title="คลิกเพื่อปิด"
-              style="margin: 0px 0px 0px 5px"
-            >
-              ปิด
-            </button>
+                <span class="btn-label"
+                  ><i class="material-icons">file_copy</i></span
+                >
+                ส่งออกคำอธิบายข้อมูล
+              </button>
+              <button
+                class="btn btn-modal"
+                data-dismiss="modal"
+                aria-hidden="true"
+                title="คลิกเพื่อปิด"
+                style="margin: 0px 0px 0px 5px"
+              >
+                ปิด
+              </button>
+            </div>
+            <MetadataInfo v-if="modalTitle != ''" />
+            <div class="modal-footer"></div>
           </div>
-          <MetadataInfo v-if="modalTitle != ''" />
-          <div class="modal-footer"></div>
         </div>
       </div>
     </div>
@@ -208,10 +212,10 @@
 </template>
 
 <script>
-// import $ from "jquery";
+import $ from "jquery";
+// import { jsPDF } from "jspdf";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
-
 import { VuejsDatatableFactory } from "vuejs-datatable";
 
 VuejsDatatableFactory.useDefaultType(false).registerTableType(
@@ -319,18 +323,21 @@ export default {
     //   // ES6 arrow function
     //   document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
     //     "center";
-
-    //   $(function() {
-    //     $(".btn-action1").click(function(e) {
-    //       _this.openModal(e, "info");
-    //     });
-    //     $(".btn-action2").click(function(e) {
-    //       _this.openModal(e, "edit");
-    //     });
-    //     $(".btn-action3").click(function(e) {
-    //       _this.openModal(e, "delete");
-    //     });
-    //   });
+    $(function() {
+      
+      $("#btncapture").click(function() {
+        window.print();
+      });
+      // $(".btn-action1").click(function(e) {
+      //   _this.openModal(e, "info");
+      // });
+      // $(".btn-action2").click(function(e) {
+      //   _this.openModal(e, "edit");
+      // });
+      // $(".btn-action3").click(function(e) {
+      //   _this.openModal(e, "delete");
+      // });
+    });
     // });
   },
   computed: {
@@ -452,6 +459,9 @@ export default {
             this.$swal.fire("ลบสำเร็จ!", "", "success");
           }
         });
+    },
+    generatePdf() {
+      console.log("")
     },
   },
 };

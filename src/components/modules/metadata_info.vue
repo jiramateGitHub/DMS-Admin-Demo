@@ -258,7 +258,10 @@
                     {{ item.tcd_comment }}
                   </td>
                   <td class="text-center">
-                    <div class="togglebutton">
+                    <i v-if="item.tcd_anonymous == '1'" class="material-icons"
+                      >check_circle_outline</i
+                    >
+                    <!-- <div class="togglebutton">
                       <label>
                         <input
                           type="checkbox"
@@ -267,7 +270,7 @@
                         />
                         <span class="toggle"></span>
                       </label>
-                    </div>
+                    </div> -->
                   </td>
                 </tr>
               </tbody>
@@ -275,6 +278,9 @@
           </div>
         </div>
       </div>
+      <!-- <div class="row">
+        <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
+      </div> -->
     </div>
   </div>
 </template>
