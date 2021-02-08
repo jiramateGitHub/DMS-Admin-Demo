@@ -116,6 +116,15 @@
                     </td>
                     <td class="text-center">
                       <button
+                        class="btn btn-fab"
+                        type="button"
+                        rel="tooltip"
+                        data-placement="top"
+                        title="คลิกเพื่อนำเข้าชุดข้อมูล"
+                      >
+                        <i class="material-icons">upload_file</i>
+                      </button>
+                      <button
                         type="button"
                         rel="tooltip"
                         class="btn btn-fab btn-primary"
@@ -123,6 +132,7 @@
                         title="คลิกเพื่อค้นหาข้อมูล"
                         data-toggle="modal"
                         data-target="#myModal"
+                        style="margin-left: 5px"
                         v-on:click="openInfo(value.meta_id)"
                       >
                         <i class="material-icons">search</i>
@@ -324,7 +334,6 @@ export default {
     //   document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
     //     "center";
     $(function() {
-      
       $("#btncapture").click(function() {
         window.print();
       });
@@ -461,7 +470,7 @@ export default {
         });
     },
     generatePdf() {
-      console.log("")
+      console.log("");
     },
   },
 };

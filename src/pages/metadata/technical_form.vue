@@ -123,7 +123,7 @@
                                 <input
                                   type="checkbox"
                                   checked=""
-                                  v-model="item.tcd_anonymous.$model"
+                                 v-model.number="item.tcd_anonymous.$model"
                                 />
                                 <span class="toggle"></span>
                               </label>
@@ -135,7 +135,6 @@
                               rel="tooltip"
                               class="btn btn-danger"
                               data-placement="top"
-                              title=""
                               data-original-title="คลิกเพื่อลบข้อมูล"
                               @click="deleteItem(index)"
                             >
