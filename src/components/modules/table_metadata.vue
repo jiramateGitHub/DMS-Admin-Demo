@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-
+<!-- 
         <div class="row">
           <div class="col-md-3">
             <v-select
@@ -66,8 +66,8 @@
               <datatable-pager v-model="page" type="short"> </datatable-pager>
             </section>
           </div>
-        </div>
-        <!-- <div class="row">
+        </div> -->
+        <div class="row">
           <div class="col-md-12">
             <div class="material-datatables">
               <table
@@ -128,23 +128,23 @@
                         <i class="material-icons">search</i>
                       </button>
                       <button
-                        style="margin-left: 5px"
                         type="button"
                         rel="tooltip"
                         class="btn btn-fab btn-warning"
                         data-placement="top"
                         title="คลิกเพื่อแก้ไขข้อมูล"
+                        style="margin-left: 5px"
                         v-on:click="openEdit(value.meta_id)"
                       >
                         <i class="material-icons">edit</i>
                       </button>
                       <button
-                        style="margin-left: 5px"
                         type="button"
                         rel="tooltip"
                         class="btn btn-fab btn-danger"
                         data-placement="top"
                         title="คลิกเพื่อลบข้อมูล"
+                        style="margin-left: 5px"
                         v-on:click="openDelete(value.meta_id)"
                       >
                         <i class="material-icons">close</i>
@@ -155,7 +155,7 @@
               </table>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <!-- <div class="row">
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import $ from "jquery";
+// import $ from "jquery";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
 
@@ -239,8 +239,8 @@ export default {
   },
   data() {
     return {
+      modalTitle: "",
       filter: "",
-      page: 1,
       perpage: 10,
       selectOptPerpage: {
         code: 2,
@@ -280,62 +280,58 @@ export default {
                             title="คลิกเพื่อค้นหาข้อมูล"
                             data-toggle="modal"
                             data-target="#myModal"
-                            @click="openInfo(${meta_id})"
                           >
                             <i class="material-icons">search</i>
                           </button>
                            <button
-                            style="margin-left: 5px"
                             type="button"
                             rel="tooltip"
                              id="${meta_id}"
                             class="btn btn-fab btn-warning btn-action2"
                             data-placement="top"
                             title="คลิกเพื่อแก้ไขข้อมูล"
-                            v-on:click="openEdit(${meta_id})"
+                            style="margin-left: 5px"
                           >
                             <i class="material-icons">edit</i>
                           </button>
                           <button
-                            style="margin-left: 5px"
                             type="button"
                             rel="tooltip"
                              id="${meta_id}"
                             class="btn btn-fab btn-danger btn-action3"
                             data-placement="top"
                             title="คลิกเพื่อลบข้อมูล"
-                            v-on:click="openDelete(${meta_id})"
+                            style="margin-left: 5px"
                           >
                             <i class="material-icons">close</i>
                           </button>`,
           interpolate: true,
         },
       ],
-      modalTitle: "",
     };
   },
   created() {
     this.fetchDmsMetadataAction();
   },
   mounted() {
-    var _this = this;
-    this.$nextTick(() => {
-      // ES6 arrow function
-      document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
-        "center";
+    // var _this = this;
+    // this.$nextTick(() => {
+    //   // ES6 arrow function
+    //   document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
+    //     "center";
 
-      $(function() {
-        $(".btn-action1").click(function(e) {
-          _this.openModal(e, "info");
-        });
-        $(".btn-action2").click(function(e) {
-          _this.openModal(e, "edit");
-        });
-        $(".btn-action3").click(function(e) {
-          _this.openModal(e, "delete");
-        });
-      });
-    });
+    //   $(function() {
+    //     $(".btn-action1").click(function(e) {
+    //       _this.openModal(e, "info");
+    //     });
+    //     $(".btn-action2").click(function(e) {
+    //       _this.openModal(e, "edit");
+    //     });
+    //     $(".btn-action3").click(function(e) {
+    //       _this.openModal(e, "delete");
+    //     });
+    //   });
+    // });
   },
   computed: {
     ...mapGetters({

@@ -34,8 +34,19 @@
             @click="scrollToTop()"
           >
             <a class="nav-link" href="#">
-              <i class="material-icons">settings</i>
+              <i class="material-icons">toc</i>
               <p>Metadata</p>
+            </a>
+          </router-link>
+          <router-link
+            tag="li"
+            active-class="active"
+            to="/base_config"
+            @click="scrollToTop()"
+          >
+            <a class="nav-link" href="#">
+              <i class="material-icons">settings</i>
+              <p>Configs</p>
             </a>
           </router-link>
         </ul>

@@ -333,7 +333,7 @@
               </div>
               <div class="row section-form">
                 <div class="col-sm-6">
-                  <label>ชื่อ-นามสกุล ผู้ติดต่อ </label><br />
+                  <label>ชื่อ-นามสกุล / หน่วยงาน สำหรับติดต่อ </label><br />
                   <input
                     type="text"
                     placeholder="ระบุชื่อและนามสกุล"
@@ -691,7 +691,7 @@ export default {
         label: this.getBusinessMetadata.dms_base_durations[0].dt_text,
       };
 
-      console.log(this.getBusinessMetadata)
+      console.log(this.getBusinessMetadata);
       let temp_meta_ft_object = [];
       // eslint-disable-next-line no-unused-vars
       for (const [key, value] of Object.entries(
@@ -753,10 +753,10 @@ export default {
         code: 1,
         label: "ไม่เผยแพร่",
       };
-      this.form.meta_ft_object = {
+      this.form.meta_ft_object = [{
         code: 1,
         label: "JSON",
-      };
+      }];
       this.form.meta_sc_object = {
         code: 1,
         label: "ภายในหน่วยงาน",

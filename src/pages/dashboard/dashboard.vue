@@ -8,14 +8,18 @@
               <div class="card-icon">
                 <i class="material-icons">table_chart</i>
               </div>
-              <h3 class="card-title">จำนวนชุดข้อมูลทั้งหมด</h3>
               <h3 class="card-title">
-                <span class="text-success">{{
-                  countDmsMetadataByBc[0] +
-                    countDmsMetadataByBc[2] +
-                    countDmsMetadataByBc[4] +
-                    countDmsMetadataByBc[6]
-                }}</span>
+                ชุดข้อมูลทั้งหมด
+              </h3>
+              <h3 class="card-title">
+                <span class="text-success">
+                  {{
+                    countDmsMetadataByBc[0] +
+                      countDmsMetadataByBc[2] +
+                      countDmsMetadataByBc[4] +
+                      countDmsMetadataByBc[6]
+                  }}</span
+                >
                 /
                 {{
                   countDmsMetadataByBc[0] +
@@ -27,13 +31,14 @@
               </h3>
             </div>
             <div class="card-footer text-right">
-              <p class="card-category"></p>
+              <div class="stats">
+                <i class="material-icons">update</i> Just updated {{date}}
+              </div>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
                 <span class="text-success">ข้อมูลใช้งาน</span> /
                 <span class="text-primary">ข้อมูลทั้งหมด</span>
               </div>
-              <p></p>
             </div>
           </div>
           <div class="card card-chart">
@@ -42,7 +47,7 @@
                 <i class="material-icons">pie_chart</i>
               </div>
               <h4 class="card-title">
-                กราฟรายงานจำนวนชุดข้อมูลจำแนกตามหมวดหมู่ข้อมูล
+                กราฟวงกลมแสดงจำนวนชุดข้อมูลจำแนกตามหมวดหมู่ข้อมูล
               </h4>
             </div>
             <div class="card-body">
@@ -64,14 +69,14 @@
                 / {{ countDmsMetadataByBc[0] + countDmsMetadataByBc[1] }}
               </h3>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer">
               <p class="card-category"></p>
+              <p></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
                 <span class="text-success">ข้อมูลใช้งาน</span> /
                 <span class="text-primary">ข้อมูลทั้งหมด</span>
               </div>
-              <p></p>
             </div>
           </div>
 
@@ -86,14 +91,14 @@
                 / {{ countDmsMetadataByBc[2] + countDmsMetadataByBc[3] }}
               </h3>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer">
               <p class="card-category"></p>
+              <p></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
                 <span class="text-success">ข้อมูลใช้งาน</span> /
                 <span class="text-primary">ข้อมูลทั้งหมด</span>
               </div>
-              <p></p>
             </div>
           </div>
           <div class="card card-stats">
@@ -109,12 +114,12 @@
             </div>
             <div class="card-footer text-right">
               <p class="card-category"></p>
+              <p></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
                 <span class="text-success">ข้อมูลใช้งาน</span> /
                 <span class="text-primary">ข้อมูลทั้งหมด</span>
               </div>
-              <p></p>
             </div>
           </div>
           <div class="card card-stats">
@@ -130,12 +135,12 @@
             </div>
             <div class="card-footer text-right">
               <p class="card-category"></p>
+              <p></p>
               <div class="stats">
                 <i class="material-icons">local_offer</i>
                 <span class="text-success">ข้อมูลใช้งาน</span> /
                 <span class="text-primary">ข้อมูลทั้งหมด</span>
               </div>
-              <p></p>
             </div>
           </div>
         </div>
@@ -146,6 +151,7 @@
 
 <script>
 import PieChart from "./pie_chart";
+import Helpers from "../../utils/helpers";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
@@ -154,6 +160,7 @@ export default {
   },
   data() {
     return {
+      date: Helpers.methods.getDateNow(),
       dataPoints: null,
     };
   },

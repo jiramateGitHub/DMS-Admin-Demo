@@ -23,6 +23,8 @@ const getters = {
     fetchDmsMetadata: (state) => {
         var objList = state.dms_metadata_list;
 
+        console.log(objList)
+
         if (state.search_filter.bc_id.code != 0) {
             objList = objList.filter((res) => res.meta_bc_id == state.search_filter.bc_id.code);
         }

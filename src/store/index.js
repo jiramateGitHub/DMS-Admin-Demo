@@ -6,6 +6,7 @@ import metadata_management from './modules/metadata_management'
 import business_metadata from './modules/business_metadata'
 import technical_metadata from './modules/technical_metadata'
 import vselect_dms_base from './modules/vselect_dms_base'
+import base_config from './modules/base_config'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
         metadata_management,
         business_metadata,
         technical_metadata,
-        vselect_dms_base
+        vselect_dms_base,
+        base_config
     },
     strict: debug
 })
