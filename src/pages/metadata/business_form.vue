@@ -29,7 +29,7 @@
                       v-if="submitted && !$v.form.meta_name.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     >
                   </label>
                 </div>
@@ -50,7 +50,7 @@
                       v-if="submitted && !$v.form.meta_code.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <input
@@ -68,7 +68,7 @@
                       v-if="submitted && !$v.form.meta_bc_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -87,7 +87,7 @@
                       v-if="submitted && !$v.form.meta_grp_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -108,7 +108,7 @@
                       v-if="submitted && !$v.form.bsds_owner.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <input
@@ -125,7 +125,7 @@
                       v-if="submitted && !$v.form.meta_ins_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -146,7 +146,7 @@
                       v-if="submitted && !$v.form.bsds_text.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <textarea
@@ -161,17 +161,21 @@
               <div class="row section-form">
                 <div class="col-sm-6">
                   <label>แหล่งที่มาของคำอธิบาย </label><br />
-                  <input
-                    type="text"
+                  <textarea
+                    rows="3"
+                    cols="50"
                     placeholder="ระบุแหล่งที่มาของคำอธิบาย เช่น ข้อบังคับบุคคล พ.ศ. 2559"
                     v-model="form.bsds_ref"
                   />
                 </div>
                 <div class="col-sm-6">
                   <label>URL เพิ่มเติม </label><br />
-                  <input
-                    type="text"
-                    placeholder="ระบุ URL เพิ่มเติม เช่น www.google.com"
+                  <textarea
+                    rows="3"
+                    cols="50"
+                    placeholder="ระบุ URL เพิ่มเติม เช่น
+1) www.dataset1.com 
+2) www.dataset2.com"
                     v-model="form.bsds_url"
                   />
                 </div>
@@ -189,7 +193,7 @@
                       v-if="submitted && !$v.form.meta_bsk_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -211,7 +215,7 @@
                       v-if="submitted && !$v.form.meta_lg_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -231,7 +235,7 @@
                       v-if="submitted && !$v.form.meta_ft_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -254,7 +258,7 @@
                       v-if="submitted && !$v.form.meta_dt_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -273,7 +277,7 @@
                       v-if="submitted && !$v.form.meta_sc_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -294,7 +298,7 @@
                       v-if="submitted && !$v.form.meta_pers_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -313,7 +317,7 @@
                       v-if="submitted && !$v.form.meta_cf_object.required"
                       class="text-danger"
                     >
-                      This field is required.</span
+                      {{txtRequired}}</span
                     ></label
                   ><br />
                   <v-select
@@ -336,12 +340,12 @@
                   <label>ชื่อ-นามสกุล / หน่วยงาน สำหรับติดต่อ </label><br />
                   <input
                     type="text"
-                    placeholder="ระบุชื่อและนามสกุล"
+                    placeholder="ระบุชื่อ-นามสกุลหรือหน่วยงาน"
                     v-model="form.metac_name"
                   />
                 </div>
                 <div class="col-sm-6">
-                  <label>อีเมล์ผู้ติดต่อ </label><br />
+                  <label>อีเมล์สำหรับติดต่อ</label><br />
                   <input
                     type="text"
                     placeholder="ระบุอีเมล์ เช่น abc@abc.com"
@@ -351,7 +355,7 @@
               </div>
               <div class="row section-form">
                 <div class="col-sm-6">
-                  <label>เบอร์โทรผู้ติดต่อ </label><br />
+                  <label>เบอร์โทรสำหรับติดต่อ </label><br />
                   <input
                     type="text"
                     placeholder="ระบุเบอร์โทร"
@@ -458,6 +462,7 @@ export default {
       submitted: null,
       submitStatus: null,
       showNotityWarning: false,
+      txtRequired : "This field is required."
     };
   },
   validations: {
@@ -753,10 +758,12 @@ export default {
         code: 1,
         label: "ไม่เผยแพร่",
       };
-      this.form.meta_ft_object = [{
-        code: 1,
-        label: "JSON",
-      }];
+      this.form.meta_ft_object = [
+        {
+          code: 1,
+          label: "JSON",
+        },
+      ];
       this.form.meta_sc_object = {
         code: 1,
         label: "ภายในหน่วยงาน",

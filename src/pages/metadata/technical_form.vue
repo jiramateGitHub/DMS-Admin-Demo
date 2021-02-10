@@ -43,10 +43,10 @@
                         <tr>
                           <th style="width: 5%">#</th>
                           <th style="width: 20%">ฟิลด์ข้อมูลในตารางข้อมูล</th>
-                          <th style="width: 15%">ประเภทข้อมูล</th>
+                          <th style="width: 11%">ประเภทข้อมูล</th>
                           <th style="width: 10%">ความกว้างของฟิลด์ข้อมูล</th>
-                          <th style="width: 12%">คีย์ข้อมูล</th>
-                          <th style="width: 12%">ตัวอย่างข้อมูล</th>
+                          <th style="width: 10%">คีย์ข้อมูล</th>
+                          <th style="width: 18%">ตัวอย่างข้อมูล</th>
                           <th style="width: 10%">หมายเหตุ</th>
                           <th style="width: 8%">ข้อมูลนิรนาม</th>
                           <th style="width: 8%">ดำเนินการ</th>
@@ -101,9 +101,10 @@
                             ></v-select>
                           </td>
                           <td class="text-right">
-                            <input
-                              type="text"
-                              placeholder="ตัวอย่าง A001"
+                            <textarea
+                              rows="3"
+                              cols="50"
+                              placeholder="ระบุตัวอย่างข้อมูล เช่น A001"
                               :class="{
                                 'input-required': $v.$error,
                               }"
@@ -111,8 +112,9 @@
                             />
                           </td>
                           <td class="text-right">
-                            <input
-                              type="text"
+                            <textarea
+                              rows="3"
+                              cols="50"
                               placeholder=""
                               v-model="item.tcd_comment.$model"
                             />
@@ -123,7 +125,7 @@
                                 <input
                                   type="checkbox"
                                   checked=""
-                                 v-model.number="item.tcd_anonymous.$model"
+                                  v-model.number="item.tcd_anonymous.$model"
                                 />
                                 <span class="toggle"></span>
                               </label>

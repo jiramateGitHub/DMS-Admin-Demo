@@ -217,10 +217,10 @@
                 <tr>
                   <th style="width: 5%">#</th>
                   <th style="width: 20%">ฟิลด์ข้อมูลในตารางข้อมูล</th>
-                  <th style="width: 15%">ประเภทข้อมูล</th>
+                  <th style="width: 9%">ประเภทข้อมูล</th>
                   <th style="width: 10%">ความกว้างของฟิลด์ข้อมูล</th>
-                  <th style="width: 12%">คีย์ข้อมูล</th>
-                  <th style="width: 12%">ตัวอย่างข้อมูล</th>
+                  <th style="width: 9%">คีย์ข้อมูล</th>
+                  <th style="width: 29%">ตัวอย่างข้อมูล</th>
                   <th style="width: 10%">หมายเหตุ</th>
                   <th style="width: 8%">ข้อมูลนิรนาม</th>
                 </tr>
@@ -242,7 +242,7 @@
                   <td>
                     {{ item.tcd_attribute }}
                   </td>
-                  <td class="text-left">
+                  <td class="text-center">
                     {{ item.tcd_type }}
                   </td>
                   <td class="text-center">

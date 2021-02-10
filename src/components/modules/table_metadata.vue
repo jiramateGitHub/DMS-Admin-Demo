@@ -116,11 +116,13 @@
                     </td>
                     <td class="text-center">
                       <button
-                        class="btn btn-fab"
                         type="button"
                         rel="tooltip"
+                        class="btn btn-fab"
                         data-placement="top"
                         title="คลิกเพื่อนำเข้าชุดข้อมูล"
+                        data-toggle="modal"
+                        data-target="#importModal"
                       >
                         <i class="material-icons">upload_file</i>
                       </button>
@@ -174,7 +176,7 @@
       </div>
     </div> -->
 
-    <!-- Classic Modal -->
+    <!-- Info Modal -->
     <div id="app">
       <div
         class="modal fade"
@@ -218,6 +220,37 @@
         </div>
       </div>
     </div>
+
+    <!-- Import Modal -->
+    <div >
+      <div
+        class="modal fade"
+        id="importModal"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title text-left" style="margin: 5px">
+                นำเข้าชุดข้อมูล: {{ modalTitle }}
+              </h3>
+              <button
+                class="btn btn-modal"
+                data-dismiss="modal"
+                aria-hidden="true"
+                title="คลิกเพื่อปิด"
+                style="margin: 0px 0px 0px 5px"
+              >
+                ปิด
+              </button>
+            </div>
+            <MetadataImport />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -226,6 +259,7 @@ import $ from "jquery";
 // import { jsPDF } from "jspdf";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
+import MetadataImport from "./metadata_import.vue";
 import { VuejsDatatableFactory } from "vuejs-datatable";
 
 VuejsDatatableFactory.useDefaultType(false).registerTableType(
@@ -250,6 +284,7 @@ export default {
   name: "TableMetadata",
   components: {
     MetadataInfo,
+    MetadataImport
   },
   data() {
     return {
