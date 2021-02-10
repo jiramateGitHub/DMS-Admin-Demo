@@ -23,8 +23,6 @@ const getters = {
     fetchDmsMetadata: (state) => {
         var objList = state.dms_metadata_list;
 
-        console.log(objList)
-
         if (state.search_filter.bc_id.code != 0) {
             objList = objList.filter((res) => res.meta_bc_id == state.search_filter.bc_id.code);
         }
@@ -87,9 +85,8 @@ const actions = {
             meta_active: "N",
         }).then(res => { commit("countDmsMetadataByBc", { res }) })
     },
-    async setFilter({ state }, payload) {
-        console.log(payload)
-        state.search_filter = payload
+    async setFilter({ commit }, payload) {
+        commit("searchFilter", { payload })
     }
 }
 
@@ -102,6 +99,9 @@ const mutations = {
             state.dms_metadata_count = [];
         }
         state.dms_metadata_count.push(res.data[0].count);
+    },
+    searchFilter(state, { payload }) {
+        state.search_filter = payload
     },
 }
 

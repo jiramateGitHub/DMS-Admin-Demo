@@ -85,19 +85,19 @@ export default {
       searchFilter: {
         case: 0,
         bc_id: {
-          code: "0",
+          code: 0,
           label: "ทั้งหมด",
         },
         grp_id: {
-          code: "0",
+          code: 0,
           label: "ทั้งหมด",
         },
         ins_id: {
-          code: "0",
+          code: 0,
           label: "ทั้งหมด",
         },
         meta_active: {
-          code: "1",
+          code: 1,
           label: "ใช้งาน",
         },
       },

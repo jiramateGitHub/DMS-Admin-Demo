@@ -36,15 +36,16 @@ const getters = {
 
 const actions = {
     async fetchBaseConfig({ commit }) {
-        await mixinHttpRequest.methods.get("/dms_base_categories/").then(res => { state.base.dms_base_categories = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_datagroups/").then(res => { state.base.dms_base_datagroups = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_durations/").then(res => { state.base.dms_base_durations = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_formats/").then(res => { state.base.dms_base_formats = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_languages/").then(res => { state.base.dms_base_languages = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_permissions/").then(res => { state.base.dms_base_permissions = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_scopes/").then(res => { state.base.dms_base_scopes = res.data; })
-        await mixinHttpRequest.methods.get("/dms_base_classified/").then(res => { state.base.dms_base_classified = res.data; })
-        await mixinHttpRequest.methods.get("/dms_institution/").then(res => { state.base.dms_institution = res.data; })
+        commit("setStateError", true)
+        await mixinHttpRequest.methods.get("/dms_base_categories/").then(res => { commit("setBaseCategories", res) })
+        await mixinHttpRequest.methods.get("/dms_base_datagroups/").then(res => { commit("setBaseDatagroups", res) })
+        await mixinHttpRequest.methods.get("/dms_base_durations/").then(res => { commit("setBaseDurations", res) })
+        await mixinHttpRequest.methods.get("/dms_base_formats/").then(res => { commit("setBaseFormats", res) })
+        await mixinHttpRequest.methods.get("/dms_base_languages/").then(res => { commit("setBaseLanguages", res) })
+        await mixinHttpRequest.methods.get("/dms_base_permissions/").then(res => { commit("setBasePermissions", res) })
+        await mixinHttpRequest.methods.get("/dms_base_scopes/").then(res => { commit("setBaseScopes", res) })
+        await mixinHttpRequest.methods.get("/dms_base_classified/").then(res => { commit("setBaseClassified", res) })
+        await mixinHttpRequest.methods.get("/dms_institution/").then(res => { commit("setInstitution", res) })
         commit("setStateError", false)
     },
 
@@ -251,6 +252,33 @@ const actions = {
 const mutations = {
     setStateError(state, res) {
         state.state_error = res
+    },
+    setBaseCategories(state, res) {
+        state.base.dms_base_categories = res.data
+    },
+    setBaseDatagroups(state, res) {
+        state.base.dms_base_datagroups = res.data
+    },
+    setBaseDurations(state, res) {
+        state.base.dms_base_durations = res.data
+    },
+    setBaseFormats(state, res) {
+        state.base.dms_base_formats = res.data
+    },
+    setBaseLanguages(state, res) {
+        state.base.dms_base_languages = res.data
+    },
+    setBasePermissions(state, res) {
+        state.base.dms_base_permissions = res.data
+    },
+    setBaseScopes(state, res) {
+        state.base.dms_base_scopes = res.data
+    },
+    setBaseClassified(state, res) {
+        state.base.dms_base_classified = res.data
+    },
+    setInstitution(state, res) {
+        state.base.dms_institution = res.data
     },
 }
 

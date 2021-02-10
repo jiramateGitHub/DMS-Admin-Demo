@@ -385,8 +385,6 @@ export default {
       );
       let obj_metadata = this.fetchDmsMetadataList[index];
 
-      this.modalTitle = obj_metadata.meta_name;
-
       await this.setCurrentDmsMetadataAction(obj_metadata);
       await this.getBusinessMetadataAction();
       if (obj_metadata.dms_technical_metadatum == null) {
@@ -397,6 +395,8 @@ export default {
         );
       }
       await this.setMetaIdAction(obj_metadata.meta_id);
+
+      this.modalTitle = obj_metadata.meta_name;
     },
     async openEdit(meta_id) {
       let index = this.fetchDmsMetadataList.findIndex(

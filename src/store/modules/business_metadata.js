@@ -333,13 +333,10 @@ const actions = {
                                 //          set payload value "bsf_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
 
-                                let payload_dms_business_format = {
-                                    bsf_active: "N"
-                                };
-                                await mixinHttpRequest.methods.put(
-                                        "/dms_business_format/active_all/" +
-                                        currentValue[1].dms_base_formats[0].dms_business_format.bsf_bsm_id,
-                                        payload_dms_business_format)
+                                await mixinHttpRequest.methods.delete(
+                                        "/dms_business_format/" +
+                                        currentValue[1].bsm_id,
+                                    )
                                     .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", true)
@@ -351,6 +348,7 @@ const actions = {
                                         bsf_bsm_id: currentValue[1].bsm_id,
                                         bsf_ft_id: payload.meta_ft_object[t].code,
                                     };
+                                    console.log(payload_dms_business_format)
                                     await mixinHttpRequest.methods.post("/dms_business_format/", payload_dms_business_format)
                                         .then(res => commit("setStateSave", { res }))
                                         .catch((err) => {
@@ -359,17 +357,6 @@ const actions = {
                                         });
                                 }
 
-                                // let payload_dms_business_format = {
-                                //     bsf_id: currentValue[1].dms_base_formats[0].dms_business_format.bsf_id,
-                                //     bsf_bsm_id: res.data.bsm_id,
-                                //     bsf_ft_id: payload.meta_ft_object.code,
-                                // };
-                                // await mixinHttpRequest.methods.put("/dms_business_format/" + payload_dms_business_format.bsf_id, payload_dms_business_format)
-                                //     .then(res => commit("setStateSave", { res }))
-                                //     .catch((err) => {
-                                //         commit("setStateError", true)
-                                //         console.log(err)
-                                //     });
                                 //**-- End Step -------------------------------------------------------------------------------------------*/
 
                                 // Step 7 : Insert payload_dms_business_permission into database.
@@ -441,13 +428,11 @@ const actions = {
                                 //          then insert payload_dms_business_language into database.
                                 //          set payload value "bsk_bsm_id" form res.data.bsm_id
                                 //          affer step 1 complate.
-                                let payload_dms_business_language = {
-                                    bsl_active: "N"
-                                };
-                                await mixinHttpRequest.methods.put(
-                                        "/dms_business_language/active_all/" +
-                                        currentValue[1].dms_base_languages[0].dms_business_language.bsl_bsm_id,
-                                        payload_dms_business_language)
+
+                                await mixinHttpRequest.methods.delete(
+                                        "/dms_business_language/" +
+                                        currentValue[1].bsm_id,
+                                    )
                                     .then(res => commit("setStateSave", { res }))
                                     .catch((err) => {
                                         commit("setStateError", true)
