@@ -278,9 +278,9 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <pre>{{ getCurrentDmsTechnicalDetailList }}</pre>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

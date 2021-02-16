@@ -427,7 +427,7 @@ export default {
       } else {
         console.log(obj_metadata.dms_technical_metadatum)
         await this.getTechnicalMetadataAction(
-          obj_metadata.dms_technical_metadatum.tsm_meta_id
+          obj_metadata.dms_technical_metadatum.tsm_id
         );
       }
       await this.setMetaIdAction(obj_metadata.meta_id);
