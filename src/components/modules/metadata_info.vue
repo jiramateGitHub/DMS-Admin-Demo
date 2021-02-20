@@ -261,16 +261,6 @@
                     <i v-if="item.tcd_anonymous == '1'" class="material-icons"
                       >check_circle_outline</i
                     >
-                    <!-- <div class="togglebutton">
-                      <label>
-                        <input
-                          type="checkbox"
-                          v-model="item.tcd_anonymous"
-                          disabled
-                        />
-                        <span class="toggle"></span>
-                      </label>
-                    </div> -->
                   </td>
                 </tr>
               </tbody>

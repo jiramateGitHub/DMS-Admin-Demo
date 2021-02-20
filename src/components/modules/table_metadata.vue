@@ -24,7 +24,6 @@
             </button>
           </div>
         </div>
-        <!-- 
         <div class="row">
           <div class="col-md-3">
             <v-select
@@ -66,8 +65,8 @@
               <datatable-pager v-model="page" type="short"> </datatable-pager>
             </section>
           </div>
-        </div> -->
-        <div class="row">
+        </div>
+        <!-- <div class="row">
           <div class="col-md-12">
             <div class="material-datatables">
               <table
@@ -159,7 +158,7 @@
                         style="margin-left: 5px"
                         v-on:click="openDelete(value.meta_id)"
                       >
-                        <i class="material-icons">close</i>
+                        <i class="material-icons">delete</i>
                       </button>
                     </td>
                   </tr>
@@ -167,7 +166,7 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- <div class="row">
@@ -177,7 +176,7 @@
     </div> -->
 
     <!-- Info Modal -->
-    <div id="app">
+    <div id="content">
       <div
         class="modal fade"
         id="myModal"
@@ -185,8 +184,8 @@
         role="dialog"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-lg" ref="testHtml">
-          <div class="modal-content">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="section-to-print">
             <div class="modal-header">
               <h3 class="modal-title text-left" style="margin: 5px">
                 ชื่อชุดข้อมูล: {{ modalTitle }}
@@ -222,7 +221,7 @@
     </div>
 
     <!-- Import Modal -->
-    <div >
+    <div>
       <div
         class="modal fade"
         id="importModal"
@@ -230,7 +229,7 @@
         role="dialog"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-lg" >
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h3 class="modal-title text-left" style="margin: 5px">
@@ -256,7 +255,8 @@
 
 <script>
 import $ from "jquery";
-// import { jsPDF } from "jspdf";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
 import MetadataImport from "./metadata_import.vue";
@@ -284,13 +284,14 @@ export default {
   name: "TableMetadata",
   components: {
     MetadataInfo,
-    MetadataImport
+    MetadataImport,
   },
   data() {
     return {
       modalTitle: "",
       filter: "",
       perpage: 10,
+      page: 1,
       selectOptPerpage: {
         code: 2,
         label: "แสดง 10 รายการ",
@@ -363,26 +364,26 @@ export default {
     this.fetchDmsMetadataAction();
   },
   mounted() {
-    // var _this = this;
-    // this.$nextTick(() => {
-    //   // ES6 arrow function
-    //   document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
-    //     "center";
-    $(function() {
-      $("#btncapture").click(function() {
-        window.print();
+    var _this = this;
+    this.$nextTick(() => {
+      document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
+        "center";
+      $(function() {
+        $("#btncapture").click(async function() {
+          window.print();
+        });
+        $(".btn-action1").click(function(e) {
+          console.log(e)
+          _this.openModal(e, "info");
+        });
+        $(".btn-action2").click(function(e) {
+          _this.openModal(e, "edit");
+        });
+        $(".btn-action3").click(function(e) {
+          _this.openModal(e, "delete");
+        });
       });
-      // $(".btn-action1").click(function(e) {
-      //   _this.openModal(e, "info");
-      // });
-      // $(".btn-action2").click(function(e) {
-      //   _this.openModal(e, "edit");
-      // });
-      // $(".btn-action3").click(function(e) {
-      //   _this.openModal(e, "delete");
-      // });
     });
-    // });
   },
   computed: {
     ...mapGetters({
@@ -410,6 +411,7 @@ export default {
     },
     openModal(e, type) {
       let meta_id = e.currentTarget.id;
+      console.log(meta_id + " " +type)
       if (type == "info") this.openInfo(parseInt(meta_id));
       if (type == "edit") this.openEdit(parseInt(meta_id));
       if (type == "delete") this.openDelete(parseInt(meta_id));
@@ -425,7 +427,7 @@ export default {
       if (obj_metadata.dms_technical_metadatum == null) {
         await this.getTechnicalMetadataAction(null);
       } else {
-        console.log(obj_metadata.dms_technical_metadatum)
+        console.log(obj_metadata.dms_technical_metadatum);
         await this.getTechnicalMetadataAction(
           obj_metadata.dms_technical_metadatum.tsm_id
         );
@@ -506,13 +508,22 @@ export default {
         });
     },
     generatePdf() {
-      console.log("");
+      console.log("pdf");
     },
   },
 };
 </script>
 
 <style>
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #section-to-print,
+  #section-to-print * {
+    visibility: visible;
+  }
+}
 .pagination {
   display: inline-flex;
 }

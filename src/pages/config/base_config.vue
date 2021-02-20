@@ -17,7 +17,7 @@
                 class="nav nav-pills nav-pills-primary flex-column"
                 role="tablist"
               >
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a
                     class="nav-link active"
                     data-toggle="tab"
@@ -27,10 +27,10 @@
                   >
                     หมวดหมู่ข้อมูล
                   </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <a
-                    class="nav-link"
+                    class="nav-link active"
                     data-toggle="tab"
                     href="#link2"
                     role="tablist"
@@ -120,7 +120,7 @@
             </div>
             <div class="col-md-9">
               <div class="tab-content">
-                <div class="tab-pane active" id="link1">
+                <!-- <div class="tab-pane" id="link1">
                   <div class="row">
                     <div class="col-md-12">
                       <button
@@ -167,18 +167,6 @@
                           <td class="text-center">{{ index + 1 }}</td>
                           <td>{{ value.bc_name }}</td>
                           <td class="text-center">
-                            <!-- <button
-                              type="button"
-                              rel="tooltip"
-                              class="btn btn-fab btn-warning"
-                              data-placement="top"
-                              title=""
-                              data-original-title="คลิกเพื่อแก้ไขข้อมูล"
-                              @click="changeTypeBase(1, true, value.bc_id)"
-                            >
-                              <i class="material-icons">edit</i>
-                            </button>
-                            &nbsp; -->
                             <button
                               type="button"
                               rel="tooltip"
@@ -195,8 +183,8 @@
                       </tbody>
                     </table>
                   </div>
-                </div>
-                <div class="tab-pane" id="link2">
+                </div> -->
+                <div class="tab-pane active" id="link2">
                   <div class="row">
                     <div class="col-md-12">
                       <button
