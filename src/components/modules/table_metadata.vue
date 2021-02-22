@@ -25,48 +25,6 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
-            <v-select
-              v-model="selectOptPerpage"
-              :options="optionPerpage"
-              :clearable="false"
-              @input="reloadTable"
-            ></v-select>
-          </div>
-          <div class=" offset-md-5 col-md-4">
-            <input
-              type="text"
-              class="form-control"
-              v-model="filter"
-              placeholder="ค้นหารายการ"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 center">
-            <div id="vue-root">
-              <datatable
-                :columns="columns"
-                :data="fetchDmsMetadataList"
-                :per-page="perpage"
-                :filter="filter"
-                class="table table-striped table-color-header table-hover table-border"
-                cellspacing="0"
-                width="100%"
-                style="width: 100%"
-              >
-              </datatable>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <section class="pagers-table text-right">
-              <datatable-pager v-model="page" type="short"> </datatable-pager>
-            </section>
-          </div>
-        </div>
-        <!-- <div class="row">
           <div class="col-md-12">
             <div class="material-datatables">
               <table
@@ -114,7 +72,7 @@
                       {{ value.dms_institution.ins_name }}
                     </td>
                     <td class="text-center">
-                      <button
+                      <!-- <button
                         type="button"
                         rel="tooltip"
                         class="btn btn-fab"
@@ -124,7 +82,7 @@
                         data-target="#importModal"
                       >
                         <i class="material-icons">upload_file</i>
-                      </button>
+                      </button> -->
                       <button
                         type="button"
                         rel="tooltip"
@@ -166,7 +124,7 @@
               </table>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <!-- <div class="row">
@@ -255,30 +213,11 @@
 
 <script>
 import $ from "jquery";
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas";
 import { mapActions, mapGetters } from "vuex";
 import MetadataInfo from "./metadata_info.vue";
 import MetadataImport from "./metadata_import.vue";
-import { VuejsDatatableFactory } from "vuejs-datatable";
-
-VuejsDatatableFactory.useDefaultType(false).registerTableType(
-  "datatable",
-  (tableType) =>
-    tableType.mergeSettings({
-      pager: {
-        classes: {
-          pager: "pagination pagination-primary",
-          li: "page-item",
-          selected: "active",
-        },
-        icons: {
-          next: `<i class="material-icons">keyboard_arrow_right</i>`,
-          previous: `<i class="material-icons">keyboard_arrow_left</i>`,
-        },
-      },
-    })
-);
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
 
 export default {
   name: "TableMetadata",
@@ -289,99 +228,40 @@ export default {
   data() {
     return {
       modalTitle: "",
-      filter: "",
-      perpage: 10,
-      page: 1,
-      selectOptPerpage: {
-        code: 2,
-        label: "แสดง 10 รายการ",
-        value: "10",
-      },
-      optionPerpage: [
-        { code: 1, label: "แสดง 5 รายการ", value: "5" },
-        { code: 2, label: "แสดง 10 รายการ", value: "10" },
-        { code: 3, label: "แสดง 25 รายการ", value: "25" },
-        { code: 4, label: "แสดง 50 รายการ", value: "50" },
-        { code: 5, label: "แสดง 100 รายการ", value: "100" },
-      ],
-      columns: [
-        // { label: "#", field: "meta_id", align: "center", filterable: false },
-        {
-          label: "รหัส",
-          field: "meta_code",
-        },
-        { label: "ชุดข้อมูล", field: "meta_name" },
-        { label: "หมวดหมู่ข้อมูล", field: "dms_base_category.bc_name" },
-        { label: "กลุ่มชุดข้อมูล", field: "dms_base_datagroup.grp_name" },
-        {
-          label: "หน่วยงานภายใน",
-          field: "dms_institution.ins_name",
-        },
-        {
-          label: "ดำเนินการ",
-          align: "center",
-          sortable: false,
-          representedAs: ({ meta_id }) => ` <button
-                            type="button"
-                            rel="tooltip"
-                            id="${meta_id}"
-                            class="btn btn-fab btn-primary btn-action1"
-                            data-placement="top"
-                            title="คลิกเพื่อค้นหาข้อมูล"
-                            data-toggle="modal"
-                            data-target="#myModal"
-                          >
-                            <i class="material-icons">search</i>
-                          </button>
-                           <button
-                            type="button"
-                            rel="tooltip"
-                             id="${meta_id}"
-                            class="btn btn-fab btn-warning btn-action2"
-                            data-placement="top"
-                            title="คลิกเพื่อแก้ไขข้อมูล"
-                            style="margin-left: 5px"
-                          >
-                            <i class="material-icons">edit</i>
-                          </button>
-                          <button
-                            type="button"
-                            rel="tooltip"
-                             id="${meta_id}"
-                            class="btn btn-fab btn-danger btn-action3"
-                            data-placement="top"
-                            title="คลิกเพื่อลบข้อมูล"
-                            style="margin-left: 5px"
-                          >
-                            <i class="material-icons">close</i>
-                          </button>`,
-          interpolate: true,
-        },
-      ],
     };
   },
   created() {
     this.fetchDmsMetadataAction();
   },
   mounted() {
-    var _this = this;
+    // var _this = this;
     this.$nextTick(() => {
-      document.querySelector("#vue-root > table > tbody > tr").style.textAlign =
-        "center";
       $(function() {
         $("#btncapture").click(async function() {
           window.print();
         });
-        $(".btn-action1").click(function(e) {
-          console.log(e)
-          _this.openModal(e, "info");
+        $('#datatables').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search records",
+            }
         });
-        $(".btn-action2").click(function(e) {
-          _this.openModal(e, "edit");
-        });
-        $(".btn-action3").click(function(e) {
-          _this.openModal(e, "delete");
-        });
+        // $(".btn-action1").click(function(e) {
+        //   console.log(e)
+        //   _this.openModal(e, "info");
+        // });
+        // $(".btn-action2").click(function(e) {
+        //   _this.openModal(e, "edit");
+        // });
+        // $(".btn-action3").click(function(e) {
+        //   _this.openModal(e, "delete");
+        // });
       });
     });
   },
@@ -402,9 +282,6 @@ export default {
       updateMetadataActiveAction: "business_metadata/updateMetadataActive",
       setMetaIdAction: "technical_metadata/setMetaId",
     }),
-    reloadTable() {
-      this.perpage = this.selectOptPerpage.value;
-    },
     async addMetadata() {
       await this.setTypeFormEditBAction(false);
       this.$router.replace({ path: "/metadata/business_form" });

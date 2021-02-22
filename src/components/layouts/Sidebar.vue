@@ -24,7 +24,7 @@
           >
             <a class="nav-link" href="#">
               <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
+              <p>รายงานแดชบอร์ด</p>
             </a>
           </router-link>
           <router-link
@@ -35,7 +35,7 @@
           >
             <a class="nav-link" href="#">
               <i class="material-icons">toc</i>
-              <p>Metadata</p>
+              <p>จัดการเมทาดาตา</p>
             </a>
           </router-link>
           <router-link
@@ -46,7 +46,7 @@
           >
             <a class="nav-link" href="#">
               <i class="material-icons">settings</i>
-              <p>Configs</p>
+              <p>จัดการข้อมูลพื้นฐาน</p>
             </a>
           </router-link>
         </ul>

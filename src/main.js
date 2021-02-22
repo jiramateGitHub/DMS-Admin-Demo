@@ -4,10 +4,6 @@ import store from './store'
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
-import { VuejsDatatableFactory } from 'vuejs-datatable';
-
-Vue.use(VuejsDatatableFactory);
-
 import routes from "./routes/routes";
 const router = new VueRouter({
     routes, // short for routes: routes
