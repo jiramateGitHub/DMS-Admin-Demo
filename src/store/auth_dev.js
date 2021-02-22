@@ -2,11 +2,11 @@ import mixinHttpRequest from '../utils/http_request.js'
 
 const state = {
     jwtToken: "",
+    UsID: ""
 }
 
 const getters = {
     getToken: (state) => {
-        console.log("getToken " + state.jwtToken)
         if (state.jwtToken == "" || state.jwtToken == null) {
             return null
         } else {
@@ -23,7 +23,12 @@ const actions = {
         };
         await mixinHttpRequest.methods.post("/ums_user/login", paylaod).then(async(res) => {
             if (res.data.success) {
-                commit("setToken", { res })
+                localStorage.jwtToken = res.data.token;
+                await commit("setToken", { res })
+                await mixinHttpRequest.methods.get("/ums_user/user").then(async(response) => {
+                    localStorage.UsID = response.data.user.UsID;
+                    commit("setUser", { response })
+                });
             }
         });
     },
@@ -31,8 +36,12 @@ const actions = {
 
 const mutations = {
     setToken(state, { res }) {
+        console.log(res.data)
         state.jwtToken = res.data.token;
-        console.log(state.jwtToken)
+    },
+    setUser(state, { response }) {
+        console.log(response.data)
+        state.UsID = response.data.user.UsID;
     },
 }
 export default {

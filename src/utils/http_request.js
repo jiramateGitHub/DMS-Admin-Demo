@@ -1,13 +1,12 @@
 import Axios from "axios";
 import { mapGetters } from "vuex";
 const baseApiURL = process.env.VUE_APP_API_ROOT;
-const JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJpYXQiOjE2MTIyNTY5ODc0MzIsImV4cCI6MTYxMjI1Njk4NzQ5Mn0.snWtpv4xdtGDvcRf6dBudORXNm89d7PhYlB4wldaGxU"
-const headers = {
-    Authorization: "Bearer " + JWTToken
-};
 export default {
     methods: {
         get(methodName) {
+            const headers = {
+                Authorization: "Bearer " + localStorage.jwtToken
+            };
             // create a promise for the axios request
             const promise = Axios.get(baseApiURL + methodName, { headers: headers })
 
@@ -18,6 +17,9 @@ export default {
             return dataPromise
         },
         post(methodName, payload) {
+            const headers = {
+                Authorization: "Bearer " + localStorage.jwtToken
+            };
             // create a promise for the axios request
             const promise = Axios.post(baseApiURL + methodName, payload, { headers: headers })
 
@@ -29,6 +31,9 @@ export default {
         },
 
         put(methodName, payload) {
+            const headers = {
+                Authorization: "Bearer " + localStorage.jwtToken
+            };
             // create a promise for the axios request
             const promise = Axios.put(baseApiURL + methodName, payload, { headers: headers })
 
@@ -40,6 +45,9 @@ export default {
         },
 
         delete(methodName, payload) {
+            const headers = {
+                Authorization: "Bearer " + localStorage.jwtToken
+            };
             // create a promise for the axios request
             const promise = Axios.delete(baseApiURL + methodName, payload, { headers: headers })
 

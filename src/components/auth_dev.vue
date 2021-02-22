@@ -70,13 +70,15 @@ export default {
     ...mapActions({
       authDevAction: "auth_dev/auth",
     }),
-    login() {
+    async login() {
       let payload = {
         username: this.username,
         password: this.password,
       };
-      this.authDevAction(payload);
-      //   this.$router.replace({ path: "/dashboard" });
+      await this.authDevAction(payload);
+      console.log("localStorage.jwtToken : " + localStorage.jwtToken)
+      console.log("localStorage.UsID : " + localStorage.UsID)
+      await this.$router.replace({ path: "/dashboard" });
     },
   },
   computed: {

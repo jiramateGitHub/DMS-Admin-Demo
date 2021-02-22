@@ -68,8 +68,8 @@ const actions = {
                             tcd_comment: payload[i].tcd_comment,
                             tcd_anonymous: payload[i].tcd_anonymous,
                             tcd_active: "Y",
-                            tcd_create_user: 1,
-                            tcd_update_user: 1,
+                            tcd_create_user: localStorage.UsID,
+                            tcd_update_user: localStorage.UsID,
                         };
                         await mixinHttpRequest.methods.post("/dms_technical_detail", payload_dms_technical_detail)
                             .then(res => commit("setStateSave", { res }))
@@ -107,8 +107,8 @@ const actions = {
                             tcd_comment: payload[i].tcd_comment,
                             tcd_anonymous: payload[i].tcd_anonymous,
                             tcd_active: "Y",
-                            tcd_create_user: 1,
-                            tcd_update_user: 1,
+                            tcd_create_user: localStorage.UsID,
+                            tcd_update_user: localStorage.UsID,
                         };
                         await mixinHttpRequest.methods.post("/dms_technical_detail", payload_dms_technical_detail)
                             .then(res => commit("setStateSave", { res }))
