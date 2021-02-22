@@ -66,6 +66,11 @@ export default {
       password: "aos.supakit",
     };
   },
+  created() {
+    if (localStorage.UsID != null && localStorage.UsID != "") {
+      this.$router.replace({ path: "/dashboard" });
+    }
+  },
   methods: {
     ...mapActions({
       authDevAction: "auth_dev/auth",
@@ -76,8 +81,8 @@ export default {
         password: this.password,
       };
       await this.authDevAction(payload);
-      console.log("localStorage.jwtToken : " + localStorage.jwtToken)
-      console.log("localStorage.UsID : " + localStorage.UsID)
+      console.log("localStorage.jwtToken : " + localStorage.jwtToken);
+      console.log("localStorage.UsID : " + localStorage.UsID);
       await this.$router.replace({ path: "/dashboard" });
     },
   },

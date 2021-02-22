@@ -11,7 +11,7 @@ import Index from "@/pages/index.vue";
 const routes = [{
     path: "/",
     component: Sidebar,
-    redirect: "/index",
+    redirect: "/auth",
     children: [{
             path: "dashboard",
             name: "Dashboard",
